@@ -15,9 +15,6 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json()); 
 
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
 
 app.use("/api/materias", materiaRoutes);
 
@@ -27,4 +24,8 @@ app.listen(PORT, ()=> {
   console.log('Server is running on http://localhost:' + PORT);
 });
 
+app.use(express.static(path.join(__dirname, "/Frontend/dist")));
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "Frontend", "dist", "index.html"));
+	});
 
