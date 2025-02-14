@@ -1,29 +1,31 @@
-import { useState } from 'react'
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// Importar páginas
+import Login from './pages/Login';
+import Registro from './pages/Registro';  // Asegúrate de que la importación sea correcta
+import AdminDashboard from './pages/admin/Dashboard';
+import ProfesorDashboard from './pages/profesor/Dashboard';
+import EstudianteDashboard from './pages/estudiante/Dashboard';
+
 function App() {
-  const [count, setCount] = useState(0)
-
-  // return (
-  //   <>
-  //      <BrowserRouter>
-  //       <Routes>
-  //         <Route path="/" element={<PaginaInicio />} />
-  //       </Routes>
-  //     </BrowserRouter> 
-  //   </>
-  // )
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-4xl font-bold text-blue-600 mb-4">Bienvenido a EDUNEG</h1>
-      <p className="text-lg text-gray-700 mb-6">
-        Aquí puedes comprar el uso de nuestros servicios de educación en línea.
-      </p>
-      <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
-        Comprar Ahora
-      </button>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/registro" element={<Registro />} />  {/* Añadir esta línea */}
+        
+        {/* Rutas de Admin */}
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        
+        {/* Rutas de Profesor */}
+        <Route path="/profesor/dashboard" element={<ProfesorDashboard />} />
+        
+        {/* Rutas de Estudiante */}
+        <Route path="/estudiante/dashboard" element={<EstudianteDashboard />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
-export default App
+export default App;
