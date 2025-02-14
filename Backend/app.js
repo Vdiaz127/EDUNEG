@@ -7,6 +7,15 @@ import materiaRoutes from './routes/materia.route.js';
 dotenv.config();
 
 const app = express();
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const authRoutes = require('./routes/route');
+
+// Middleware
+app.use(cors()); // Habilita CORS para permitir solicitudes desde diferentes dominios
+app.use(bodyParser.json()); // Permite analizar el cuerpo de las solicitudes en formato JSON
+
+
 
 const __dirname = path.resolve();
 
@@ -17,6 +26,8 @@ app.use(express.json());
 
 
 app.use("/api/materias", materiaRoutes);
+app.use('/api/auth', authRoutes); // Define las rutas de autenticación bajo el prefijo /api/auth
+
 
 
 app.listen(PORT, ()=> {
