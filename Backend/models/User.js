@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+import mongoose from 'mongoose'; // Use import instead of require
+import bcrypt from 'bcryptjs';
 
 // Definir el esquema del usuario
 const userSchema = new mongoose.Schema(
@@ -48,7 +48,7 @@ userSchema.pre('save', async function (next) {
 });
 
 // Crear el modelo User a partir del esquema
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('User ', userSchema);
 
 // Exportar el modelo para usarlo en otras partes de la aplicación
-module.exports = User;
+export default User; // Use export default instead of module.exports

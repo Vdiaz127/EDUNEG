@@ -1,6 +1,6 @@
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+import User from '../models/User.js'; // Use import instead of require
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 // Registrar un nuevo usuario
 const register = async (req, res) => {
@@ -34,7 +34,7 @@ const login = async (req, res) => {
 };
 
 // Obtener información del usuario
-const getUser = async (req, res) => {
+const getUser  = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     res.send(user);
@@ -43,4 +43,4 @@ const getUser = async (req, res) => {
   }
 };
 
-module.exports = { register, login, getUser };
+export { register, login, getUser  }; // Use named exports instead of module.exports

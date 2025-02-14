@@ -3,13 +3,13 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { connectDB } from './config/db.js';
 import materiaRoutes from './routes/materia.route.js';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import authRoutes from './routes/route.js'; // This will work with default export
 
 dotenv.config();
 
 const app = express();
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const authRoutes = require('./routes/route');
 
 // Middleware
 app.use(cors()); // Habilita CORS para permitir solicitudes desde diferentes dominios
