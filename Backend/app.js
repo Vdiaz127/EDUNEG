@@ -6,7 +6,6 @@ import materiaRoutes from './routes/materia.route.js';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import authRoutes from './routes/loginRoutes.js';
-import evaluationRoutes from './routes/evaluationRoutes.js'; // Importación de evaluationRoutes
 import gradeRoutes from './routes/gradeRoutes.js'; // Importación de gradeRoutes
 import subjectRoutes from './routes/subjectRoutes.js'; // Importación de subjectRoutes
 import evaluationPlanRoutes from './routes/evaluationPlanRoutes.js'; // Importación de evaluationPlanRoutes
@@ -28,7 +27,6 @@ app.use(express.json());
 // Rutas
 app.use("/api/materias", materiaRoutes);
 app.use('/api/auth', authRoutes); // Define las rutas de autenticación bajo el prefijo /api/auth
-app.use('/api/evaluations', evaluationRoutes); // Define las rutas de evaluaciones bajo el prefijo /api/evaluations
 app.use('/api/grades', gradeRoutes); // Define las rutas de calificaciones bajo el prefijo /api/grades
 app.use('/api/subjects', subjectRoutes); // Define las rutas de materias bajo el prefijo /api/subjects
 app.use('/api/evaluation-plans', evaluationPlanRoutes); // Define las rutas de planes de evaluación bajo el prefijo /api/evaluation-plans
