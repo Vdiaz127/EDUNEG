@@ -28,7 +28,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes); // Define las rutas de autenticación bajo el prefijo /api/auth
 app.use('/api/grades', gradeRoutes); // Define las rutas de calificaciones bajo el prefijo /api/grades
 app.use('/api/subjects', subjectRoutes); // Define las rutas de materias bajo el prefijo /api/subjects
-app.use('/api/semesters', semesterRoutes); // Define las rutas de semestres
+app.use('/api/semesters', semesterRoutes); // Define las rutas de semestres bajo el prefijo /api/semesters
 app.use('/api/evaluation-plans', evaluationPlanRoutes); // Define las rutas de planes de evaluación bajo el prefijo /api/evaluation-plans
 
 // Iniciar el servidor
