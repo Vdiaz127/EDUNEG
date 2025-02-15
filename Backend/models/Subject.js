@@ -5,6 +5,9 @@ const subjectSchema = new mongoose.Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
     credits: { type: Number, required: true }
+}, {
+    timestamps: true, // Añade automáticamente `createdAt` y `updatedAt`
+    versionKey: false // Esto es para que no aparezca el atributo `__v`
 });
 
 export default mongoose.model('Subject', subjectSchema);
