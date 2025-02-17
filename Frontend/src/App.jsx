@@ -1,29 +1,41 @@
-import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// Importa los componentes de página
+
+import AdminPage from './pages/Administrador/page';
+import EstudiantesPage from './pages/Administrador/Estudiantes/page';
+import FormularioEstudiante from './pages/Administrador/Estudiantes/AgregarEstudiante/page';
+import VerEstudiante from './pages/Administrador/Estudiantes/VerEstudiante/page';
+import MateriasPage from './pages/Administrador/Materias/page';
+import FormularioMateria from './pages/Administrador/Materias/AgregarMateria/page';
+import VerMateria from './pages/Administrador/Materias/VerMateria/page';
+import ProfesoresPage from './pages/Administrador/Profesores/page';
+import FormularioProfesor from './pages/Administrador/Profesores/AgregarProfesor/page';
+import VerProfesor from './pages/Administrador/Profesores/VerProfesor/page';
+
 function App() {
-  const [count, setCount] = useState(0)
-
-  // return (
-  //   <>
-  //      <BrowserRouter>
-  //       <Routes>
-  //         <Route path="/" element={<PaginaInicio />} />
-  //       </Routes>
-  //     </BrowserRouter> 
-  //   </>
-  // )
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-4xl font-bold text-blue-600 mb-4">Bienvenido a EDUNEG</h1>
-      <p className="text-lg text-gray-700 mb-6">
-        Aquí puedes comprar el uso de nuestros servicios de educación en línea.
-      </p>
-      <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
-        Comprar Ahora
-      </button>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* Rutas del Administrador */}
+        <Route path="/administrador" element={<AdminPage />} >
+          {/* Rutas de estudiantes */}
+          <Route path="estudiantes" element={<EstudiantesPage />} />
+          <Route path="estudiantes/agregar" element={<FormularioEstudiante />} />
+          <Route path="estudiantes/ver/:id" element={<VerEstudiante />} /> 
+          {/* Rutas de materias */}
+          <Route path="materias" element={<MateriasPage />} />
+          <Route path="materias/agregar" element={<FormularioMateria />} />
+          <Route path="materias/ver/:id" element={<VerMateria />} />
+          {/* Rutas de profesores */}
+          <Route path="profesores" element={<ProfesoresPage />} />
+          <Route path="profesores/agregar" element={<FormularioProfesor />} />
+          <Route path="profesores/ver/:id" element={<VerProfesor />} />
+        </Route>
+
+      </Routes>
+    </BrowserRouter>
   );
 }
 
-export default App
+export default App;
