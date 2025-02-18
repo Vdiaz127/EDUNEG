@@ -1,46 +1,35 @@
-import User from '../models/User.js'; // Use import instead of require
+import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 
-// Registrar un nuevo usuario
-const register = async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    const user = new User({ username, password });
-    await user.save();
-    res.status(201).send({ message: 'Usuario registrado exitosamente' });
-  } catch (err) {
-    res.status(400).send({ error: 'Registro fallido', details: err });
-  }
-};
+// Función para registrar un nuevo usuario
+export const registerUser = async (req, res) => {
+    const { firstName, lastName, email, password, role } = req.body;
 
-// Iniciar sesión
-const login = async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(404).send({ error: 'Usuario no encontrado' });
+    try {
+        const user = new User({ firstName, lastName, email, password, role });
+        await user.save();
+        res.status(201).json({ message: "Usuario creado exitosamente." });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
     }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).send({ error: 'Credenciales inválidas' });
+};
+
+// Función para iniciar sesión
+export const loginUser = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user || !(await user.matchPassword(password))) {
+            return res.status(401).json({ message: "Credenciales inválidas." });
+        }
+
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+            expiresIn: '1h',
+        });
+        
+        res.json({ token, user: { id: user._id, firstName: user.firstName, lastName: user.lastName } });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-    const token = jwt.sign({ id: user._id }, 'secretkey', { expiresIn: '1h' });
-    res.send({ token });
-  } catch (err) {
-    res.status(500).send({ error: 'Inicio de sesión fallido', details: err });
-  }
 };
-
-// Obtener información del usuario
-const getUser  = async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select('-password');
-    res.send(user);
-  } catch (err) {
-    res.status(500).send({ error: 'Error al obtener la información del usuario', details: err });
-  }
-};
-
-export { register, login, getUser  }; // Use named exports instead of module.exports

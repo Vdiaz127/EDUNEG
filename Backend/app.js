@@ -4,7 +4,7 @@ import path from 'path';
 import { connectDB } from './config/db.js';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import authRoutes from './routes/loginRoutes.js';
+import authRoutes from './routes/authRoutes.js'
 import gradeRoutes from './routes/gradeRoutes.js'; // Importación de gradeRoutes
 import subjectRoutes from './routes/subjectRoutes.js'; // Importación de subjectRoutes
 import semesterRoutes from './routes/semesterRoutes.js'; // Importación de semesterRoutes
@@ -25,7 +25,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 
 // Rutas
-app.use('/api/auth', authRoutes); // Define las rutas de autenticación bajo el prefijo /api/auth
+app.use('/api/auth', authRoutes);
 app.use('/api/grades', gradeRoutes); // Define las rutas de calificaciones bajo el prefijo /api/grades
 app.use('/api/subjects', subjectRoutes); // Define las rutas de materias bajo el prefijo /api/subjects
 app.use('/api/semesters', semesterRoutes); // Define las rutas de semestres bajo el prefijo /api/semesters
