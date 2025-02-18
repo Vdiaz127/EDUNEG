@@ -20,13 +20,13 @@ const evaluationSchema = new mongoose.Schema({
         required: [true, 'La fecha de entrega de la evaluación es requerida'], 
     },
     weight: { 
-        type: Float, 
+        type: Number, 
         required: [true, 'El peso de la evaluación es requeridos'], 
         min: [1, 'Los créditos deben ser al menos 1'], 
         max: [10, 'Los créditos no pueden exceder 10'] 
     },
     documentLink: { 
-        type: mongoose.SchemaTypes.Url
+        type: String
     }
     
 }, {

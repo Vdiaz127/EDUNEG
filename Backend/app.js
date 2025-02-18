@@ -9,6 +9,7 @@ import gradeRoutes from './routes/gradeRoutes.js'; // Importación de gradeRoute
 import subjectRoutes from './routes/subjectRoutes.js'; // Importación de subjectRoutes
 import semesterRoutes from './routes/semesterRoutes.js'; // Importación de semesterRoutes
 import evaluationPlanRoutes from './routes/evaluationPlanRoutes.js'; // Importación de evaluationPlanRoutes
+import evaluationRoutes from './routes/evaluationRoutes.js'; // Importación de evaluationRoutes
 
 dotenv.config();
 
@@ -30,7 +31,7 @@ app.use('/api/grades', gradeRoutes); // Define las rutas de calificaciones bajo 
 app.use('/api/subjects', subjectRoutes); // Define las rutas de materias bajo el prefijo /api/subjects
 app.use('/api/semesters', semesterRoutes); // Define las rutas de semestres bajo el prefijo /api/semesters
 app.use('/api/evaluation-plans', evaluationPlanRoutes); // Define las rutas de planes de evaluación bajo el prefijo /api/evaluation-plans
-
+app.use('/api/evaluations', evaluationRoutes); // Define las rutas de evaluaciónes bajo el prefijo /api/evaluations
 // Iniciar el servidor
 app.listen(PORT, () => {
   connectDB();
