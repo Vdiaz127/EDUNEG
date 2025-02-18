@@ -11,6 +11,7 @@ import semesterRoutes from './routes/semesterRoutes.js'; // Importación de seme
 import evaluationPlanRoutes from './routes/evaluationPlanRoutes.js'; // Importación de evaluationPlanRoutes
 import evaluationRoutes from './routes/evaluationRoutes.js'; // Importación de evaluationPlanRoutes
 import sectionRoutes from './routes/sectionRoutes.js'; // Importación de evaluationPlanRoutes
+import reportRoutes from './routes/reportRoutes.js'; // Importación de evaluationPlanRoutes
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use('/api/semesters', semesterRoutes); // Define las rutas de semestres bajo
 app.use('/api/evaluation-plans', evaluationPlanRoutes); // Define las rutas de planes de evaluación bajo el prefijo /api/evaluation-plans
 app.use('/api/evaluations', evaluationRoutes); // Define las rutas de evaluaciónes bajo el prefijo /api/evaluations
 app.use('/api/sections', sectionRoutes); // Define las rutas de evaluaciónes bajo el prefijo /api/evaluations
+app.use('/api/reports', reportRoutes); // Define las rutas de evaluaciónes bajo el prefijo /api/evaluations
 
 // Iniciar el servidor
 app.listen(PORT, () => {
