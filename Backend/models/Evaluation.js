@@ -21,9 +21,9 @@ const evaluationSchema = new mongoose.Schema({
     },
     weight: { 
         type: Number, 
-        required: [true, 'El peso de la evaluación es requeridos'], 
-        min: [1, 'Los créditos deben ser al menos 1'], 
-        max: [10, 'Los créditos no pueden exceder 10'] 
+        required: [true, 'La puntuacion de la evaluación es requeridos'], 
+        min: [1, 'La puntuacion debe ser al menos 1'], 
+        max: [10, 'La puntuacion no pueden exceder 10'] 
     },
     documentLink: { 
         type: String
