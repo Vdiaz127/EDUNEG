@@ -2,18 +2,18 @@ import Section from '../models/Section.js';
 
 export const createSection = async (req, res) => {
     try {
-        const evaluation = new Section(req.body);
-        await evaluation.save();
-        res.status(201).send(evaluation);
+        const section = new Section(req.body);
+        await section.save();
+        res.status(201).send(section);
     } catch (error) {
         res.status(400).send(error);
     }
 };
 
-export const getEvaluations = async (req, res) => {
+export const getSections = async (req, res) => {
     try {
-        const evaluations = await Section.find();
-        res.status(200).send(evaluations);
+        const sections = await Section.find();
+        res.status(200).send(sections);
     } catch (error) {
         res.status(500).send(error);
     }
@@ -21,11 +21,11 @@ export const getEvaluations = async (req, res) => {
 
 export const getSectionById = async (req, res) => {
     try {
-        const evaluation = await Section.findById(req.params.id);
-        if (!evaluation) {
+        const section = await Section.findById(req.params.id);
+        if (!section) {
             return res.status(404).send();
         }
-        res.send(evaluation);
+        res.send(section);
     } catch (error) {
         res.status(500).send(error);
     }
@@ -33,11 +33,11 @@ export const getSectionById = async (req, res) => {
 
 export const updateSection = async (req, res) => {
     try {
-        const evaluation = await Section.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (!evaluation) {
+        const section = await Section.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!section) {
             return res.status(404).send();
         }
-        res.send(evaluation);
+        res.send(section);
     } catch (error) {
         res.status(400).send(error);
     }
@@ -45,11 +45,11 @@ export const updateSection = async (req, res) => {
 
 export const deleteSection = async (req, res) => {
     try {
-        const evaluation = await Section.findByIdAndDelete(req.params.id);
-        if (!evaluation) {
+        const section = await Section.findByIdAndDelete(req.params.id);
+        if (!section) {
             return res.status(404).send();
         }
-        res.send(evaluation);
+        res.send(section);
     } catch (error) {
         res.status(500).send(error);
     }

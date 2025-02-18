@@ -1,12 +1,12 @@
 import express from 'express';
-import { createEvaluation, getEvaluations, getEvaluationById, updateEvaluation, deleteEvaluation } from '../controllers/evaluationController.js';
+import { createSection, getSections, getSectionById, updateSection, deleteSection } from '../controllers/sectionController.js';
 
 const router = express.Router();
 
-router.post('/', createEvaluation);
-router.get('/', getEvaluations);
-router.get('/:id', getEvaluationById);
-router.put('/:id', updateEvaluation);
-router.delete('/:id', deleteEvaluation);
+router.post('/', createSection);
+router.get('/', getSections);
+router.get('/:id', getSectionById);
+router.put('/:id', updateSection);
+router.delete('/:id', deleteSection);
 
 export default router;
