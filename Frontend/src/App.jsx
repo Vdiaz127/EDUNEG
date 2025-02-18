@@ -20,7 +20,7 @@ function App() {
         Aquí puedes comprar el uso de nuestros servicios de educación en línea.
       </p>
       <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
-        Comprar Ahora
+        Comprar Ahora [test]
       </button>
     </div>
   );
