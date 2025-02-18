@@ -5,7 +5,11 @@ import { FaRegAddressCard } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-const UserInformacion = ({ nombre, apellido, email, estatus, rol }) => {
+const UserInformacion = ({ user, rol, returnUrl }) => {
+  if (!user) {
+    return <div>Cargando...</div>;
+  }
+
   return (
     <div className="flex flex-col justify-center items-center h-screen m-5">
       {/* Informacion */}
@@ -14,8 +18,8 @@ const UserInformacion = ({ nombre, apellido, email, estatus, rol }) => {
           Información del {rol}
         </h1>
         {/* Foto */}
-        <div className="w-24 h-24  flex justify-center items-center border-2 border-gray-300 rounded-full shadow-md">
-          {rol == "Profesor" ? (
+        <div className="w-24 h-24 flex justify-center items-center border-2 border-gray-300 rounded-full shadow-md">
+          {rol === "Profesor" ? (
             <FaRegUser className="w-12 h-12 opacity-60" />
           ) : (
             <PiStudentBold className="w-12 h-12 opacity-60" />
@@ -24,10 +28,10 @@ const UserInformacion = ({ nombre, apellido, email, estatus, rol }) => {
         {/* Estatus */}
         <div
           className={`text-sm font-bold mt-2 mb-8 px-2 rounded-md ${
-            estatus ? "bg-green-300 text-green-700" : "bg-red-300 text-red-700"
+            user.estatus ? "bg-green-300 text-green-700" : "bg-red-300 text-red-700"
           }`}
         >
-          {estatus ? "Activo" : "Inactivo"}
+          {user.estatus ? "Activo" : "Inactivo"}
         </div>
 
         {/* Contenedor del nombre */}
@@ -38,7 +42,7 @@ const UserInformacion = ({ nombre, apellido, email, estatus, rol }) => {
               Nombre
             </p>
             <p className="font-bold text-lg">
-              {nombre} {apellido}{" "}
+              {user.nombre} {user.apellido}
             </p>
           </div>
         </div>
@@ -50,24 +54,23 @@ const UserInformacion = ({ nombre, apellido, email, estatus, rol }) => {
               <MdOutlineEmail color="green" className="w-7 h-7" />
               Email
             </p>
-            <p className="font-bold text-lg ">{email} </p>
+            <p className="font-bold text-lg ">{user.email}</p>
           </div>
         </div>
       </div>
       {/* Botones */}
-      {/* /administrador/estudiantes */}
       <div className="mt-4 w-1/2 flex justify-center md:justify-between items-center flex-wrap gap-4">
-        <Link to={rol.toLowerCase() === 'profesor' ? '/administrador/profesores' : '/administrador/estudiantes'}>
+        <Link to={returnUrl}>
           <button className="bg-black text-white flex justify-center items-center gap-2 px-8 py-2 text-center rounded-md shadow-md cursor-pointer">
             <IoIosSkipBackward className="w-5 h-5" />
             Regresar
           </button>
         </Link>
 
-        <Link to={rol.toLowerCase() === 'profesor' ? '/administrador/profesores/agregar' : '/administrador/estudiantes/agregar'}>
-        <button className="bg-gray-100 px-8 py-2 text-center border-2 border-gray-300 rounded-md shadow-md cursor-pointer">
-          Editar Perfil
-        </button>
+        <Link to={`${returnUrl}/editar/${user._id}`}>
+          <button className="bg-gray-100 px-8 py-2 text-center border-2 border-gray-300 rounded-md shadow-md cursor-pointer">
+            Editar Perfil
+          </button>
         </Link>
       </div>
     </div>
@@ -75,13 +78,3 @@ const UserInformacion = ({ nombre, apellido, email, estatus, rol }) => {
 };
 
 export default UserInformacion;
-
-/*
-       <p
-            className={`text-center font-semibold ${
-              estatus
-                ? "bg-green-200 text-green-500"
-                : "bg-red-200 text-red-500"
-            } px-2 rounded-md `}
-          >
-*/

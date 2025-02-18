@@ -2,30 +2,38 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { IoArrowBackCircle } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const schema = yup.object().shape({
   nombre: yup
     .string()
     .required("El nombre es requerido")
-    .min(2, "Mínimo 2 caracteres")
-    .max(255, "Máximo 255 caracteres"),
+    .min(2, "El nombre debe tener al menos 2 caracteres")
+    .max(50, "El nombre no puede tener más de 50 caracteres"),
   apellido: yup
     .string()
     .required("El apellido es requerido")
-    .min(2, "Mínimo 2 caracteres")
-    .max(255, "Máximo 255 caracteres"),
+    .min(2, "El apellido debe tener al menos 2 caracteres")
+    .max(50, "El apellido no puede tener más de 50 caracteres"),
   email: yup
     .string()
-    .required("El correo es requerido")
-    .email("Formato de correo inválido"),
+    .required("El email es requerido")
+    .email("Formato de email inválido"),
   estatus: yup
-    .boolean()
+    .string()
     .required("El estatus es requerido")
     .typeError("Debes seleccionar un estatus válido"),
 });
 
-const UserFormulario = ({ initialData, onSubmit, rol }) => {
+const UserFormulario = ({ 
+  initialData, 
+  onSubmit, 
+  rol, 
+  isEditing = false, 
+  submitButtonText,
+  returnUrl 
+}) => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -40,6 +48,13 @@ const UserFormulario = ({ initialData, onSubmit, rol }) => {
     },
   });
 
+  const handleCancel = () => {
+    navigate(returnUrl);
+  };
+
+  const formTitle = isEditing ? `Actualizar ${rol}` : `Agregar un Nuevo ${rol}`;
+  const buttonText = submitButtonText || (isEditing ? `Actualizar ${rol}` : `Agregar ${rol}`);
+
   return (
     <div className="w-full flex justify-center items-center mt-8">
       <form
@@ -47,19 +62,14 @@ const UserFormulario = ({ initialData, onSubmit, rol }) => {
         className="p-8 space-y-4 w-4/5 shadow-lg rounded-md border border-gray-200 flex flex-col justify-center"
       >
         <div className="flex justify-center items-center gap-2 mb-4">
-          <Link
-            to={
-              rol.toLowerCase() === "profesor"
-                ? "/administrador/profesores"
-                : "/administrador/estudiantes"
-            }
-          >
+          <Link to={returnUrl}>
             <IoArrowBackCircle className="w-5 h-5" />
           </Link>
           <h1 className="text-2xl font-bold text-center">
-            {initialData ? `Actualizar ${rol}` : `Agregar un Nuevo ${rol}`}
+            {formTitle}
           </h1>
         </div>
+
         <div>
           <label htmlFor="nombre" className="block text-sm font-medium">
             Nombre
@@ -123,7 +133,7 @@ const UserFormulario = ({ initialData, onSubmit, rol }) => {
           type="submit"
           className="md:w-1/4 bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 cursor-pointer self-center"
         >
-          {initialData ? `Actualizar ${rol}` : `Agregar ${rol}`}
+          {buttonText}
         </button>
       </form>
     </div>

@@ -29,7 +29,6 @@ const EditarEstudiante = () => {
 
   const handleSubmit = async (data) => {
     try {
-      // Asegurarnos de que el estatus se maneje correctamente
       const userData = {
         ...data,
         estatus: data.estatus === "true" || data.estatus === true
@@ -57,8 +56,11 @@ const EditarEstudiante = () => {
         nombre: student.nombre,
         apellido: student.apellido,
         email: student.email,
-        estatus: student.estatus.toString() // Convertir el booleano a string
+        estatus: student.estatus.toString()
       }}
+      isEditing={true}
+      submitButtonText="Actualizar Estudiante"
+      returnUrl="/administrador/estudiantes"
     />
   );
 };

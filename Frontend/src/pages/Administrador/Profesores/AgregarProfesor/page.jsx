@@ -1,33 +1,51 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import UserFormulario from "../../../../components/UserFormulario";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-// En tu componente padre
-const handleSubmit = (data) => {
-  // Los valores vienen parseados correctamente
-  const userData = {
-    ...data,
-    estatus: data.estatus === "true", // Convertir a boolean
+const AgregarProfesor = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (data) => {
+    try {
+      setLoading(true);
+      // Asegurarnos de que el estatus se maneje correctamente
+      const userData = {
+        ...data,
+        rol: "Profesor",
+        estatus: data.estatus === "true" || data.estatus === true
+      };
+
+      await axios.post('/api/professors', userData);
+      toast.success("Profesor agregado exitosamente");
+      navigate("/administrador/profesores");
+    } catch (error) {
+      console.error("Error al agregar profesor:", error);
+      toast.error(error.response?.data?.message || "Error al agregar el profesor");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Aquí tu lógica para enviar a API
-  console.log(userData);
-};
+  if (loading) return <div>Cargando...</div>;
 
-const FormularioProfesor = () => {
   return (
-    // Para un nuevo usuario
-    <UserFormulario onSubmit={handleSubmit} rol={"Profesor"} />
-    // Para actualizar usuario
-/*     <UserFormulario
-      initialData={{
-        nombre: "Juan",
-        apellido: "Pérez",
-        email: "juan@example.com",
-        estatus: "true",
-      }}
+    <UserFormulario 
       onSubmit={handleSubmit}
       rol="Profesor"
-    /> */
+      initialData={{
+        nombre: "",
+        apellido: "",
+        email: "",
+        estatus: "true"
+      }}
+      isEditing={false}
+      submitButtonText="Crear Profesor"
+      returnUrl="/administrador/profesores"
+    />
   );
 };
 
-export default FormularioProfesor;
+export default AgregarProfesor;

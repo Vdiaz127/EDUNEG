@@ -31,11 +31,9 @@ const VerEstudiante = () => {
 
   return (
     <UserInformacion 
-      nombre={student.nombre}
-      apellido={student.apellido}
-      email={student.email}
-      estatus={student.estatus}
+      user={student}
       rol="Estudiante"
+      returnUrl="/administrador/estudiantes"
     />
   );
 };
