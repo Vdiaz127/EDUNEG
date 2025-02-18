@@ -41,7 +41,7 @@ const UserFormulario = ({ initialData, onSubmit, rol }) => {
   });
 
   return (
-    <div className="w-full flex justify-end my-8 mx-5">
+    <div className="w-full flex justify-center items-center mt-8">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="p-8 space-y-4 w-4/5 shadow-lg rounded-md border border-gray-200 flex flex-col justify-center"

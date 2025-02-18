@@ -4,6 +4,8 @@ import AccionesAdmin from "../../components/AccionesAdmin";
 import { FaGraduationCap } from "react-icons/fa";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { ImBooks } from "react-icons/im";
+import Sidebar from "../../components/Sidebar/Sidebar";
+
 
 function AdminPage() {
   const location = useLocation();
@@ -16,9 +18,12 @@ function AdminPage() {
   }
 
   return (
-    <div className="w-full flex flex-col items-end justify-center min-h-screen bg-gray-100">
+    <div>
+    
+
+    <div className="w-full flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full md:w-4/5 h-36 relative border-2 border-gray-300 rounded-md shadow-md mb-6 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('images/EDUNEG.webp')] bg-cover bg-center bg-no-repeat"></div>
+        <div className="absolute inset-0 bg-[url('/images/EDUNEG.webp')] bg-cover bg-center bg-no-repeat"></div>
         <div className="absolute inset-0 bg-black opacity-50 "></div>{" "}
         <div className="absolute inset-0 flex flex-col justify-center items-center ml-6">
           <p className="font-bold text-4xl text-white">EDUNEG</p>
@@ -32,7 +37,7 @@ function AdminPage() {
         <CardAdmin
           ruta={"/administrador/estudiantes"}
           titulo={"Estudiantes"}
-          imagen={"src/images/ALUMNOS.webp"}
+          imagen={"/images/ALUMNOS.webp"}
           cantidad={10}
           isFullWidth={false}
         />
@@ -40,7 +45,7 @@ function AdminPage() {
         <CardAdmin
           ruta={"/administrador/profesores"}
           titulo={"Profesores"}
-          imagen={"src/images/PROFESORES.webp"}
+          imagen={"/images/PROFESORES.webp"}
           cantidad={10}
           isFullWidth={false}
         />
@@ -49,7 +54,7 @@ function AdminPage() {
       <CardAdmin
         ruta={"/administrador/materias"}
         titulo={"Materias"}
-        imagen={"src/images/MATERIAS.webp"}
+        imagen={"/images/MATERIAS.webp"}
         cantidad={150}
         isFullWidth={true}
       />
@@ -77,6 +82,7 @@ function AdminPage() {
       </div>
 
       <Outlet />
+    </div>
     </div>
   );
 }

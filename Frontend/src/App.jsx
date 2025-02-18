@@ -1,7 +1,10 @@
+// src/App.js
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// Importa los componentes de página
+// Layout que envuelve las rutas del administrador (Sidebar + main content)
+import AdminLayout from './layouts/AdminLayout';
 
+// Importa los componentes de página
 import AdminPage from './pages/Administrador/page';
 import EstudiantesPage from './pages/Administrador/Estudiantes/page';
 import FormularioEstudiante from './pages/Administrador/Estudiantes/AgregarEstudiante/page';
@@ -17,12 +20,14 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rutas del Administrador */}
-        <Route path="/administrador" element={<AdminPage />} >
+        {/* Todas las rutas de /administrador usarán el AdminLayout */}
+        <Route path="/administrador" element={<AdminLayout />}>
+          {/* Página principal de administrador */}
+          <Route index element={<AdminPage />} />
           {/* Rutas de estudiantes */}
           <Route path="estudiantes" element={<EstudiantesPage />} />
           <Route path="estudiantes/agregar" element={<FormularioEstudiante />} />
-          <Route path="estudiantes/ver/:id" element={<VerEstudiante />} /> 
+          <Route path="estudiantes/ver/:id" element={<VerEstudiante />} />
           {/* Rutas de materias */}
           <Route path="materias" element={<MateriasPage />} />
           <Route path="materias/agregar" element={<FormularioMateria />} />
@@ -32,7 +37,6 @@ function App() {
           <Route path="profesores/agregar" element={<FormularioProfesor />} />
           <Route path="profesores/ver/:id" element={<VerProfesor />} />
         </Route>
-
       </Routes>
     </BrowserRouter>
   );

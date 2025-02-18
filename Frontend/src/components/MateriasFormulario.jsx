@@ -39,7 +39,7 @@ const MateriasFormulario = ({ initialData, onSubmit }) => {
   });
 
   return (
-    <div className="w-full flex justify-end m-8">
+    <div className="w-full flex justify-center items-center m-8">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="p-8 mr-14 space-y-4 w-4/5 shadow-lg rounded-md border border-gray-300 flex flex-col justify-center"
