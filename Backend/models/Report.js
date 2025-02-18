@@ -17,4 +17,4 @@ const reportSchema = new mongoose.Schema({
     versionKey: false // Esto es para que no aparezca el atributo `__v`
 });
 
-export default mongoose.model('Section', reportSchema);
+export default mongoose.model('Report', reportSchema);
