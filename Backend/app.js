@@ -10,6 +10,7 @@ import subjectRoutes from './routes/subjectRoutes.js'; // Importación de subjec
 import semesterRoutes from './routes/semesterRoutes.js'; // Importación de semesterRoutes
 import evaluationPlanRoutes from './routes/evaluationPlanRoutes.js'; // Importación de evaluationPlanRoutes
 import studentRoutes from './routes/studentRoutes.js';
+import professorRoutes from './routes/professorRoutes.js'; // Importación de professorRoutes
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use('/api/subjects', subjectRoutes); // Define las rutas de materias bajo el
 app.use('/api/semesters', semesterRoutes); // Define las rutas de semestres bajo el prefijo /api/semesters
 app.use('/api/evaluation-plans', evaluationPlanRoutes); // Define las rutas de planes de evaluación bajo el prefijo /api/evaluation-plans
 app.use('/api/students', studentRoutes);
+app.use('/api/professors', professorRoutes); // Define las rutas de profesores bajo el prefijo /api/professors
 
 // Iniciar el servidor
 app.listen(PORT, () => {
