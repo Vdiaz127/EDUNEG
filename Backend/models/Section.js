@@ -2,28 +2,28 @@ import mongoose from 'mongoose';
 
 const sectionSchema = new mongoose.Schema({
     subjectId: { 
-        type: Number, 
+        type: String, 
         required: [true, 'El código de la materia es requerido'], 
-        min: [1, 'El codigo debe ser al menos 1']
+        trim: true 
     },
     semesterId: { 
-        type: Number, 
+        type: String,  
         required: [true, 'El código del semestre es requerido'], 
-        min: [1, 'El codigo debe ser al menos 1']
+        trim: true
     },
     sectionNumber: { 
-        type: Number, 
+        type: String,
         required: [true, 'El código de la sección es requerido'], 
-        min: [1, 'El codigo debe ser al menos 1']
+        trim: true
     },
     arrayStudents: { 
         type : Array ,
         "default" : [] 
     },
     profesorId: { 
-        type: Number, 
+        type: String,
         required: [true, 'El código del profesor es requerido'], 
-        min: [1, 'El codigo debe ser al menos 1']
+        trim: true
     }
 }, {
     timestamps: true, // Añade automáticamente `createdAt` y `updatedAt`
