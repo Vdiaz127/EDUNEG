@@ -3,35 +3,29 @@ import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
 
-/* 
-  Tabla para mostrar el listado de elementos (profesores, alumnos, materias, etc).
-  Recibe las columnas, los datos, los estilos de la tabla, el placeholder y la función para filtrar la búsqueda por props.
-  El prop "rol" determina la ruta del botón de agregar.
-*/
-
 const Tabla = ({
   columns,
-  data,
+  data, // Aquí se pasa el array de datos desde el componente padre
   customStyles,
   buttontext,
   placeholder,
   filterFunction,
   rol,
 }) => {
-  const [isClient, setIsClient] = useState(false);
   const [records, setRecords] = useState(data);
 
+  // Cada vez que la prop 'data' cambie, actualizamos el estado local
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    setRecords(data);
+  }, [data]);
 
-  if (!isClient) return null;
-
+  // Maneja la búsqueda filtrando sobre el array original
   const handleChange = (e) => {
     const filteredData = filterFunction(data, e.target.value);
     setRecords(filteredData);
   };
 
+  // Mapeo de rutas para el botón "Agregar"
   const routeMap = {
     profesores: "/administrador/profesores/agregar",
     estudiantes: "/administrador/estudiantes/agregar",
@@ -62,16 +56,22 @@ const Tabla = ({
         </Link>
       </div>
 
-      {/* Tabla de datos */}
-      <div className="overflow-x-auto">
-        <DataTable
-          columns={columns}
-          data={records}
-          customStyles={customStyles}
-          pagination
-          paginationPerPage={5}
-        />
-      </div>
+      {/* Renderizado de la tabla o mensaje si no hay datos */}
+      {records.length === 0 ? (
+        <div className=" flex flex-col justify-center items-center p-2">
+          <p >No hay datos disponibles.</p>
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <DataTable
+            columns={columns}
+            data={records}
+            customStyles={customStyles}
+            pagination
+            paginationPerPage={5}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -32,6 +32,7 @@ function App() {
           <Route path="materias" element={<MateriasPage />} />
           <Route path="materias/agregar" element={<FormularioMateria />} />
           <Route path="materias/ver/:id" element={<VerMateria />} />
+          <Route path="materias/agregar/:id" element={<FormularioMateria />} /> 
           {/* Rutas de profesores */}
           <Route path="profesores" element={<ProfesoresPage />} />
           <Route path="profesores/agregar" element={<FormularioProfesor />} />

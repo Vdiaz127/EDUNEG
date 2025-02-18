@@ -2,7 +2,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { IoArrowBackCircle } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 
 const schema = yup.object().shape({
   codigo: yup.string().required("El código es requerido"),
@@ -23,20 +25,59 @@ const schema = yup.object().shape({
     .typeError("Debe ser un número válido"),
 });
 
-const MateriasFormulario = ({ initialData, onSubmit }) => {
+const MateriasFormulario = ({ initialData }) => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: initialData || {
+    defaultValues: {
       codigo: "",
       nombre: "",
       descripcion: "",
       unidadesCreditos: "",
     },
   });
+
+  // Cuando initialData cambie, reseteamos el formulario con esos valores
+  useEffect(() => {
+    if (initialData) {
+      reset({
+        codigo: initialData.code || "",
+        nombre: initialData.name || "",
+        descripcion: initialData.description || "",
+        unidadesCreditos: initialData.credits || "",
+      });
+    }
+  }, [initialData, reset]);
+
+  const onSubmit = async (data) => {
+    try {
+      if (initialData) {
+        // Actualiza materia existente
+        await axios.put(`/api/subjects/${initialData._id}`, {
+          code: data.codigo,
+          name: data.nombre,
+          description: data.descripcion,
+          credits: data.unidadesCreditos,
+        });
+      } else {
+        // Crea nueva materia
+        await axios.post("/api/subjects", {
+          code: data.codigo,
+          name: data.nombre,
+          description: data.descripcion,
+          credits: data.unidadesCreditos,
+        });
+      }
+      navigate("/administrador/materias");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  };
 
   return (
     <div className="w-full flex justify-center items-center m-8">
@@ -60,7 +101,7 @@ const MateriasFormulario = ({ initialData, onSubmit }) => {
           <input
             {...register("codigo")}
             type="text"
-            className="bg-gray-100 mt-1 block w-full border-b-2 border-gray-500  p-2 outline-none"
+            className="bg-gray-100 mt-1 block w-full border-b-2 border-gray-500 p-2 outline-none"
           />
           {errors.codigo && (
             <p className="text-red-500 text-sm">{errors.codigo.message}</p>
@@ -74,7 +115,7 @@ const MateriasFormulario = ({ initialData, onSubmit }) => {
           <input
             {...register("nombre")}
             type="text"
-            className="bg-gray-100 mt-1 block w-full border-b-2 border-gray-500  p-2 outline-none"
+            className="bg-gray-100 mt-1 block w-full border-b-2 border-gray-500 p-2 outline-none"
           />
           {errors.nombre && (
             <p className="text-red-500 text-sm">{errors.nombre.message}</p>
@@ -87,7 +128,7 @@ const MateriasFormulario = ({ initialData, onSubmit }) => {
           </label>
           <textarea
             {...register("descripcion")}
-            className="bg-gray-100 mt-1 block w-full border-b-2 border-gray-500  p-2 outline-none"
+            className="bg-gray-100 mt-1 block w-full border-b-2 border-gray-500 p-2 outline-none"
             rows="3"
           />
           {errors.descripcion && (
@@ -96,10 +137,7 @@ const MateriasFormulario = ({ initialData, onSubmit }) => {
         </div>
 
         <div>
-          <label
-            htmlFor="unidadesCreditos"
-            className="block text-sm font-medium"
-          >
+          <label htmlFor="unidadesCreditos" className="block text-sm font-medium">
             Unidades de Créditos
           </label>
           <input
@@ -108,7 +146,7 @@ const MateriasFormulario = ({ initialData, onSubmit }) => {
             min="0"
             max="4"
             step="1"
-            className="bg-gray-100 mt-1 block w-full border-b-2 border-gray-500  p-2 outline-none"
+            className="bg-gray-100 mt-1 block w-full border-b-2 border-gray-500 p-2 outline-none"
           />
           {errors.unidadesCreditos && (
             <p className="text-red-500 text-sm">
