@@ -2,12 +2,38 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema({
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    role: { type: String, required: true },
-    isActive: { type: Boolean, default: true }
+    firstName: { 
+        type: String, 
+        required: [true, 'El nombre es obligatorio.'] 
+    },
+    lastName: { 
+        type: String, 
+        required: [true, 'El apellido es obligatorio.'] 
+    },
+    email: { 
+        type: String, 
+        required: [true, 'El correo electrónico es obligatorio.'], 
+        unique: [true, 'El correo electrónico ya está en uso.'],
+        validate: {
+            validator: function(v) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); // Validación básica de correo electrónico
+            },
+            message: props => `${props.value} no es un correo electrónico válido.`
+        }
+    },
+    password: { 
+        type: String, 
+        required: [true, 'La contraseña es obligatoria.'],
+        minlength: [6, 'La contraseña debe tener al menos 6 caracteres.']
+    },
+    role: { 
+        type: String, 
+        required: [true, 'El rol es obligatorio.'] 
+    },
+    isActive: { 
+        type: Boolean, 
+        default: true 
+    }
 }, { timestamps: true });
 
 // Encriptar la contraseña antes de guardar
@@ -23,5 +49,5 @@ userSchema.methods.matchPassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('User ', userSchema);
 export default User;
