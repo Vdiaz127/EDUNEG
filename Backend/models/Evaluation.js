@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 
 const evaluationSchema = new mongoose.Schema({
     evaluationPlan: { 
-        type: Number, 
+        type: String, 
         required: [true, 'El código del plan de evaluación es requerido'], 
-        min: [1, 'Los créditos deben ser al menos 1']
+        trim: true 
     },
     name: { 
         type: String, 
