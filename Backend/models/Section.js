@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const evaluationSchema = new mongoose.Schema({
+const sectionSchema = new mongoose.Schema({
     evaluationPlan: { 
         type: Number, 
         required: [true, 'El código del plan de evaluación es requerido'], 
@@ -21,9 +21,9 @@ const evaluationSchema = new mongoose.Schema({
     },
     weight: { 
         type: Float, 
-        required: [true, 'La puntuacion de la evaluación es requeridos'], 
-        min: [1, 'La puntuacion debe ser al menos 1'], 
-        max: [10, 'La puntuacion no pueden exceder 10'] 
+        required: [true, 'El peso de la evaluación es requeridos'], 
+        min: [1, 'Los créditos deben ser al menos 1'], 
+        max: [10, 'Los créditos no pueden exceder 10'] 
     },
     documentLink: { 
         type: mongoose.SchemaTypes.Url
@@ -34,4 +34,4 @@ const evaluationSchema = new mongoose.Schema({
     versionKey: false // Esto es para que no aparezca el atributo `__v`
 });
 
-export default mongoose.model('Evaluation', evaluationSchema);
+export default mongoose.model('Section', sectionSchema);
