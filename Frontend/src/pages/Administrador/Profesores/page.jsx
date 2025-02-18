@@ -10,17 +10,17 @@ const columns = [
     name: "Nombre",
     selector: (row) => row.nombre,
     sortable: true,
-    center: true,
+    center: "true",
   },
   {
     name: "Email",
     selector: (row) => row.email,
     sortable: true,
-    center: true,
+    center: "true",
   },
   {
     name: "Estatus",
-    center: true,
+    center: "true",
     selector: (row) => row.isArctive,
     cell: (row) => (
       <div
@@ -40,7 +40,7 @@ const columns = [
   },
   {
     name: "Acciones",
-    center: true,
+    center: "true",
     cell: (row) => (
       <div className="flex space-x-2 md:space-x-8 ">
         <Link to="/administrador/profesores/ver/2">
@@ -133,6 +133,7 @@ const Dashboard = () => {
         placeholder={"Buscar por nombre o email"}
         filterFunction={filterFunction}
         rol={"Profesores"}
+        responsive
       />
     </div>
   );

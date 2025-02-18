@@ -10,22 +10,22 @@ const columns = [
     name: "Codigo",
     selector: (row) => row.codigo,
     sortable: true,
-    center: true,
+    center: "true",
   },
   {
     name: "Nombre",
     selector: (row) => row.nombre,
     sortable: true,
-    center: true,
+    center: "true",
   },
   {
     name: "Unidades de credito",
     selector: (row) => row.unidadesCredito,
-    center: true,
+    center: "true",
   },
   {
     name: "Acciones",
-    center: true,
+    center: "true",
     cell: (row) => (
       <div className="flex space-x-2 md:space-x-8 ">
 
@@ -116,7 +116,7 @@ const filterFunction = (data, query) => {
 
 const DashboardMaterias = () => {
   return (
-    <div className="flex flex-col items-end">
+    <div className="flex flex-col items-center">
       <Tabla
         columns={columns}
         data={data}
@@ -125,6 +125,7 @@ const DashboardMaterias = () => {
         placeholder={"Buscar por nombre o código"}
         filterFunction={filterFunction}
         rol={"Materias"}
+        responsive
       />
     </div>
   );

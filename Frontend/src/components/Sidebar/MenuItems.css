@@ -1,0 +1,21 @@
+
+.imgRedonda {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .menuitem {
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .menuitem:hover {
+    transform: scale(1.1);
+  }
+  
+  .icon-class {
+    font-size: 1.5rem;
+  }
+  
