@@ -9,6 +9,7 @@ import AdminPage from './pages/Administrador/page';
 import EstudiantesPage from './pages/Administrador/Estudiantes/page';
 import FormularioEstudiante from './pages/Administrador/Estudiantes/AgregarEstudiante/page';
 import VerEstudiante from './pages/Administrador/Estudiantes/VerEstudiante/page';
+import EditarEstudiante from './pages/Administrador/Estudiantes/EditarEstudiante/page';
 import MateriasPage from './pages/Administrador/Materias/page';
 import FormularioMateria from './pages/Administrador/Materias/AgregarMateria/page';
 import VerMateria from './pages/Administrador/Materias/VerMateria/page';
@@ -28,6 +29,7 @@ function App() {
           <Route path="estudiantes" element={<EstudiantesPage />} />
           <Route path="estudiantes/agregar" element={<FormularioEstudiante />} />
           <Route path="estudiantes/ver/:id" element={<VerEstudiante />} />
+          <Route path="estudiantes/editar/:id" element={<EditarEstudiante />} />
           {/* Rutas de materias */}
           <Route path="materias" element={<MateriasPage />} />
           <Route path="materias/agregar" element={<FormularioMateria />} />

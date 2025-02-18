@@ -1,31 +1,40 @@
 import UserFormulario from "../../../../components/UserFormulario";
-
-const handleSubmit = (data) => {
-  // Los valores vienen parseados correctamente
-  const userData = {
-    ...data,
-    estatus: data.estatus === "true",
-  };
-
-  // Aquí tu lógica para enviar a API
-  console.log(userData);
-};
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const FormularioEstudiante = () => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (data) => {
+    try {
+      // Convertir el string "true"/"false" a booleano real
+      const userData = {
+        ...data,
+        estatus: data.estatus === "true"
+      };
+
+      const response = await axios.post("/api/students", userData);
+      
+      toast.success("Estudiante creado exitosamente");
+      navigate("/administrador/estudiantes");
+    } catch (error) {
+      console.error("Error al crear estudiante:", error);
+      toast.error(error.response?.data?.message || "Error al crear el estudiante");
+    }
+  };
+
   return (
-    // Para un nuevo usuario
-    <UserFormulario onSubmit={handleSubmit} rol={"Estudiante"} />
-    // Para actualizar usuario
-/*     <UserFormulario
+    <UserFormulario 
+      onSubmit={handleSubmit} 
+      rol={"Estudiante"} 
       initialData={{
-        nombre: "Juan",
-        apellido: "Pérez",
-        email: "juan@example.com",
-        estatus: "true",
+        nombre: "",
+        apellido: "",
+        email: "",
+        estatus: "true" // Establecer el valor por defecto como "true" para Activo
       }}
-      onSubmit={handleSubmit}
-      rol="Profesor"
-    /> */
+    />
   );
 };
 
