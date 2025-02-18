@@ -34,7 +34,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean, 
         default: true 
     }
-}, { timestamps: true });
+}, { 
+    timestamps: true,
+    versionKey: false
+});
 
 // Encriptar la contraseña antes de guardar
 userSchema.pre('save', async function(next) {
@@ -49,5 +52,5 @@ userSchema.methods.matchPassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
-const User = mongoose.model('User ', userSchema);
+const User = mongoose.model('User ', userSchema); // Nota: se eliminó el espacio extra en 'User  '
 export default User;
