@@ -2,8 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { connectDB } from './config/db.js';
-import materiaRoutes from './routes/materia.route.js';
-import profesorRoutes from './routes/profesor.route.js';
+import materiaRoutes from './routes/PRUEBA-materia.route.js';
+import profesorRoutes from './routes/PRUEBA.route.js';
 import cors from "cors";
 
 dotenv.config();
@@ -18,6 +18,9 @@ app.use(express.json());
 
 app.use(cors());
 
+
+
+//PRUEBA-PROFESOR (SE ELIMINARÁ)
 app.use("/api/materias", materiaRoutes);
 app.use("/api/profesores", profesorRoutes);
 

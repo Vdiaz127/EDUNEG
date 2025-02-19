@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { getHello, getProfesores, createProfesor, getTasks, addTask, updateTask, deleteTask } from '../controllers/profesor.controller.js';
+import { getHello, getProfesores, createProfesor, getTasks, addTask, updateTask, deleteTask } from '../controllers/PRUEBA-profesor.controller.js';
 
 const router = express.Router(); 
 

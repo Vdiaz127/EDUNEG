@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { createMateria, getMaterias, updateMateria, deleteMateria } from '../controllers/materia.controller.js';
+import { createMateria, getMaterias, updateMateria, deleteMateria } from '../controllers/PRUEBA-materia.controller.js';
 
 const router = express.Router(); 
 

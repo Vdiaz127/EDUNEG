@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import TeachersPage from './pages/profesores';
+import TeachersPage from './pages/PRUEBA-profesores';
 
 function App() {
   const [count, setCount] = useState(0)
