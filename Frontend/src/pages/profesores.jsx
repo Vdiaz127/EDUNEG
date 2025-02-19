@@ -69,9 +69,9 @@ export default function TeacherDashboard() {
 
       // Transform the data to match our structure
       const transformedSubjects = result.data.map((subject) => ({
-        id: subject._id,
+        id: subject.id,
         name: subject.nombre,
-        code: subject._id.slice(-4), // Using last 4 chars of ID as code
+        code: subject.id, // Using last 4 chars of ID as code
         description: subject.descripcion,
         credits: subject.creditos,
       }))
