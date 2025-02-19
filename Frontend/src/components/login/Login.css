@@ -1,0 +1,65 @@
+/* src/components/Login.css */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .login-container {
+    display: flex;
+    height: 100vh; /* Full height */
+  }
+  
+  .login-left {
+    background-color: #007bff; /* Blue background */
+    color: white;
+    padding: 20px;
+    flex: 1; /* This section takes up 50% of the width */
+  }
+  
+  .login-right {
+    background-color: white; /* White background */
+    color: black;
+    padding: 20px;
+    flex: 1; /* This section takes up 50% of the width */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center the content */
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px; /* Add some space from the title */
+  }
+  
+  .login-form input {
+    padding: 10px;
+    margin: 10px 0; /* Space between inputs */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .login-form button {
+    background-color: #007bff; /* Blue button */
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer; /* Pointer cursor on hover */
+  }
+  
+  .login-form button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  .forgot-password {
+    margin-top: 10px;
+    text-align: center; /* Center the text */
+  }
+  
+  .error {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
