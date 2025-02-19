@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Layout que envuelve las rutas del administrador (Sidebar + main content)
 import AdminLayout from './layouts/AdminLayout';
+import ProfesorLayout from './layouts/ProfesorLayout';
 
 // Importa los componentes de página
 import AdminPage from './pages/Administrador/InicioAdministrador';
@@ -48,10 +49,18 @@ function App() {
           <Route path="profesores/agregar" element={<FormularioProfesor />} />
           <Route path="profesores/ver/:id" element={<VerProfesor />} />
           <Route path="profesores/editar/:id" element={<EditarProfesor />} />
+
+          
+        
         </Route>
+
+        <Route path="/profesor" element={<ProfesorLayout />} >
+          <Route index element={<TeachersPage />} />
+        </Route>
+        
       </Routes>
     </BrowserRouter>
-  );*/
+  );
 }
 
 export default App;

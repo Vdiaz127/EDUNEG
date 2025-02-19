@@ -27,7 +27,7 @@ export const getProfesores = async (req, res) => {
 
 export const getTasks = async (req, res) => {
     const data = loadData();
-    console.log(data);
+    //console.log(data);
     const profesor = data.profesores.find(p => p.id === Number(req.params.id));
     if (!profesor) return res.status(404).json({ message: "Profesor no encontrado" });
     res.json(profesor.asignaciones || []);

@@ -2,11 +2,12 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { connectDB } from './config/db.js';
+
 import materiaRoutes from './routes/PRUEBA-materia.route.js';
-import profesorRoutes from './routes/PRUEBA.route.js';
+import profesorRoutes from './routes/PRUEBA-profesor.route.js';
+
 import cors from "cors";
 import bodyParser from 'body-parser';
-import cors from 'cors';
 import authRoutes from './routes/loginRoutes.js';
 import gradeRoutes from './routes/gradeRoutes.js'; // Importación de gradeRoutes
 import subjectRoutes from './routes/subjectRoutes.js'; // Importación de subjectRoutes
@@ -32,14 +33,10 @@ app.use(express.json());
 app.use(cors());
 
 
-
 //PRUEBA-PROFESOR (SE ELIMINARÁ)
 app.use("/api/materias", materiaRoutes);
 app.use("/api/profesores", profesorRoutes);
 
-
-app.listen(PORT, ()=> {
-	/*connectDB();*/
 // Rutas
 app.use('/api/auth', authRoutes); // Define las rutas de autenticación bajo el prefijo /api/auth
 app.use('/api/grades', gradeRoutes); // Define las rutas de calificaciones bajo el prefijo /api/grades
@@ -49,6 +46,8 @@ app.use('/api/evaluation-plans', evaluationPlanRoutes); // Define las rutas de p
 app.use('/api/students', studentRoutes);
 app.use('/api/professors', professorRoutes); // Define las rutas de profesores bajo el prefijo /api/professors
 
+app.listen(PORT, ()=> {
+	
 // Iniciar el servidor
   connectDB();
   console.log('Server is running on http://localhost:' + PORT);

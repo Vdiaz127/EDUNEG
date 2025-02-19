@@ -36,8 +36,8 @@ export default function MenuItems({ onItemSelected, userType = 'admin', userName
       { panelName: 'Materias', icon: MdLibraryBooks, path: '/administrador/materias' },
     ],
     teacher: [
-      { panelName: 'Dashboard', icon: MdHome, path: '/teacher/dashboard' },
-      { panelName: 'Mis Cursos', icon: MdSchool, path: '/teacher/courses' },
+      { panelName: 'Dashboard', icon: MdHome, path: '/profesor' },
+      { panelName: 'Mis Cursos', icon: MdSchool, path: '/profesor' },
     ],
     student: [
       { panelName: 'Dashboard', icon: MdHome, path: '/dashboard' },
