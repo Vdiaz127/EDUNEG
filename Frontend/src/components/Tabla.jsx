@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Tabla = ({
   columns,
-  data, // Aquí se pasa el array de datos desde el componente padre
+  data, 
   customStyles,
   buttontext,
   placeholder,

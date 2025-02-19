@@ -13,8 +13,8 @@ const FormularioEstudiante = () => {
       setLoading(true);
       const userData = {
         ...data,
-        rol: "Estudiante",
-        estatus: data.estatus === "true" || data.estatus === true
+        role: "Estudiante",
+        isActive: data.isActive === "true" || data.isActive === true
       };
 
       await axios.post("/api/students", userData);
@@ -33,12 +33,12 @@ const FormularioEstudiante = () => {
   return (
     <UserFormulario 
       onSubmit={handleSubmit} 
-      rol="Estudiante" 
+      role="Estudiante" 
       initialData={{
-        nombre: "",
-        apellido: "",
+        firstName: "",
+        lastName: "",
         email: "",
-        estatus: "true"
+        isActive: "true"
       }}
       isEditing={false}
       submitButtonText="Crear Estudiante"

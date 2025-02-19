@@ -31,7 +31,7 @@ const EditarProfesor = () => {
     try {
       const userData = {
         ...data,
-        estatus: data.estatus === "true" || data.estatus === true
+        isActive: data.isActive === "true" || data.isActive === true
       };
 
       await axios.put(`/api/professors/${id}`, userData);
@@ -53,10 +53,10 @@ const EditarProfesor = () => {
       onSubmit={handleSubmit}
       rol="Profesor"
       initialData={{
-        nombre: professor.nombre,
-        apellido: professor.apellido,
+        firstName: professor.firstName,
+        lastName: professor.lastName,
         email: professor.email,
-        estatus: professor.estatus.toString()
+        isActive: professor.isActive
       }}
       isEditing={true}
       submitButtonText="Actualizar Profesor"

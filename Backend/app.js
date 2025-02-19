@@ -8,7 +8,7 @@ import profesorRoutes from './routes/PRUEBA-profesor.route.js';
 
 import cors from "cors";
 import bodyParser from 'body-parser';
-import cors from 'cors';
+
 import authRoutes from './routes/authRoutes.js'
 import gradeRoutes from './routes/gradeRoutes.js'; // Importación de gradeRoutes
 import subjectRoutes from './routes/subjectRoutes.js'; // Importación de subjectRoutes
@@ -17,7 +17,8 @@ import evaluationPlanRoutes from './routes/evaluationPlanRoutes.js'; // Importac
 import evaluationRoutes from './routes/evaluationRoutes.js'; // Importación de evaluationPlanRoutes
 import sectionRoutes from './routes/sectionRoutes.js'; // Importación de evaluationPlanRoutes
 import reportRoutes from './routes/reportRoutes.js'; // Importación de evaluationPlanRoutes
-import studentRoutes from './routes/studentRoutes.js';
+
+import studentRoutes from './routes/studentRoutes.js';// Importación de studentRoutes
 import professorRoutes from './routes/professorRoutes.js'; // Importación de professorRoutes
 
 dotenv.config();

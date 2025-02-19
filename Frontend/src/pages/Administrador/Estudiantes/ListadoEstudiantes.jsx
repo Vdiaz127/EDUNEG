@@ -57,7 +57,7 @@ const modalStyles = {
 const filterFunction = (data, query) => {
   return data.filter((record) => {
     return (
-      record.nombre.toLowerCase().includes(query.toLowerCase()) ||
+      record.firstName.toLowerCase().includes(query.toLowerCase()) ||
       record.email.toLowerCase().includes(query.toLowerCase())
     );
   });
@@ -114,7 +114,7 @@ const DashboardEstudiantes = () => {
   const columns = [
     {
       name: "Nombre",
-      selector: (row) => row.nombre,
+      selector: (row) => `${row.firstName} ${row.lastName}`,
       sortable: true,
       center: "true",
     },
@@ -131,8 +131,8 @@ const DashboardEstudiantes = () => {
       cell: (row) => (
         <div
           style={{
-            backgroundColor: row.isActive === "Activo" ? "#7FF8AA" : "#FECACA",
-            color: row.isActive === "Activo" ? "#166534" : "#991B1B",
+            backgroundColor: row.isActive ? "#7FF8AA" : "#FECACA",
+            color: row.isActive ? "#166534" : "#991B1B",
             width: "5rem",
             padding: "0.25rem 0.5rem",
             borderRadius: "0.25rem",
@@ -140,7 +140,7 @@ const DashboardEstudiantes = () => {
             textAlign: "center",
           }}
         >
-          {row.isActive}
+          {row.isActive ? "Activo" : "Inactivo"}
         </div>
       ),
     },
@@ -193,7 +193,7 @@ const DashboardEstudiantes = () => {
             ¿Estás seguro de que deseas eliminar este estudiante?
             {studentToDelete && (
               <span className="block font-semibold mt-2">
-                {studentToDelete.nombre}
+                {studentToDelete.firstName} {studentToDelete.lastName}
               </span>
             )}
           </p>

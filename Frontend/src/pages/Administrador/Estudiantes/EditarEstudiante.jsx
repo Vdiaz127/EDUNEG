@@ -31,7 +31,7 @@ const EditarEstudiante = () => {
     try {
       const userData = {
         ...data,
-        estatus: data.estatus === "true" || data.estatus === true
+        isActive: data.isActive === "true" || data.isActive === true
       };
 
       await axios.put(`/api/students/${id}`, userData);
@@ -53,10 +53,11 @@ const EditarEstudiante = () => {
       onSubmit={handleSubmit}
       rol="Estudiante"
       initialData={{
-        nombre: student.nombre,
-        apellido: student.apellido,
+        firstName: student.firstName,
+        lastName: student.lastName,
         email: student.email,
-        estatus: student.estatus.toString()
+        role: student.role,
+        isActive: student.isActive.toString()
       }}
       isEditing={true}
       submitButtonText="Actualizar Estudiante"

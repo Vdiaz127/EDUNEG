@@ -2,7 +2,7 @@ import User from '../models/User.js';
 
 export const createStudent = async (req, res) => {
     try {
-        const { nombre, apellido, email, estatus } = req.body;
+        const { firstName, lastName, email, isActive } = req.body;
 
         // Verificar si el email ya existe
         const existingUser = await User.findOne({ email });
@@ -14,13 +14,13 @@ export const createStudent = async (req, res) => {
 
         // Crear el estudiante
         const student = new User({
-            nombre,
-            apellido,
+            firstName,
+            lastName,
             email,
-            estatus,
-            rol: 'Estudiante',
+            isActive,
+            role: 'Estudiante',
             // Generar una contraseña temporal
-            password: Math.random().toString(36).slice(-8)
+           // password: Math.random().toString(36).slice(-8)
         });
 
         await student.save();
@@ -29,10 +29,10 @@ export const createStudent = async (req, res) => {
             message: 'Estudiante creado exitosamente',
             student: {
                 id: student._id,
-                nombre: student.nombre,
-                apellido: student.apellido,
+                firstName: student.firstName,
+                lastName: student.lastName,
                 email: student.email,
-                estatus: student.estatus
+                isActive: student.isActive
             }
         });
     } catch (error) {
@@ -46,14 +46,15 @@ export const createStudent = async (req, res) => {
 
 export const getAllStudents = async (req, res) => {
     try {
-        const students = await User.find({ rol: 'Estudiante' })
-            .select('nombre apellido email estatus');
+        const students = await User.find({ role: 'Estudiante' })
+            .select('firstName lastName email isActive');
 
         const formattedStudents = students.map(student => ({
             id: student._id,
-            nombre: `${student.nombre} ${student.apellido}`,
+            firstName: student.firstName,
+            lastName: student.lastName,
             email: student.email,
-            isActive: student.estatus ? "Activo" : "Inactivo"
+            isActive: student.isActive
         }));
 
         res.status(200).json(formattedStudents);
@@ -68,8 +69,8 @@ export const getAllStudents = async (req, res) => {
 
 export const getStudentById = async (req, res) => {
     try {
-        const student = await User.findOne({ _id: req.params.id, rol: 'Estudiante' })
-            .select('nombre apellido email estatus');
+        const student = await User.findOne({ _id: req.params.id, role: 'Estudiante' })
+            .select('firstName lastName email isActive');
 
         if (!student) {
             return res.status(404).json({
@@ -79,10 +80,10 @@ export const getStudentById = async (req, res) => {
 
         res.status(200).json({
             id: student._id,
-            nombre: student.nombre,
-            apellido: student.apellido,
+            firstName: student.firstName,
+            lastName: student.lastName,
             email: student.email,
-            estatus: student.estatus
+            isActive: student.isActive
         });
     } catch (error) {
         console.error('Error al obtener estudiante:', error);
@@ -95,7 +96,7 @@ export const getStudentById = async (req, res) => {
 
 export const updateStudent = async (req, res) => {
     try {
-        const { nombre, apellido, email, estatus } = req.body;
+        const { firstName, lastName, email, isActive } = req.body;
         
         // Verificar si el email ya existe en otro usuario
         const existingUser = await User.findOne({ 
@@ -110,10 +111,10 @@ export const updateStudent = async (req, res) => {
         }
 
         const updatedStudent = await User.findOneAndUpdate(
-            { _id: req.params.id, rol: 'Estudiante' },
-            { nombre, apellido, email, estatus },
+            { _id: req.params.id, role: 'Estudiante' },
+            { firstName, lastName, email, isActive },
             { new: true }
-        ).select('nombre apellido email estatus');
+        ).select('firstName lastName email isActive');
 
         if (!updatedStudent) {
             return res.status(404).json({
@@ -125,10 +126,10 @@ export const updateStudent = async (req, res) => {
             message: 'Estudiante actualizado exitosamente',
             student: {
                 id: updatedStudent._id,
-                nombre: updatedStudent.nombre,
-                apellido: updatedStudent.apellido,
+                firstName: updatedStudent.firstName,
+                lastName: updatedStudent.lastName,
                 email: updatedStudent.email,
-                estatus: updatedStudent.estatus
+                isActive: updatedStudent.isActive
             }
         });
     } catch (error) {
@@ -144,7 +145,7 @@ export const deleteStudent = async (req, res) => {
     try {
         const deletedStudent = await User.findOneAndDelete({
             _id: req.params.id,
-            rol: 'Estudiante'
+            role: 'Estudiante'
         });
 
         if (!deletedStudent) {

@@ -43,7 +43,7 @@ const UserInformacion = ({ user, rol, returnUrl }) => {
               Nombre
             </p>
             <p className="font-bold text-lg">
-              {user.nombre} {user.apellido}
+              {user.firstName} {user.lastName}
             </p>
           </div>
         </div>

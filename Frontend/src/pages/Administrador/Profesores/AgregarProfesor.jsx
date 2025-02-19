@@ -14,8 +14,8 @@ const AgregarProfesor = () => {
       // Asegurarnos de que el estatus se maneje correctamente
       const userData = {
         ...data,
-        rol: "Profesor",
-        estatus: data.estatus === "true" || data.estatus === true
+        role: "Profesor",
+        isActive: data.isActive === "true" || data.isActive === true
       };
 
       await axios.post('/api/professors', userData);
@@ -34,12 +34,13 @@ const AgregarProfesor = () => {
   return (
     <UserFormulario 
       onSubmit={handleSubmit}
-      rol="Profesor"
+      role="Profesor"
       initialData={{
-        nombre: "",
-        apellido: "",
+        firstName: "",
+        lastName: "",
         email: "",
-        estatus: "true"
+        password: "",
+        isActive: "true"
       }}
       isEditing={false}
       submitButtonText="Crear Profesor"

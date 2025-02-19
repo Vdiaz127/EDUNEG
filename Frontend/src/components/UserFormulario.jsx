@@ -5,12 +5,12 @@ import { IoArrowBackCircle } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 
 const schema = yup.object().shape({
-  nombre: yup
+  firstName: yup
     .string()
     .required("El nombre es requerido")
     .min(2, "El nombre debe tener al menos 2 caracteres")
     .max(50, "El nombre no puede tener más de 50 caracteres"),
-  apellido: yup
+  lastName: yup
     .string()
     .required("El apellido es requerido")
     .min(2, "El apellido debe tener al menos 2 caracteres")
@@ -19,7 +19,7 @@ const schema = yup.object().shape({
     .string()
     .required("El email es requerido")
     .email("Formato de email inválido"),
-  estatus: yup
+  isActive: yup
     .string()
     .required("El estatus es requerido")
     .typeError("Debes seleccionar un estatus válido"),
@@ -41,10 +41,10 @@ const UserFormulario = ({
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: initialData || {
-      nombre: "",
-      apellido: "",
+      firstName: "",
+      lastName: "",
       email: "",
-      estatus: "",
+      isActive: "",
     },
   });
 
@@ -71,30 +71,30 @@ const UserFormulario = ({
         </div>
 
         <div>
-          <label htmlFor="nombre" className="block text-sm font-medium">
+          <label htmlFor="firstName" className="block text-sm font-medium">
             Nombre
           </label>
           <input
-            {...register("nombre")}
+            {...register("firstName")}
             type="text"
             className="bg-gray-100 mt-1 block w-full border-b-2 border-gray-500 p-2 outline-none"
           />
-          {errors.nombre && (
-            <p className="text-red-500 text-sm">{errors.nombre.message}</p>
+          {errors.firstName && (
+            <p className="text-red-500 text-sm">{errors.firstName.message}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor="apellido" className="block text-sm font-medium">
+          <label htmlFor="lastName" className="block text-sm font-medium">
             Apellido
           </label>
           <input
-            {...register("apellido")}
+            {...register("lastName")}
             type="text"
             className="bg-gray-100 mt-1 block w-full border-b-2 border-gray-500  p-2 outline-none"
           />
-          {errors.apellido && (
-            <p className="text-red-500 text-sm">{errors.apellido.message}</p>
+          {errors.lastName && (
+            <p className="text-red-500 text-sm">{errors.lastName.message}</p>
           )}
         </div>
 
@@ -113,19 +113,19 @@ const UserFormulario = ({
         </div>
 
         <div>
-          <label htmlFor="estatus" className="block text-sm font-medium">
+          <label htmlFor="isActive" className="block text-sm font-medium">
             Estatus
           </label>
           <select
-            {...register("estatus")}
+            {...register("isActive")}
             className="bg-gray-100 mt-1 block w-full border-b-2 border-gray-500 p-2 outline-none text-gray-600"
           >
             <option value="">Seleccionar estatus</option>
             <option value="true">Activo</option>
             <option value="false">Inactivo</option>
           </select>
-          {errors.estatus && (
-            <p className="text-red-500 text-sm">{errors.estatus.message}</p>
+          {errors.isActive && (
+            <p className="text-red-500 text-sm">{errors.isActive.message}</p>
           )}
         </div>
 

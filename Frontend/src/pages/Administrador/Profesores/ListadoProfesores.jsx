@@ -57,7 +57,7 @@ const modalStyles = {
 const filterFunction = (data, query) => {
   return data.filter((record) => {
     return (
-      record.nombre.toLowerCase().includes(query.toLowerCase()) ||
+      record.firstName.toLowerCase().includes(query.toLowerCase()) ||
       record.email.toLowerCase().includes(query.toLowerCase())
     );
   });
@@ -74,6 +74,7 @@ const DashboardProfesores = () => {
     try {
       const response = await axios.get('/api/professors');
       setProfessors(response.data);
+      console.log(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener profesores:', error);
@@ -113,8 +114,8 @@ const DashboardProfesores = () => {
 
   const columns = [
     {
-      name: "Nombre",
-      selector: (row) => row.nombre,
+      name: "Name",
+      selector: (row) => `${row.firstName} ${row.lastName}`,
       sortable: true,
       center: "true",
     },
@@ -131,8 +132,8 @@ const DashboardProfesores = () => {
       cell: (row) => (
         <div
           style={{
-            backgroundColor: row.isActive === "Activo" ? "#7FF8AA" : "#FECACA",
-            color: row.isActive === "Activo" ? "#166534" : "#991B1B",
+            backgroundColor: row.isActive ? "#7FF8AA" : "#FECACA",
+            color: row.isActive ? "#166534" : "#991B1B",
             width: "5rem",
             padding: "0.25rem 0.5rem",
             borderRadius: "0.25rem",
@@ -140,7 +141,7 @@ const DashboardProfesores = () => {
             textAlign: "center",
           }}
         >
-          {row.isActive}
+          {row.isActive ? "Activo" : "Inactivo"}
         </div>
       ),
     },
