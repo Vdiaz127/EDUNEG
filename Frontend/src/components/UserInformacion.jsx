@@ -6,10 +6,11 @@ import { MdOutlineEmail } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const UserInformacion = ({ user, rol, returnUrl }) => {
+  
   if (!user) {
     return <div>Cargando...</div>;
   }
-
+  console.log(user);
   return (
     <div className="flex flex-col justify-center items-center h-screen m-5">
       {/* Informacion */}
@@ -66,8 +67,9 @@ const UserInformacion = ({ user, rol, returnUrl }) => {
             Regresar
           </button>
         </Link>
-
-        <Link to={`${returnUrl}/editar/${user._id}`}>
+        
+        
+        <Link to={`${returnUrl}/editar/${user.id}`}>
           <button className="bg-gray-100 px-8 py-2 text-center border-2 border-gray-300 rounded-md shadow-md cursor-pointer">
             Editar Perfil
           </button>

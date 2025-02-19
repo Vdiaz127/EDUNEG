@@ -15,7 +15,7 @@ const MateriaInformacion = ({
   const navigate = useNavigate();
 
   const handleEdit = () => {
-    navigate(`/administrador/materias/agregar/${id}`);
+    navigate(`/administrador/materias/editar/${id}`);
   };
 
   return (

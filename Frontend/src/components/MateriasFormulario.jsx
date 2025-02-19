@@ -58,7 +58,7 @@ const MateriasFormulario = ({ initialData }) => {
     try {
       if (initialData) {
         // Actualiza materia existente
-        await axios.put(`/api/subjects/${initialData._id}`, {
+        await axios.put(`/api/subjects/${initialData.id}`, {
           code: data.codigo,
           name: data.nombre,
           description: data.descripcion,

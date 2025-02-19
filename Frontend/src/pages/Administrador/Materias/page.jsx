@@ -58,7 +58,7 @@ const DashboardMaterias = () => {
           <Link to={`/administrador/materias/ver/${row._id}`}>
             <FaEye className="cursor-pointer w-5 h-5" title="Ver" />
           </Link>
-          <Link to={`/administrador/materias/agregar/${row._id}`}>
+          <Link to={`/administrador/materias/editar/${row._id}`}>
             <FaEdit className="cursor-pointer w-5 h-5" title="Editar" />
           </Link>
           <FaTrash

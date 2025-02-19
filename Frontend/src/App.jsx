@@ -6,17 +6,22 @@ import AdminLayout from './layouts/AdminLayout';
 
 // Importa los componentes de página
 import AdminPage from './pages/Administrador/page';
+
 import EstudiantesPage from './pages/Administrador/Estudiantes/page';
 import FormularioEstudiante from './pages/Administrador/Estudiantes/AgregarEstudiante/page';
 import VerEstudiante from './pages/Administrador/Estudiantes/VerEstudiante/page';
 import EditarEstudiante from './pages/Administrador/Estudiantes/EditarEstudiante/page';
+
 import MateriasPage from './pages/Administrador/Materias/page';
 import FormularioMateria from './pages/Administrador/Materias/AgregarMateria/page';
+import EditarMateria from './pages/Administrador/Materias/EditarMateria/page';
 import VerMateria from './pages/Administrador/Materias/VerMateria/page';
+
 import ProfesoresPage from './pages/Administrador/Profesores/page';
 import FormularioProfesor from './pages/Administrador/Profesores/AgregarProfesor/page';
 import VerProfesor from './pages/Administrador/Profesores/VerProfesor/page';
 import EditarProfesor from './pages/Administrador/Profesores/EditarProfesor/page';
+
 
 function App() {
   return (
@@ -35,6 +40,7 @@ function App() {
           <Route path="materias" element={<MateriasPage />} />
           <Route path="materias/agregar" element={<FormularioMateria />} />
           <Route path="materias/ver/:id" element={<VerMateria />} />
+          <Route path="materias/editar/:id" element={<EditarMateria />} />
           {/* Rutas de profesores */}
           <Route path="profesores" element={<ProfesoresPage />} />
           <Route path="profesores/agregar" element={<FormularioProfesor />} />

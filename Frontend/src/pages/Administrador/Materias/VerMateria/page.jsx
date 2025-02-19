@@ -7,6 +7,7 @@ const VerMateria = () => {
   const { id } = useParams();
   const [materia, setMateria] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchMateria = async () => {
@@ -15,6 +16,7 @@ const VerMateria = () => {
         setMateria(response.data);
       } catch (error) {
         console.error("Error fetching subject:", error);
+        setError("Error al cargar la información de la materia");
       } finally {
         setLoading(false);
       }
@@ -23,13 +25,9 @@ const VerMateria = () => {
     fetchMateria();
   }, [id]);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (!materia) {
-    return <p>No se encontró la materia.</p>;
-  }
+  if (loading) return <div>Cargando...</div>;
+  if (error) return <div>{error}</div>;
+  if (!materia) return <div>Materia no encontrada</div>;
 
   return (
     <MateriaInformacion
