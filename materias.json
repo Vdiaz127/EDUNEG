@@ -1,0 +1,22 @@
+{
+    "materias": [
+    {
+        "id": 1,
+        "nombre": "Matemáticas",
+        "descripcion": "Introducción a los conceptos matemáticos básicos.",
+        "creditos": 3
+    },
+    {
+        "id": 2,
+        "nombre": "Física",
+        "descripcion": "Estudio de las leyes naturales y sus aplicaciones.",
+        "creditos": 4
+    },
+    {
+        "id": 3,
+        "nombre": "Programación",
+        "descripcion": "Fundamentos de algoritmos y desarrollo de software.",
+        "creditos": 5
+    }
+    ]
+}

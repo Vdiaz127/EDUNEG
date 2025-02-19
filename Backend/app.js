@@ -2,8 +2,13 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { connectDB } from './config/db.js';
+
+import materiaRoutes from './routes/PRUEBA-materia.route.js';
+import profesorRoutes from './routes/PRUEBA-profesor.route.js';
+
+import cors from "cors";
 import bodyParser from 'body-parser';
-import cors from 'cors';
+
 import authRoutes from './routes/authRoutes.js'
 import gradeRoutes from './routes/gradeRoutes.js'; // Importación de gradeRoutes
 import subjectRoutes from './routes/subjectRoutes.js'; // Importación de subjectRoutes
@@ -12,6 +17,9 @@ import evaluationPlanRoutes from './routes/evaluationPlanRoutes.js'; // Importac
 import evaluationRoutes from './routes/evaluationRoutes.js'; // Importación de evaluationPlanRoutes
 import sectionRoutes from './routes/sectionRoutes.js'; // Importación de evaluationPlanRoutes
 import reportRoutes from './routes/reportRoutes.js'; // Importación de evaluationPlanRoutes
+
+import studentRoutes from './routes/studentRoutes.js';// Importación de studentRoutes
+import professorRoutes from './routes/professorRoutes.js'; // Importación de professorRoutes
 
 dotenv.config();
 
@@ -27,6 +35,13 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
+app.use(cors());
+
+
+//PRUEBA-PROFESOR (SE ELIMINARÁ)
+app.use("/api/materias", materiaRoutes);
+app.use("/api/profesores", profesorRoutes);
+
 // Rutas
 app.use('/api/auth', authRoutes);
 app.use('/api/grades', gradeRoutes); // Define las rutas de calificaciones bajo el prefijo /api/grades
@@ -37,8 +52,12 @@ app.use('/api/evaluations', evaluationRoutes); // Define las rutas de evaluació
 app.use('/api/sections', sectionRoutes); // Define las rutas de evaluaciónes bajo el prefijo /api/evaluations
 app.use('/api/reports', reportRoutes); // Define las rutas de evaluaciónes bajo el prefijo /api/evaluations
 
+app.use('/api/students', studentRoutes);
+app.use('/api/professors', professorRoutes); // Define las rutas de profesores bajo el prefijo /api/professors
+
+app.listen(PORT, ()=> {
+	
 // Iniciar el servidor
-app.listen(PORT, () => {
   connectDB();
   console.log('Server is running on http://localhost:' + PORT);
 });
