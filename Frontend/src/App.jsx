@@ -5,22 +5,22 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AdminLayout from './layouts/AdminLayout';
 
 // Importa los componentes de página
-import AdminPage from './pages/Administrador/page';
+import AdminPage from './pages/Administrador/InicioAdministrador';
 
-import EstudiantesPage from './pages/Administrador/Estudiantes/page';
-import FormularioEstudiante from './pages/Administrador/Estudiantes/AgregarEstudiante/page';
-import VerEstudiante from './pages/Administrador/Estudiantes/VerEstudiante/page';
-import EditarEstudiante from './pages/Administrador/Estudiantes/EditarEstudiante/page';
+import EstudiantesPage from './pages/Administrador/Estudiantes/ListadoEstudiantes';
+import FormularioEstudiante from './pages/Administrador/Estudiantes/AgregarEstudiante';
+import VerEstudiante from './pages/Administrador/Estudiantes/VerEstudiante';
+import EditarEstudiante from './pages/Administrador/Estudiantes/EditarEstudiante';
 
-import MateriasPage from './pages/Administrador/Materias/page';
-import FormularioMateria from './pages/Administrador/Materias/AgregarMateria/page';
-import EditarMateria from './pages/Administrador/Materias/EditarMateria/page';
-import VerMateria from './pages/Administrador/Materias/VerMateria/page';
+import MateriasPage from './pages/Administrador/Materias/ListadoMaterias';
+import FormularioMateria from './pages/Administrador/Materias/AgregarMateria';
+import EditarMateria from './pages/Administrador/Materias/EditarMateria';
+import VerMateria from './pages/Administrador/Materias/VerMateria';
 
-import ProfesoresPage from './pages/Administrador/Profesores/page';
-import FormularioProfesor from './pages/Administrador/Profesores/AgregarProfesor/page';
-import VerProfesor from './pages/Administrador/Profesores/VerProfesor/page';
-import EditarProfesor from './pages/Administrador/Profesores/EditarProfesor/page';
+import ProfesoresPage from './pages/Administrador/Profesores/ListadoProfesores';
+import FormularioProfesor from './pages/Administrador/Profesores/AgregarProfesor';
+import VerProfesor from './pages/Administrador/Profesores/VerProfesor';
+import EditarProfesor from './pages/Administrador/Profesores/EditarProfesor';
 
 
 function App() {

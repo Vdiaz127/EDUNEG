@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import UserInformacion from "../../../../components/UserInformacion";
+import UserInformacion from "../../../components/UserInformacion";
 import axios from "axios";
 
 const VerProfesor = () => {

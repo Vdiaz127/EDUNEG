@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import MateriasFormulario from "../../../../components/MateriasFormulario";
+import MateriasFormulario from "../../../components/MateriasFormulario";
 import axios from 'axios';
 
 const FormularioMateria = () => {

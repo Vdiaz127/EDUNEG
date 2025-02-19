@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import MateriaInformacion from "../../../../components/MateriaInformacion";
+import MateriaInformacion from "../../../components/MateriaInformacion";
 
 const VerMateria = () => {
   const { id } = useParams();

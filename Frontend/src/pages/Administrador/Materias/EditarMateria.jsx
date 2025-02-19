@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useParams, useNavigate } from "react-router-dom";
-import MateriaFormulario from "../../../../components/MateriasFormulario";
+import MateriaFormulario from "../../../components/MateriasFormulario";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";

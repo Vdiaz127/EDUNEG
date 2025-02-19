@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import UserFormulario from "../../../../components/UserFormulario";
+import UserFormulario from "../../../components/UserFormulario";
 import axios from "axios";
 import { toast } from "react-toastify";
 
