@@ -27,7 +27,7 @@ const subjectSchema = new mongoose.Schema({
         type: Number, 
         required: [true, 'Los créditos de la materia son requeridos'], 
         min: [1, 'Los créditos deben ser al menos 1'], 
-        max: [10, 'Los créditos no pueden exceder 10'] 
+        max: [4, 'Los créditos no pueden exceder 4'] 
     }
 }, {
     timestamps: true, // Añade automáticamente `createdAt` y `updatedAt`
