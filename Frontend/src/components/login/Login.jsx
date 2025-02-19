@@ -69,7 +69,7 @@ const Login = () => {
     <div class="bg-sky-100 flex lg:flex-row flex-col justify-center items-center h-screen">
       <div class="lg:w-1/2 h-screen lg:block flex justify-center content-center flex-col login-left">
         <div class="w-full p-3 flex items-center content-center flex-col">
-            <img class="leftLogo" src="/img/birrete.png"  />
+            <img class="leftLogo" src="/images/birrete.png"  />
             <h1>¡Bienvenido!</h1>
             <h2>EDUNEG</h2>
             <p>
