@@ -2,6 +2,9 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { connectDB } from './config/db.js';
+import materiaRoutes from './routes/PRUEBA-materia.route.js';
+import profesorRoutes from './routes/PRUEBA.route.js';
+import cors from "cors";
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import authRoutes from './routes/loginRoutes.js';
@@ -26,6 +29,17 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
+app.use(cors());
+
+
+
+//PRUEBA-PROFESOR (SE ELIMINARÁ)
+app.use("/api/materias", materiaRoutes);
+app.use("/api/profesores", profesorRoutes);
+
+
+app.listen(PORT, ()=> {
+	/*connectDB();*/
 // Rutas
 app.use('/api/auth', authRoutes); // Define las rutas de autenticación bajo el prefijo /api/auth
 app.use('/api/grades', gradeRoutes); // Define las rutas de calificaciones bajo el prefijo /api/grades
@@ -36,7 +50,6 @@ app.use('/api/students', studentRoutes);
 app.use('/api/professors', professorRoutes); // Define las rutas de profesores bajo el prefijo /api/professors
 
 // Iniciar el servidor
-app.listen(PORT, () => {
   connectDB();
   console.log('Server is running on http://localhost:' + PORT);
 });

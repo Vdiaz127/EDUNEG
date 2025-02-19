@@ -23,6 +23,8 @@ import VerProfesor from './pages/Administrador/Profesores/VerProfesor';
 import EditarProfesor from './pages/Administrador/Profesores/EditarProfesor';
 
 
+import TeachersPage from './pages/PRUEBA-profesores';
+
 function App() {
   return (
     <BrowserRouter>
@@ -49,7 +51,7 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
-  );
+  );*/
 }
 
 export default App;
