@@ -1,18 +1,21 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import TeachersPage from './pages/profesores';
+
 function App() {
   const [count, setCount] = useState(0)
 
-  // return (
-  //   <>
-  //      <BrowserRouter>
-  //       <Routes>
-  //         <Route path="/" element={<PaginaInicio />} />
-  //       </Routes>
-  //     </BrowserRouter> 
-  //   </>
-  // )
+  return (
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<TeachersPage />} />
+        </Routes>
+      </BrowserRouter> 
+    </>
+  )
 
+  /*
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <h1 className="text-4xl font-bold text-blue-600 mb-4">Bienvenido a EDUNEG</h1>
@@ -23,7 +26,7 @@ function App() {
         Comprar Ahora
       </button>
     </div>
-  );
+  );*/
 }
 
 export default App

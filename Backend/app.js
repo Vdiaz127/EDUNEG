@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { connectDB } from './config/db.js';
 import materiaRoutes from './routes/materia.route.js';
+import profesorRoutes from './routes/profesor.route.js';
+import cors from "cors";
 
 dotenv.config();
 
@@ -14,13 +16,14 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json()); 
 
-
+app.use(cors());
 
 app.use("/api/materias", materiaRoutes);
+app.use("/api/profesores", profesorRoutes);
 
 
 app.listen(PORT, ()=> {
-  connectDB();
+	/*connectDB();*/
   console.log('Server is running on http://localhost:' + PORT);
 });
 

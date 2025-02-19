@@ -27,7 +27,7 @@ const EVALUATION_PLANS = [
 ]
 
 // ID del profesor (normalmente vendría de autenticación)
-const TEACHER_ID = "67b2739c36498dd15d209c4f"
+const TEACHER_ID = 1
 
 export default function TeacherDashboard() {
   const [tasks, setTasks] = useState([])
