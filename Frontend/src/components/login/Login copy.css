@@ -12,71 +12,41 @@ body {
   
   .login-left {
     background-color: #007bff; /* Blue background */
-    background-image: url(../../assets/left-bg.png);
-    background-repeat: no-repeat;
-    background-size: cover;
     color: white;
     padding: 20px;
+    flex: 1; /* This section takes up 50% of the width */
   }
   
-  .login-left .leftLogo {
-    width: 150px;
-    margin: 0 auto;
-    display: block;
-  }
-
-  .login-left h1 {
-    font-size: xx-large;
-    font-weight: bold;
-  }
-
-  .login-left h2 {
-    margin-bottom: 33px;
-  }
-
-  .login-left p {
-    text-align: center;
-  }
-
   .login-right {
     background-color: white; /* White background */
     color: black;
+    padding: 20px;
+    flex: 1; /* This section takes up 50% of the width */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center the content */
   }
-
-  .login-right h1 {
-    font-size: xx-large;
-    color: rgb(32, 32, 32);
-  }
-
-    .login-right p {
-        text-align: center;
-        line-height: 21px;
-        color: rgb(71, 71, 71);
-    }
   
   .login-form {
     display: flex;
     flex-direction: column;
-    margin-top: 30px; /* Add some space from the title */
-    margin-bottom: 15px; /* Add some space from the title */
-    width: 100%;
+    margin-top: 20px; /* Add some space from the title */
   }
   
   .login-form input {
-    padding: 6px 12px;
+    padding: 10px;
     margin: 10px 0; /* Space between inputs */
-    border: 1px solid #dddddd9d;
-    border-radius: 3px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
   }
   
   .login-form button {
-    background-color: #002a57; /* Blue button */
+    background-color: #007bff; /* Blue button */
     color: white;
     padding: 10px;
     border: none;
-    border-radius: 3px;
+    border-radius: 4px;
     cursor: pointer; /* Pointer cursor on hover */
-    transition: .6s;
   }
   
   .login-form button:hover {
