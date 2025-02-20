@@ -20,7 +20,7 @@ const sectionSchema = new mongoose.Schema({
         type : Array ,
         "default" : [] 
     },
-    profesorId: { 
+    profesorId: {
         type: String,
         required: [true, 'El código del profesor es requerido'], 
         trim: true

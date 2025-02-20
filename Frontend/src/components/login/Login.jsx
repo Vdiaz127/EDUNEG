@@ -35,7 +35,7 @@ const Login = () => {
         console.log("Login exitoso. Token:", data.token);
 
         // Redirigir al usuario a la página principal (puedes usar React Router)
-        window.location.href = "/"; // Cambia esto según tu ruta de inicio
+        window.location.href = "/administrador"; // Cambia esto según tu ruta de inicio
       } else {
         // Mostrar errores del backend
         setErrors({ backend: data.msg || "Error en el servidor" });

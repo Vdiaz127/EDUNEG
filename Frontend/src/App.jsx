@@ -52,8 +52,6 @@ function App() {
           <Route path="profesores/ver/:id" element={<VerProfesor />} />
           <Route path="profesores/editar/:id" element={<EditarProfesor />} />
 
-          
-        
         </Route>
 
         <Route path="/profesor" element={<ProfesorLayout />} >

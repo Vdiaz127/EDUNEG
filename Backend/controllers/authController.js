@@ -33,3 +33,19 @@ export const loginUser = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Middleware para validar el token
+export const authenticateToken = async (req, res, next) => {
+    const token = req.headers['authorization']?.split(' ')[1]; // Obtener el token del encabezado
+    console.log(token);
+    if (!token) {
+        return res.sendStatus(401); // No autorizado
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) {
+            return res.sendStatus(403).json({ message: "Credenciales invalidas.", valid: false }); // Prohibido
+        }
+        return res.status(200).json({ message: "Credenciales validas.", valid: true });
+    });
+}
