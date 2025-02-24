@@ -3,7 +3,6 @@ import Tabla from "../../../components/Tabla";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
 import Modal from 'react-modal';
 
 // Establecer el elemento raíz de la aplicación para el modal
@@ -100,12 +99,12 @@ const DashboardEstudiantes = () => {
     if (studentToDelete) {
       try {
         await axios.delete(`/api/students/${studentToDelete.id}`);
-        toast.success('Estudiante eliminado exitosamente');
+        
         fetchStudents();
         closeModal();
       } catch (error) {
         console.error('Error al eliminar estudiante:', error);
-        toast.error(error.response?.data?.message || 'Error al eliminar el estudiante');
+        
         closeModal();
       }
     }

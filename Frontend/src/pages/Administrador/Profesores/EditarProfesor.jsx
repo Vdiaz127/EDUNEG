@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import UserFormulario from "../../../components/UserFormulario";
 import axios from "axios";
-import { toast } from "react-toastify";
+
 
 const EditarProfesor = () => {
   const { id } = useParams();
@@ -36,11 +36,11 @@ const EditarProfesor = () => {
 
       await axios.put(`/api/professors/${id}`, userData);
       
-      toast.success("Profesor actualizado exitosamente");
+      
       navigate("/administrador/profesores");
     } catch (error) {
       console.error("Error al actualizar profesor:", error);
-      toast.error(error.response?.data?.message || "Error al actualizar el profesor");
+      
     }
   };
 

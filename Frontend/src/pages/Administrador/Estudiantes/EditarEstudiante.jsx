@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import UserFormulario from "../../../components/UserFormulario";
 import axios from "axios";
-import { toast } from "react-toastify";
 
 const EditarEstudiante = () => {
   const { id } = useParams();
@@ -36,11 +35,11 @@ const EditarEstudiante = () => {
 
       await axios.put(`/api/students/${id}`, userData);
       
-      toast.success("Estudiante actualizado exitosamente");
+      
       navigate("/administrador/estudiantes");
     } catch (error) {
       console.error("Error al actualizar estudiante:", error);
-      toast.error(error.response?.data?.message || "Error al actualizar el estudiante");
+      
     }
   };
 

@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { useParams, useNavigate } from "react-router-dom";
 import MateriaFormulario from "../../../components/MateriasFormulario";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 
 const EditarMateria = () => {
@@ -37,11 +36,11 @@ const EditarMateria = () => {
 
             await axios.put(`/api/subjects/${id}`, materiaData);
             
-            toast.success("Materia actualizada exitosamente");
+           
             navigate("/administrador/materias");
         } catch (error) {
             console.error("Error al actualizar materia:", error);
-            toast.error(error.response?.data?.message || "Error al actualizar la materia");
+            
             setError("Error al actualizar la materia");
         }
     };

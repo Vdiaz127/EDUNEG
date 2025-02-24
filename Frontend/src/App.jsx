@@ -23,8 +23,8 @@ import FormularioProfesor from './pages/Administrador/Profesores/AgregarProfesor
 import VerProfesor from './pages/Administrador/Profesores/VerProfesor';
 import EditarProfesor from './pages/Administrador/Profesores/EditarProfesor';
 
-
-import TeachersPage from './pages/PRUEBA-profesores';
+import SeccionesPage from './pages/Administrador/Secciones/ListadoSecciones';
+import VerSeccion from './pages/Administrador/Secciones/VerSeccion';
 
 import Login from './components/login/login'; 
 
@@ -52,10 +52,13 @@ function App() {
           <Route path="profesores/ver/:id" element={<VerProfesor />} />
           <Route path="profesores/editar/:id" element={<EditarProfesor />} />
 
+          <Route path="secciones" element={<SeccionesPage />} />
+          <Route path="secciones/ver/:id" element={<VerSeccion/>} />
+
         </Route>
 
         <Route path="/profesor" element={<ProfesorLayout />} >
-          <Route index element={<TeachersPage />} />
+          
         </Route>
 
         <Route path="*" element={<h1>Not Found</h1>} />

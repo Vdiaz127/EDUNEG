@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserFormulario from "../../../components/UserFormulario";
 import axios from "axios";
-import { toast } from "react-toastify";
+
 
 const AgregarProfesor = () => {
   const navigate = useNavigate();
@@ -19,11 +19,11 @@ const AgregarProfesor = () => {
       };
 
       await axios.post('/api/professors', userData);
-      toast.success("Profesor agregado exitosamente");
+      
       navigate("/administrador/profesores");
     } catch (error) {
       console.error("Error al agregar profesor:", error);
-      toast.error(error.response?.data?.message || "Error al agregar el profesor");
+      
     } finally {
       setLoading(false);
     }

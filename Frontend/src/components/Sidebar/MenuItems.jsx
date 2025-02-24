@@ -1,5 +1,5 @@
 import './MenuItems.css';
-import { MdHome, MdPeople, MdSchool, MdLibraryBooks } from 'react-icons/md';
+import { MdHome, MdPeople, MdSchool, MdLibraryBooks, MdViewList } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
 function Profile({ nombre, imgUrl }) {
@@ -34,6 +34,7 @@ export default function MenuItems({ onItemSelected, userType = 'admin', userName
       { panelName: 'Estudiantes', icon: MdSchool, path: '/administrador/estudiantes' },
       { panelName: 'Profesores', icon: MdPeople, path: '/administrador/profesores' },
       { panelName: 'Materias', icon: MdLibraryBooks, path: '/administrador/materias' },
+      { panelName: 'Secciones', icon: MdViewList, path: '/administrador/secciones' },
     ],
     teacher: [
       { panelName: 'Dashboard', icon: MdHome, path: '/profesor' },

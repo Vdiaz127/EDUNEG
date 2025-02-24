@@ -1,7 +1,6 @@
 import UserFormulario from "../../../components/UserFormulario";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useState } from "react";
 
 const FormularioEstudiante = () => {
@@ -18,11 +17,11 @@ const FormularioEstudiante = () => {
       };
 
       await axios.post("/api/students", userData);
-      toast.success("Estudiante creado exitosamente");
+      
       navigate("/administrador/estudiantes");
     } catch (error) {
       console.error("Error al crear estudiante:", error);
-      toast.error(error.response?.data?.message || "Error al crear el estudiante");
+     
     } finally {
       setLoading(false);
     }
