@@ -30,6 +30,7 @@ const Tabla = ({
     profesores: "/administrador/profesores/agregar",
     estudiantes: "/administrador/estudiantes/agregar",
     materias: "/administrador/materias/agregar",
+    semestres: "/administrador/semestres/agregar"
   };
 
   const link = routeMap[rol.toLowerCase()] || "/administrador/materias/agregar";

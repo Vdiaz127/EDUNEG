@@ -26,6 +26,12 @@ import EditarProfesor from './pages/Administrador/Profesores/EditarProfesor';
 import SeccionesPage from './pages/Administrador/Secciones/ListadoSecciones';
 import VerSeccion from './pages/Administrador/Secciones/VerSeccion';
 
+import SemestresPage from './pages/Administrador/Semestres/ListarSemestre';
+import VerSemestre from './pages/Administrador/Semestres/VerSemestre';
+import AgregarSemestre from './pages/Administrador/Semestres/AgregarSemestre';
+import EditarSemestre from './pages/Administrador/Semestres/EditarSemestre';
+
+
 import Login from './components/login/login'; 
 
 function App() {
@@ -54,6 +60,11 @@ function App() {
 
           <Route path="secciones" element={<SeccionesPage />} />
           <Route path="secciones/ver/:id" element={<VerSeccion/>} />
+
+          <Route path="semestres" element={<SemestresPage/>} />
+          <Route path="semestres/ver/:id" element={<VerSemestre/>} />
+          <Route path="semestres/agregar" element={<AgregarSemestre/>} />
+          <Route path="semestres/editar/:id" element={<EditarSemestre/>} />
 
         </Route>
 
