@@ -5,7 +5,16 @@ import { FaRegAddressCard } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 import { Link } from "react-router-dom";
 
+<<<<<<< HEAD
 const UserInformacion = ({ nombre, apellido, email, estatus, rol }) => {
+=======
+const UserInformacion = ({ user, rol, returnUrl }) => {
+  
+  if (!user) {
+    return <div>Cargando...</div>;
+  }
+  console.log(user);
+>>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0
   return (
     <div className="flex flex-col justify-center items-center h-screen m-5">
       {/* Informacion */}
@@ -14,8 +23,13 @@ const UserInformacion = ({ nombre, apellido, email, estatus, rol }) => {
           Información del {rol}
         </h1>
         {/* Foto */}
+<<<<<<< HEAD
         <div className="w-24 h-24  flex justify-center items-center border-2 border-gray-300 rounded-full shadow-md">
           {rol == "Profesor" ? (
+=======
+        <div className="w-24 h-24 flex justify-center items-center border-2 border-gray-300 rounded-full shadow-md">
+          {rol === "Profesor" ? (
+>>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0
             <FaRegUser className="w-12 h-12 opacity-60" />
           ) : (
             <PiStudentBold className="w-12 h-12 opacity-60" />
@@ -24,10 +38,17 @@ const UserInformacion = ({ nombre, apellido, email, estatus, rol }) => {
         {/* Estatus */}
         <div
           className={`text-sm font-bold mt-2 mb-8 px-2 rounded-md ${
+<<<<<<< HEAD
             estatus ? "bg-green-300 text-green-700" : "bg-red-300 text-red-700"
           }`}
         >
           {estatus ? "Activo" : "Inactivo"}
+=======
+            user.estatus ? "bg-green-300 text-green-700" : "bg-red-300 text-red-700"
+          }`}
+        >
+          {user.estatus ? "Activo" : "Inactivo"}
+>>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0
         </div>
 
         {/* Contenedor del nombre */}
@@ -38,7 +59,11 @@ const UserInformacion = ({ nombre, apellido, email, estatus, rol }) => {
               Nombre
             </p>
             <p className="font-bold text-lg">
+<<<<<<< HEAD
               {nombre} {apellido}{" "}
+=======
+              {user.firstName} {user.lastName}
+>>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0
             </p>
           </div>
         </div>
@@ -50,24 +75,42 @@ const UserInformacion = ({ nombre, apellido, email, estatus, rol }) => {
               <MdOutlineEmail color="green" className="w-7 h-7" />
               Email
             </p>
+<<<<<<< HEAD
             <p className="font-bold text-lg ">{email} </p>
+=======
+            <p className="font-bold text-lg ">{user.email}</p>
+>>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0
           </div>
         </div>
       </div>
       {/* Botones */}
+<<<<<<< HEAD
       {/* /administrador/estudiantes */}
       <div className="mt-4 w-1/2 flex justify-center md:justify-between items-center flex-wrap gap-4">
         <Link to={rol.toLowerCase() === 'profesor' ? '/administrador/profesores' : '/administrador/estudiantes'}>
+=======
+      <div className="mt-4 w-1/2 flex justify-center md:justify-between items-center flex-wrap gap-4">
+        <Link to={returnUrl}>
+>>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0
           <button className="bg-black text-white flex justify-center items-center gap-2 px-8 py-2 text-center rounded-md shadow-md cursor-pointer">
             <IoIosSkipBackward className="w-5 h-5" />
             Regresar
           </button>
         </Link>
+<<<<<<< HEAD
 
         <Link to={rol.toLowerCase() === 'profesor' ? '/administrador/profesores/agregar' : '/administrador/estudiantes/agregar'}>
         <button className="bg-gray-100 px-8 py-2 text-center border-2 border-gray-300 rounded-md shadow-md cursor-pointer">
           Editar Perfil
         </button>
+=======
+        
+        
+        <Link to={`${returnUrl}/editar/${user.id}`}>
+          <button className="bg-gray-100 px-8 py-2 text-center border-2 border-gray-300 rounded-md shadow-md cursor-pointer">
+            Editar Perfil
+          </button>
+>>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0
         </Link>
       </div>
     </div>
@@ -75,6 +118,7 @@ const UserInformacion = ({ nombre, apellido, email, estatus, rol }) => {
 };
 
 export default UserInformacion;
+<<<<<<< HEAD
 
 /*
        <p
@@ -85,3 +129,5 @@ export default UserInformacion;
             } px-2 rounded-md `}
           >
 */
+=======
+>>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0

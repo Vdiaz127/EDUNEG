@@ -3,14 +3,29 @@ import { FaCode } from "react-icons/fa6";
 import { FiBook } from "react-icons/fi";
 import { GrDocumentText } from "react-icons/gr";
 import { LuGraduationCap } from "react-icons/lu";
+<<<<<<< HEAD
 import { Link } from "react-router-dom";
+=======
+import { Link, useNavigate } from "react-router-dom";
+>>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0
 
 const MateriaInformacion = ({
   codigo,
   nombre,
   descripcion,
   unidadesCredito,
+<<<<<<< HEAD
 }) => {
+=======
+  id,
+}) => {
+  const navigate = useNavigate();
+
+  const handleEdit = () => {
+    navigate(`/administrador/materias/editar/${id}`);
+  };
+
+>>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0
   return (
     <div className=" flex flex-col justify-center items-center h-screen m-5">
       {/* Informacion */}
@@ -55,7 +70,11 @@ const MateriaInformacion = ({
           <div className="w-full bg-gray-100 border-2 border-gray-300 py-4 px-5 rounded-lg shadow-md flex justify-between">
             <p className="text-lg font-semibold flex items-center gap-2">
               <LuGraduationCap color="purple" className="w-7 h-7" />
+<<<<<<< HEAD
               Unideades de Credito
+=======
+              Unidades de Crédito
+>>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0
             </p>
             <p className="font-bold text-lg ml-2">{unidadesCredito}</p>
           </div>
@@ -69,11 +88,20 @@ const MateriaInformacion = ({
             Regresar
           </button>
         </Link>
+<<<<<<< HEAD
         <Link to="/administrador/materias/agregar">
           <button className="bg-gray-100 px-8 py-2 text-center border-2 border-gray-300 rounded-md shadow-md cursor-pointer text-sm md:text-md">
             Editar Materia
           </button>
         </Link>
+=======
+        <button
+          onClick={handleEdit}
+          className="bg-gray-100 px-8 py-2 text-center border-2 border-gray-300 rounded-md shadow-md cursor-pointer text-sm md:text-md"
+        >
+          Editar Materia
+        </button>
+>>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0
       </div>
     </div>
   );
