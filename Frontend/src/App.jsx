@@ -34,6 +34,10 @@ import EditarSemestre from './pages/Administrador/Semestres/EditarSemestre';
 
 import Login from './components/login/login'; 
 
+import { DashboardProfesor } from './pages/dashboard_profesor';
+import { Materia } from './pages/materia';
+import { Asignacion } from './pages/asignacion';
+
 function App() {
   return (
     <BrowserRouter>
@@ -75,6 +79,11 @@ function App() {
         <Route path="*" element={<h1>Not Found</h1>} />
 
         <Route path="/" element={<Login/>} />
+
+  
+        <Route path="/profesor" element={<DashboardProfesor />} />
+        <Route path="/materia" element={<Materia />} />
+        <Route path="/asignacion" element={<Asignacion />} />
         
       </Routes>
     </BrowserRouter>
