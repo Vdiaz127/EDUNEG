@@ -22,7 +22,6 @@
     "react-modal": "^3.16.3",
 >>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0
     "react-router-dom": "^7.1.5",
-    "sweetalert2": "^11.17.2",
     "tailwindcss": "^4.0.6"
   },
   "devDependencies": {
