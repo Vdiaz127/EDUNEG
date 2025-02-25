@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // Importa los componentes de página
@@ -57,6 +58,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Importa los componentes de página
 
+=======
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// Importa los componentes de página
+
+>>>>>>> parent of 289013e (Agergando plan de evaluacion)
 import AdminPage from './pages/Administrador/page';
 import EstudiantesPage from './pages/Administrador/Estudiantes/page';
 import FormularioEstudiante from './pages/Administrador/Estudiantes/AgregarEstudiante/page';
@@ -67,6 +74,9 @@ import VerMateria from './pages/Administrador/Materias/VerMateria/page';
 import ProfesoresPage from './pages/Administrador/Profesores/page';
 import FormularioProfesor from './pages/Administrador/Profesores/AgregarProfesor/page';
 import VerProfesor from './pages/Administrador/Profesores/VerProfesor/page';
+<<<<<<< HEAD
+>>>>>>> parent of 289013e (Agergando plan de evaluacion)
+=======
 >>>>>>> parent of 289013e (Agergando plan de evaluacion)
 
 function App() {
@@ -78,6 +88,7 @@ function App() {
         <Route path="/administrador" element={<AdminPage />} >
           {/* Rutas de estudiantes */}
           <Route path="estudiantes" element={<EstudiantesPage />} />
+<<<<<<< HEAD
 <<<<<<< HEAD
           <Route
             path="estudiantes/agregar"
@@ -99,6 +110,10 @@ function App() {
           <Route path="estudiantes/agregar" element={<FormularioEstudiante />} />
           <Route path="estudiantes/ver/:id" element={<VerEstudiante />} /> 
 >>>>>>> parent of 289013e (Agergando plan de evaluacion)
+=======
+          <Route path="estudiantes/agregar" element={<FormularioEstudiante />} />
+          <Route path="estudiantes/ver/:id" element={<VerEstudiante />} /> 
+>>>>>>> parent of 289013e (Agergando plan de evaluacion)
           {/* Rutas de materias */}
           <Route path="materias" element={<MateriasPage />} />
           <Route path="materias/agregar" element={<FormularioMateria />} />
@@ -116,6 +131,7 @@ function App() {
 
       </Routes>
     </BrowserRouter>
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     
@@ -143,6 +159,8 @@ function App() {
       </Routes>
     </BrowserRouter>
 >>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0
+=======
+>>>>>>> parent of 289013e (Agergando plan de evaluacion)
 =======
 >>>>>>> parent of 289013e (Agergando plan de evaluacion)
   );
