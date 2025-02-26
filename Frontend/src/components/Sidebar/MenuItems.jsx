@@ -1,18 +1,6 @@
-import './MenuItems.css';
-import { MdHome, MdPeople, MdSchool, MdLibraryBooks, MdViewList, MdDateRange} from 'react-icons/md';
-//import { BsCalendarFill } from "react-icons/bs";
-import { Link } from 'react-router-dom';
-
-function Profile({ nombre, imgUrl }) {
-  return (
-    <div className="flex flex-col items-center mb-11">
-      <img className="imgRedonda" src={imgUrl} alt="profile" />
-      <h3 className="mt-2 text-center text-white">
-        <b>{nombre}</b>
-      </h3>
-    </div>
-  );
-}
+import React from "react";
+import { MdHome, MdPeople, MdSchool, MdLibraryBooks, MdViewList, MdDateRange } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 function PanelItem({ panelName, Icon, to, onClick }) {
   return (
@@ -27,10 +15,10 @@ function PanelItem({ panelName, Icon, to, onClick }) {
   );
 }
 
-export default function MenuItems({ onItemSelected, userType = 'admin', userName, userImg }) {
+export default function MenuItems({ onItemSelected, userType = 'admin' }) {
   // Define los ítems de menú según el rol del usuario
   const routesByRole = {
-    admin: [
+    Administrador: [
       { panelName: 'Dashboard', icon: MdHome, path: '/administrador' },
       { panelName: 'Estudiantes', icon: MdSchool, path: '/administrador/estudiantes' },
       { panelName: 'Profesores', icon: MdPeople, path: '/administrador/profesores' },
@@ -38,13 +26,14 @@ export default function MenuItems({ onItemSelected, userType = 'admin', userName
       { panelName: 'Secciones', icon: MdViewList, path: '/administrador/secciones' },
       { panelName: 'Semestres', icon: MdDateRange, path: '/administrador/semestres' }
     ],
-    teacher: [
+    
+    Profesor: [
       { panelName: 'Dashboard', icon: MdHome, path: '/profesor' },
       { panelName: 'Mis Cursos', icon: MdSchool, path: '/profesor' },
     ],
-    student: [
-      { panelName: 'Dashboard', icon: MdHome, path: '/dashboard' },
-      { panelName: 'Cursos', icon: MdSchool, path: '/courses' },
+    Estudiante: [
+      { panelName: 'Dashboard', icon: MdHome, path: '/estudiante' },
+      { panelName: 'Cursos', icon: MdSchool, path: '/estudiante/cursos' },
     ],
   };
 
@@ -52,19 +41,14 @@ export default function MenuItems({ onItemSelected, userType = 'admin', userName
 
   return (
     <div className="flex flex-col items-center containerMenu p-4 space-y-4">
-      <Profile 
-        nombre={userName || 'Usuario'} 
-        imgUrl={userImg || 'https://picsum.photos/200'} 
-      />
       {routes.map((route, index) => (
         <div className='mt-1' key={index}>
-            <PanelItem
-                key={index}
-                panelName={route.panelName}
-                Icon={route.icon}
-                to={route.path}
-                onClick={onItemSelected}
-            />
+          <PanelItem
+            panelName={route.panelName}
+            Icon={route.icon}
+            to={route.path}
+            onClick={onItemSelected}
+          />
         </div>
       ))}
     </div>

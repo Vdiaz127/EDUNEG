@@ -30,11 +30,10 @@ const VerEstudiante = () => {
   if (!student) return <div>Estudiante no encontrado</div>;
 
   return (
-    <UserInformacion 
+    <><UserInformacion
       user={student}
       rol="Estudiante"
-      returnUrl="/administrador/estudiantes"
-    />
+      returnUrl="/administrador/estudiantes" /><h1>Hola</h1></>
   );
 };
 
