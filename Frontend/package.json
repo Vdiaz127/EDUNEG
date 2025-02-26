@@ -17,10 +17,7 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
     "react-icons": "^5.4.0",
-<<<<<<< HEAD
-=======
     "react-modal": "^3.16.3",
->>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0
     "react-router-dom": "^7.1.5",
     "tailwindcss": "^4.0.6"
   },
@@ -28,13 +25,8 @@
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react-swc": "^3.5.0",
-<<<<<<< HEAD
-    "globals": "^15.14.0",
-    "vite": "^6.1.0"
-=======
     "esbuild": "^0.25.0",
     "globals": "^16.0.0",
     "vite": "^6.1.1"
->>>>>>> 70f7132946dd18df20bc62c78faedb4b81e630d0
   }
 }
