@@ -26,5 +26,5 @@ router.post('/validate-email', validateEmail);
 router.post('/create-password', createPassword);
 
 // Ruta para crear la contraseña (Primer Login)
-router.post('/validate-token', validateToken);
+router.get('/validate-token', validateToken);
 export default router;
