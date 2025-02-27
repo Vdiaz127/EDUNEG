@@ -34,7 +34,7 @@ export const loginUser = async (req, res) => {
     }
 
     // Verificar si la contraseña es correcta
-    const isMatch = await user.matchPassword(password);
+    const isMatch = await user.matchPassword(password); 
 
     if (!isMatch) {
       return res.status(401).json({ msg: "Credenciales inválidas." });
@@ -159,8 +159,8 @@ export const createPassword = async (req, res) => {
     }
 
     // Actualizar la contraseña del usuario
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
+    // const salt = await bcrypt.genSalt(10);
+    user.password = password;
     await user.save();
 
     // Enviar respuesta exitosa
