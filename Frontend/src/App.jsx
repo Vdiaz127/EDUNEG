@@ -39,6 +39,7 @@ import CrearContrasena from './components/login/CrearContrasena';
 import { DashboardProfesor } from './pages/Profesor/dashboard_profesor';
 import { Materia } from './pages/Profesor/materia';
 import { Asignacion } from './pages/Profesor/asignacion';
+import PlanEvaluacion  from './pages/Profesor/PlanEvaluacion';
 
 function App() {
   const { user } = useContext(UserContext); // Obtén el estado del usuario desde el contexto
@@ -46,26 +47,27 @@ function App() {
   // Función para proteger las rutas según el rol del usuario
   const ProtectedRoute = ({ children, requiredRole }) => {
     if (!user) {
-      return <Navigate to="/" />; // Redirige al login si no hay usuario autenticado
+      //return <Navigate to="/" />; // Redirige al login si no hay usuario autenticado
     }
 
-    if (requiredRole && user.role !== requiredRole) {
+    // if (requiredRole && user.role !== requiredRole) {
 
-      if (user.role === "Admin") {
-        return <Navigate to={`/Administrador`} />
-      } else if (user.role === "Profesor") {
-        return <Navigate to={`/profesor`} />
-      } else if (user.role === "Estudiante") {
-        return <Navigate to={`/estudiante`} />
-      }
-    }
+    //   if (user.role === "Admin") {
+    //     return <Navigate to={`/Administrador`} />
+    //   } else if (user.role === "Profesor") {
+    //     return <Navigate to={`/profesor`} />
+    //   } else if (user.role === "Estudiante") {
+    //     return <Navigate to={`/estudiante`} />
+    //   }
+    // }
 
-    return children; // Permite el acceso si el usuario está autenticado y tiene el rol correcto
+     return children; // Permite el acceso si el usuario está autenticado y tiene el rol correcto
   };
 
   return (
     <BrowserRouter>
       <Routes>
+        
         {/* Ruta de Login */}
         <Route path="/" element={!user ? <Login /> : <Navigate to={`/${user.role.toLowerCase()}`} />} />
 
@@ -117,6 +119,8 @@ function App() {
           <Route index element={<DashboardProfesor />} />
           <Route path="materia" element={<Materia />} />
           <Route path="asignacion" element={<Asignacion />} />
+          <Route path="PlanEvaluacion" element={<PlanEvaluacion />} />
+          
         </Route>
 
         {/* Rutas de Estudiante */}
