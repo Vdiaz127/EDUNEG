@@ -6,6 +6,8 @@ import { FaGraduationCap } from "react-icons/fa";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { ImBooks } from "react-icons/im";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function AdminPage() {
   const location = useLocation();
   const isSubRoute =
@@ -19,15 +21,15 @@ function AdminPage() {
   useEffect(() => {
     const fetchCounts = async () => {
       try {
-        const studentResponse = await fetch("/api/students");
+        const studentResponse = await fetch(`${API_URL}/api/students`);
         const students = await studentResponse.json();
         setStudentCount(students.length);
 
-        const professorResponse = await fetch("/api/professors");
+        const professorResponse = await fetch(`${API_URL}/api/professors`);
         const professors = await professorResponse.json();
         setProfessorCount(professors.length);
 
-        const subjectResponse = await fetch("/api/subjects");
+        const subjectResponse = await fetch(`${API_URL}/api/subjects`);
         const subjects = await subjectResponse.json();
         setSubjectCount(subjects.length);
       } catch (error) {
