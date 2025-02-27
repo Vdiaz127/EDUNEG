@@ -20,11 +20,11 @@ router.get("/", getSections);
 router.get("/:id", getSectionById);
 router.put("/:id", updateSection);
 router.delete("/:id", deleteSection);
-router.get("/:id", getSubjectIdsByStudentId);
-router.put("/:id", addStudentToSection);
-router.delete("/:id", removeStudentFromSection);
-router.get("/:id", isStudentInSection);
-router.get("/:id", getSubjectIdsByProfessorId);
-router.get("/:id",getSectionsBySubjectId);
+// router.get("/:id", getSubjectIdsByStudentId);
+// router.put("/:id", addStudentToSection);
+// router.delete("/:id", removeStudentFromSection);
+// router.get("/:id", isStudentInSection);
+router.get("/professor/:professorId", getSubjectIdsByProfessorId);
+// router.get("/:id",getSectionsBySubjectId);
 
 export default router;

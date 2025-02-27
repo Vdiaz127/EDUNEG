@@ -131,6 +131,7 @@ export const getSubjectIdsByProfessorId = async (req, res) => {
     const { professorId } = req.params; // Asegúrate de que el ID del profesor se envía como parámetro
     try {
         const sections = await Section.find({ profesorId: professorId });
+        console.log(sections);
         const subjectIds = sections.map(section => section.subjectId);
         const uniqueSubjectIds = [...new Set(subjectIds)];
 
