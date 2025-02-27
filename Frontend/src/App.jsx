@@ -34,9 +34,9 @@ import EditarSemestre from './pages/Administrador/Semestres/EditarSemestre';
 
 import Login from './components/login/login'; 
 
-import { DashboardProfesor } from './pages/dashboard_profesor';
-import { Materia } from './pages/materia';
-import { Asignacion } from './pages/asignacion';
+import { DashboardProfesor } from './pages/Profesor/dashboard_profesor';
+import { Materia } from './pages/Profesor/materia';
+import { Asignacion } from './pages/Profesor/asignacion';
 
 function App() {
   return (
@@ -73,7 +73,9 @@ function App() {
         </Route>
 
         <Route path="/profesor" element={<ProfesorLayout />} >
-          
+          <Route index element={<DashboardProfesor />} />
+          <Route path="materia" element={<Materia />} />
+          <Route path="asignacion" element={<Asignacion />} />
         </Route>
 
         <Route path="*" element={<h1>Not Found</h1>} />
@@ -81,9 +83,7 @@ function App() {
         <Route path="/" element={<Login/>} />
 
   
-        <Route path="/profesor" element={<DashboardProfesor />} />
-        <Route path="/materia" element={<Materia />} />
-        <Route path="/asignacion" element={<Asignacion />} />
+        
         
       </Routes>
     </BrowserRouter>

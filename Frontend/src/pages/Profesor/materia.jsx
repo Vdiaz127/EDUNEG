@@ -9,8 +9,6 @@
 import { BsMortarboardFill } from "react-icons/bs";
 
 export const Materia = () => {
-
-
     return (
         <div className="pt-3 box-content container mx-auto lg:px-4">
             <h3 className="lg:ml-3 text-xl sm:text-3xl lg:text-5xl text-left font-semibold">
