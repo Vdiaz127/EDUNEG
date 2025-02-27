@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^4.1.0",
     "axios": "^1.7.9",
     "bcryptjs": "^3.0.0",
