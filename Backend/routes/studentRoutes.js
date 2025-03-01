@@ -1,27 +1,23 @@
 import express from 'express';
-import { 
-    createStudent, 
-    getAllStudents, 
-    getStudentById,
-    updateStudent,
-    deleteStudent
+import {
+  createStudent,
+  getAllStudents,
+  getStudentById,
+  updateStudent,
+  deleteStudent,
+  getStudentDetails, // Importa la nueva función
 } from '../controllers/studentController.js';
 
 const router = express.Router();
 
-// Obtener todos los estudiantes
-router.get('/', getAllStudents);
-
-// Obtener un estudiante específico
-router.get('/:id', getStudentById);
-
-// Crear un nuevo estudiante
+// Rutas CRUD para estudiantes
 router.post('/', createStudent);
-
-// Actualizar un estudiante
+router.get('/', getAllStudents);
+router.get('/:id', getStudentById);
 router.put('/:id', updateStudent);
-
-// Eliminar un estudiante
 router.delete('/:id', deleteStudent);
+
+// Nueva ruta para obtener los detalles del estudiante
+router.get('/:id/details', getStudentDetails);
 
 export default router;

@@ -14,6 +14,7 @@ const VerSeccion = () => {
     const [subjects, setSubjects] = useState([]);
     const [professors, setProfessors] = useState([]);
     const [students, setStudents] = useState([]);
+    const [semesters, setSemesters] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -30,11 +31,12 @@ const VerSeccion = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [sectionResponse, subjectsResponse, professorsResponse, studentsResponse] = await Promise.all([
+                const [sectionResponse, subjectsResponse, professorsResponse, studentsResponse, semestersResponse] = await Promise.all([
                     axios.get(`/api/sections/${id}`),
                     axios.get(`/api/subjects`),
                     axios.get(`/api/professors`),
-                    axios.get(`/api/students`)
+                    axios.get(`/api/students`),
+                    axios.get(`/api/semesters`) // Obtener la lista de semestres
                 ]);
 
                 setSection(sectionResponse.data);
@@ -42,6 +44,7 @@ const VerSeccion = () => {
                 setSubjects(subjectsResponse.data);
                 setProfessors(professorsResponse.data);
                 setStudents(studentsResponse.data);
+                setSemesters(semestersResponse.data);
 
                 const subjectResponse = await axios.get(`/api/subjects/${sectionResponse.data.subjectId}`);
                 setSubjectName(subjectResponse.data.name);
@@ -64,6 +67,12 @@ const VerSeccion = () => {
 
         fetchData();
     }, [id]);
+
+    // Función para obtener el nombre del semestre a partir del semesterId
+    const getSemesterName = (semesterId) => {
+        const semester = semesters.find(sem => sem._id === semesterId);
+        return semester ? `Semestre ${semester.periodo} - ${semester.año}` : "Semestre no encontrado";
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -93,7 +102,6 @@ const VerSeccion = () => {
             setSection(updatedSection);
             setModalIsOpen(false);
             navigate(`/administrador/secciones`);
-            
         } catch (error) {
             console.error("Error al actualizar la sección:", error);
             setError("Error al actualizar la sección");
@@ -126,7 +134,7 @@ const VerSeccion = () => {
                             Semestre
                         </p>
                         <p className="font-bold text-lg">
-                            {section.semesterId}
+                            {getSemesterName(section.semesterId)} {/* Mostrar el nombre del semestre */}
                         </p>
                     </div>
                 </div>
@@ -208,14 +216,20 @@ const VerSeccion = () => {
                     </label>
                     <label className="block">
                         <span className="text-gray-700 font-medium">Semestre:</span>
-                        <input 
-                            type="text" 
+                        <select 
                             name="semesterId" 
                             value={updatedSection.semesterId} 
                             onChange={handleInputChange} 
                             required 
                             className="mt-2 block w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500"
-                        />
+                        >
+                            <option value="">Seleccione un semestre</option>
+                            {semesters.map(semester => (
+                                <option key={semester._id} value={semester._id}>
+                                    Semestre {semester.periodo} - {semester.año}
+                                </option>
+                            ))}
+                        </select>
                     </label>
                     <label className="block">
                         <span className="text-gray-700 font-medium">Número de Sección:</span>
@@ -279,7 +293,6 @@ const VerSeccion = () => {
                     </div>
                 </form>
             </Modal>
-
         </div>
     );
 };
