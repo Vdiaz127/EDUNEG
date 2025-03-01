@@ -83,7 +83,7 @@ export const createProfessor = async (req, res) => {
             isActive,
             role: role || 'Profesor',
             // Generar una contraseña temporal
-            password: Math.random().toString(36).slice(-8)
+            //password: Math.random().toString(36).slice(-8)
         });
 
         await professor.save();
