@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useContext } from 'react';
-import { UserContext } from './components/context/UserContext'; // Importa el contexto de usuario
+import { UserContext } from './components/context/UserContext';
 
 // Layouts
 import AdminLayout from './layouts/AdminLayout';
@@ -36,32 +36,52 @@ import Login from './components/login/Login';
 import PrimerLogin from './components/login/PrimerLogin';
 import CrearContrasena from './components/login/CrearContrasena';
 
+// Páginas de Profesor
 import { DashboardProfesor } from './pages/Profesor/dashboard_profesor';
 import { Materia } from './pages/Profesor/materia';
 import { Asignacion } from './pages/Profesor/asignacion';
 import PlanEvaluacion from './pages/Profesor/PlanEvaluacion';
 
 function App() {
-  const { user } = useContext(UserContext); // Obtén el estado del usuario desde el contexto
+  const { user, loading } = useContext(UserContext);
 
-  // Función para proteger las rutas según el rol del usuario
+  // Mientras se valida el token, mostramos un loader global.
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Cargando...
+      </div>
+    );
+  }
+
+  // Componente para proteger las rutas según el rol del usuario.
   const ProtectedRoute = ({ children, requiredRole }) => {
+    // Al llegar aquí, ya se terminó la validación.
     if (!user) {
-      return <Navigate to="/" />; // Redirige al login si no hay usuario autenticado
+      // Si no hay usuario autenticado, redirige al login.
+      return <Navigate to="/" />;
     }
-
     if (requiredRole && user.role !== requiredRole) {
-      return <Navigate to={`/${user.role.toLowerCase()}`} />; // Redirige al dashboard del rol correcto
+      // Si el usuario no tiene el rol requerido, redirige a su dashboard.
+      return <Navigate to={`/${user.role.toLowerCase()}`} />;
     }
-
-    return children; // Permite el acceso si el usuario está autenticado y tiene el rol correcto
+    return children;
   };
 
   return (
     <BrowserRouter>
       <Routes>
         {/* Ruta de Login */}
-        <Route path="/" element={!user ? <Login /> : <Navigate to={`/${user.role.toLowerCase()}`} />} />
+        <Route
+          path="/"
+          element={
+            !user ? (
+              <Login />
+            ) : (
+              <Navigate to={`/${user.role.toLowerCase()}`} />
+            )
+          }
+        />
 
         {/* Ruta de Primer Login */}
         <Route path="/primer-login" element={<PrimerLogin />} />
@@ -124,7 +144,6 @@ function App() {
           }
         >
           <Route index element={<EstudiantePage />} />
-          {/* Aquí puedes agregar más rutas específicas del estudiante */}
         </Route>
 
         {/* Ruta por defecto (Not Found) */}

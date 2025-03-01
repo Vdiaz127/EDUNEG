@@ -63,8 +63,8 @@ export const loginUser = async (req, res) => {
 
 // Middleware para validar el token
 export const authenticateToken = async (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Obtener el token del encabezado
-  console.log(token);
+  const token = req.headers['Authorization']?.split(' ')[1]; // Obtener el token del encabezado
+  
   if (!token) {
     return res.sendStatus(401); // No autorizado
   }
@@ -78,12 +78,13 @@ export const authenticateToken = async (req, res, next) => {
 };
 
 export const validateToken = async (req, res) => {
+  
   const token = req.headers['authorization']?.split(' ')[1];
 
   if (!token) {
     return res.status(401).json({ msg: "Token no proporcionado." });
   }
-
+  
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
@@ -104,9 +105,11 @@ export const validateToken = async (req, res) => {
     });
   } catch (error) {
     console.error("Error al validar el token:", error);
+    
     res.status(401).json({ msg: "Token no válido." });
   }
 };
+
 
 // Función para validar el correo (Primer Login)
 export const validateEmail = async (req, res) => {
