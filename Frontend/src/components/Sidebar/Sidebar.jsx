@@ -67,7 +67,7 @@ export default function Sidebar({ className }) {
       {isOpen && (
         <div
           onClick={toggleMenu}
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+          className="fixed inset-0 bg-black opacity-25 z-30 lg:hidden"
         ></div>
       )}
     </div>
