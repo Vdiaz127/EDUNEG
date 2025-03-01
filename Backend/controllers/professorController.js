@@ -1,4 +1,8 @@
 import User from '../models/User.js';
+import Section from '../models/Section.js';
+import Subject from '../models/Subject.js';
+import Semester from '../models/Semester.js';
+import mongoose from 'mongoose';
 
 // Obtener todos los profesores
 export const getAllProfessors = async (req, res) => {
@@ -183,10 +187,68 @@ export const deleteProfessor = async (req, res) => {
     }
 };
 
+// Obtener detalles del profesor
+export const getProfessorDetails = async (req, res) => {
+    try {
+        const professorId = req.params.id;
+
+        // Buscar al profesor por su ID
+        const professor = await User.findById(professorId);
+
+        if (!professor) {
+            return res.status(404).json({ message: 'Profesor no encontrado' });
+        }
+
+        // Buscar las secciones en las que el profesor está asignado
+        const secciones = await Section.find({ profesorId: professorId });
+
+        // Obtener la información de las materias y semestres asociados a las secciones
+        const formattedSemestres = await Promise.all(
+            secciones.map(async (seccion) => {
+                // Convertir subjectId (String) a ObjectId
+                const subjectId = new mongoose.Types.ObjectId(seccion.subjectId);
+
+                // Obtener la materia asociada a la sección
+                const materia = await Subject.findById(subjectId);
+
+                // Obtener el semestre asociado a la sección
+                const semestre = await Semester.findById(seccion.semesterId);
+
+                return {
+                    id: seccion.semesterId,
+                    periodo: semestre ? semestre.periodo : "N/A",
+                    año: semestre ? semestre.año : "N/A",
+                    secciones: [
+                        {
+                            id: seccion._id,
+                            materia: materia ? materia.name : "Materia no encontrada",
+                            codigo: seccion.subjectId,
+                            seccion: seccion.sectionNumber,
+                            // horario: "Lunes y Miércoles, 10:00 AM - 12:00 PM", // Esto debería venir de la base de datos
+                            // enlace: `/seccion/${seccion.subjectId}-${seccion.sectionNumber}`,
+                        },
+                    ],
+                };
+            })
+        );
+
+        res.status(200).json({
+            nombre: `${professor.firstName} ${professor.lastName}`,
+            email: professor.email,
+            isActive: professor.isActive,
+            semestres: formattedSemestres,
+        });
+    } catch (error) {
+        console.error("Error al obtener detalles del profesor:", error);
+        res.status(500).json({ message: 'Error en el servidor', error: error.message });
+    }
+};
+
 export default {
     getAllProfessors,
     getProfessorById,
     createProfessor,
     updateProfessor,
-    deleteProfessor
+    deleteProfessor,
+    getProfessorDetails
 };

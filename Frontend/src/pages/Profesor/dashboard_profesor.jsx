@@ -1,66 +1,112 @@
-import { BsMortarboardFill } from "react-icons/bs";
-import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
-import { UserContext } from '../../components/context/UserContext'; // Asegúrate de ajustar la ruta según tu estructura de carpetas
+import React, { useContext, useState, useEffect } from "react";
+import { UserContext } from "../../components/context/UserContext";
+import Sidebar from "../../components/Sidebar/Sidebar";
+import { useNavigate } from "react-router-dom";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
+import axios from "axios";
 
-export const DashboardProfesor = () => {
-    const [subjects, setSubjects] = useState([]);
-    const { user } = useContext(UserContext); // Obtén el usuario desde el contexto
 
-    useEffect(() => {
-        const fetchSubjects = async () => {
-            if (!user) return; // Asegúrate de que el usuario esté disponible
+export default function InicioProfesor() {
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
 
-            try {
-                const response = await axios.get(`/api/sections/professor/${user.id}`);
-                const subjectIds = Array.isArray(response.data) ? response.data : [];
+  const [semestres, setSemestres] = useState([]);
+  const [semestresExpandidos, setSemestresExpandidos] = useState({});
+  const [loading, setLoading] = useState(true);
 
-                const subjectsData = await Promise.all(subjectIds.map(async (subjectId) => {
-                    const subjectResponse = await axios.get(`/api/subjects/${subjectId}`);
-                    return { id: subjectId, data: subjectResponse.data };
-                }));
+  const toggleSemestre = (id) => {
+    setSemestresExpandidos((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
-                setSubjects(subjectsData);
-            } catch (error) {
-                console.error("Error fetching subjects:", error.response ? error.response.data : error.message);
+  useEffect(() => {
+    if (user) {
+      // Obtener los datos del profesor desde el backend
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(`/api/professors/${user.id}/details`);
+          // Suponemos que la respuesta tiene la siguiente estructura:
+          // { semestres: [ { id, periodo, año, secciones: [ { id, materia, seccion, enlace } ] }, ... ] }
+          const groupedSemestres = response.data.semestres.reduce((acc, semestre) => {
+            const existingSemestre = acc.find(s => s.id === semestre.id);
+            if (existingSemestre) {
+              existingSemestre.secciones.push(...semestre.secciones);
+            } else {
+              acc.push(semestre);
             }
-        };
+            return acc;
+          }, []);
+          setSemestres(groupedSemestres);
+        } catch (error) {
+          console.error("Error fetching professor data:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-        fetchSubjects();
-    }, [user]);
+      fetchData();
+    }
+  }, [user]);
 
-    return (
-        <div className="pt-3 box-content container mx-auto lg:px-4">
-            <h3 className="lg:ml-3 text-xl sm:text-3xl lg:text-5xl text-left font-semibold">
-                Dashboard - Profesor
-            </h3>
+  if (!user) {
+    navigate("/login");
+    return null;
+  }
 
-            <div className="lg:ml-3 place-content-center w-full max-w-4xl mx-auto">
-                <div className="mt-8 py-7 px-4 lg:px-14 grid gap-5 border-solid border-4">
-                    <h4 className="text-lg sm:text-2xl lg:text-3xl text-left">
-                        Asignaturas 
-                    </h4>
+  if (loading) {
+    return <div className="text-center text-gray-500">Cargando...</div>;
+  }
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {subjects.map((subject, index) => (
-                            <div key={subject.id || index} className="p-6 border border-gray-300 rounded-lg shadow-lg">
-                                <h4 className="text-lg sm:text-xl font-bold">{subject.data.name || 'Cargando...'}</h4>
+  return (
+    <div className="flex h-screen">
 
-                                <div className="flex items-center space-x-4 mt-4">
-                                    <button className="rounded-md bg-blue-950 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-50 hover:text-blue-950">
-                                        Ver Detalles
-                                    </button>
-                                    <div className="flex items-center space-x-2">
-                                        <BsMortarboardFill className="text-3xl text-black" />
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+      <div className="flex-grow p-6 overflow-y-auto bg-gray-100">
+        <h1 className="text-3xl font-bold mb-4">
+          Bienvenido, {user.firstName} {user.lastName}
+        </h1>
+        <p className="text-lg text-gray-700">
+          Esta es la vista de profesor. Aquí puedes ver en qué materias y secciones
+          estás asignado.
+        </p>
+
+        {/* Lista de semestres con sus secciones asignadas */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold mb-4">Tus Semestres Asignados</h2>
+          {semestres.map((semestre) => (
+            <div key={semestre.id} className="mb-4">
+              <div
+                className="bg-white p-4 rounded-lg shadow-md cursor-pointer flex justify-between items-center hover:bg-gray-50 transition-colors"
+                onClick={() => toggleSemestre(semestre.id)}
+              >
+                <h3 className="text-xl font-bold">
+                  Semestre {semestre.periodo} - {semestre.año}
+                </h3>
+                {semestresExpandidos[semestre.id] ? (
+                  <ChevronUpIcon className="h-6 w-6 text-gray-600" />
+                ) : (
+                  <ChevronDownIcon className="h-6 w-6 text-gray-600" />
+                )}
+              </div>
+
+              {semestresExpandidos[semestre.id] && (
+                <div className="mt-2 pl-6">
+                  {semestre.secciones.map((seccion) => (
+                    <div
+                      key={seccion.id}
+                      className="bg-white p-4 rounded-lg shadow-md mt-2 hover:bg-gray-50 transition-colors"
+                    >
+                        {seccion.materia} / Sección {seccion.seccion}
+                      
                     </div>
+                  ))}
                 </div>
-
-                <div className="mt-8 py-7 h-40 max-w-xl mx-auto"></div>
+              )}
             </div>
+          ))}
         </div>
-    );
-};
+      </div>
+    </div>
+  );
+}

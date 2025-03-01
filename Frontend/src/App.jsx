@@ -21,8 +21,11 @@ import ProfesoresPage from './pages/Administrador/Profesores/ListadoProfesores';
 import FormularioProfesor from './pages/Administrador/Profesores/AgregarProfesor';
 import VerProfesor from './pages/Administrador/Profesores/VerProfesor';
 import EditarProfesor from './pages/Administrador/Profesores/EditarProfesor';
+
 import SeccionesPage from './pages/Administrador/Secciones/ListadoSecciones';
 import VerSeccion from './pages/Administrador/Secciones/VerSeccion';
+import EditarSeccion from './pages/Administrador/Secciones/EditarSeccion';
+
 import SemestresPage from './pages/Administrador/Semestres/ListarSemestre';
 import VerSemestre from './pages/Administrador/Semestres/VerSemestre';
 import AgregarSemestre from './pages/Administrador/Semestres/AgregarSemestre';
@@ -37,10 +40,11 @@ import PrimerLogin from './components/login/PrimerLogin';
 import CrearContrasena from './components/login/CrearContrasena';
 
 // Páginas de Profesor
-import { DashboardProfesor } from './pages/Profesor/dashboard_profesor';
+import InicioProfesor  from './pages/Profesor/dashboard_profesor';
 import { Materia } from './pages/Profesor/materia';
 import { Asignacion } from './pages/Profesor/asignacion';
 import PlanEvaluacion from './pages/Profesor/PlanEvaluacion';
+import SeccionesFormulario from './components/SeccionFormulario';
 
 function App() {
   const { user, loading } = useContext(UserContext);
@@ -103,16 +107,22 @@ function App() {
           <Route path="estudiantes/agregar" element={<FormularioEstudiante />} />
           <Route path="estudiantes/ver/:id" element={<VerEstudiante />} />
           <Route path="estudiantes/editar/:id" element={<EditarEstudiante />} />
+
           <Route path="materias" element={<MateriasPage />} />
           <Route path="materias/agregar" element={<FormularioMateria />} />
           <Route path="materias/ver/:id" element={<VerMateria />} />
           <Route path="materias/editar/:id" element={<EditarMateria />} />
+
           <Route path="profesores" element={<ProfesoresPage />} />
           <Route path="profesores/agregar" element={<FormularioProfesor />} />
           <Route path="profesores/ver/:id" element={<VerProfesor />} />
           <Route path="profesores/editar/:id" element={<EditarProfesor />} />
-          <Route path="secciones" element={<SeccionesPage />} />
+
+          <Route path="secciones" element={<SeccionesPage/>} />
           <Route path="secciones/ver/:id" element={<VerSeccion />} />
+          <Route path="secciones/agregar" element={<SeccionesFormulario />} />
+          <Route path="secciones/editar/:id" element={<EditarSeccion />} />
+
           <Route path="semestres" element={<SemestresPage />} />
           <Route path="semestres/ver/:id" element={<VerSemestre />} />
           <Route path="semestres/agregar" element={<AgregarSemestre />} />
@@ -128,7 +138,7 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<DashboardProfesor />} />
+          <Route index element={<InicioProfesor />} />
           <Route path="materia" element={<Materia />} />
           <Route path="asignacion" element={<Asignacion />} />
           <Route path="PlanEvaluacion" element={<PlanEvaluacion />} />

@@ -34,7 +34,7 @@ const AgregarProfesor = () => {
   return (
     <UserFormulario 
       onSubmit={handleSubmit}
-      role="Profesor"
+      rol="Profesor"
       initialData={{
         firstName: "",
         lastName: "",

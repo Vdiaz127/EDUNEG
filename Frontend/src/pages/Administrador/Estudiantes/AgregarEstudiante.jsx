@@ -32,7 +32,7 @@ const FormularioEstudiante = () => {
   return (
     <UserFormulario 
       onSubmit={handleSubmit} 
-      role="Estudiante" 
+      rol="Estudiante" 
       initialData={{
         firstName: "",
         lastName: "",
