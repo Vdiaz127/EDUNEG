@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import MateriasFormulario from "../../../components/MateriasFormulario";
+import FormularioGenerico from "../../../components/FormularioGenerico";
 import axios from 'axios';
 
-const FormularioMateria = () => {
+const AgregarMateria = () => {
   const { id } = useParams(); // Si existe, estamos en modo edición
   const navigate = useNavigate();
   const [initialData, setInitialData] = useState(null);
   const isEditMode = Boolean(id); // Modo edición si id existe
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (isEditMode) {
@@ -45,14 +46,54 @@ const FormularioMateria = () => {
       navigate('/administrador/materias');
     } catch (error) {
       console.error('Error al enviar el formulario:', error);
+      setError(error.response?.data?.message || 'Ocurrió un error al guardar los datos.');
     }
   };
 
+  const campos = [
+    {
+      name: 'codigo',
+      label: 'Código',
+      type: 'text',
+      placeholder: 'Ingrese el código de la materia',
+      required: true,
+    },
+    {
+      name: 'nombre',
+      label: 'Nombre',
+      type: 'text',
+      placeholder: 'Ingrese el nombre de la materia',
+      required: true,
+    },
+    {
+      name: 'descripcion',
+      label: 'Descripción',
+      type: 'textarea',
+      placeholder: 'Ingrese la descripción de la materia',
+      required: true,
+    },
+    {
+      name: 'unidadesCreditos',
+      label: 'Unidades de Crédito',
+      type: 'number',
+      placeholder: 'Ingrese las unidades de crédito',
+      required: true,
+    },
+  ];
+
   return (
     <div>
-      <MateriasFormulario initialData={initialData} onSubmit={handleSubmit} />
+      <FormularioGenerico
+        titulo={isEditMode ? "Editar Materia" : "Agregar Materia"}
+        campos={campos}
+        onSubmit={handleSubmit}
+        submitButtonText={isEditMode ? "Actualizar Materia" : "Crear Materia"}
+        returnUrl="/administrador/materias"
+        initialData={initialData}
+        error={error}
+      />
     </div>
   );
 };
 
-export default FormularioMateria;
+export default AgregarMateria;

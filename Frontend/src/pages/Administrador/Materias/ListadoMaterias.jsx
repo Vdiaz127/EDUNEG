@@ -1,19 +1,25 @@
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
-import Tabla from "../../../components/Tabla";
-import { Link } from "react-router-dom";
+import TablaGenerica from "../../../components/TablaGenerica";
+import { Link, useNavigate } from "react-router-dom"; // Importamos useNavigate
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const DashboardMaterias = () => {
+const ListadoMaterias = () => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate(); // Usamos useNavigate
 
   // Función para obtener los datos de la API y guardarlos en el estado
   const fetchData = async () => {
     try {
       const response = await axios.get("/api/subjects");
       setData(response.data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setError("Error al cargar las materias");
+      setLoading(false);
     }
   };
 
@@ -28,13 +34,14 @@ const DashboardMaterias = () => {
       fetchData(); // Se actualizan los datos después de eliminar
     } catch (error) {
       console.error("Error deleting subject:", error);
+      setError("Error al eliminar la materia");
     }
   };
 
   // Definición de las columnas de la tabla
   const columns = [
     {
-      name: "Codigo",
+      name: "Código",
       selector: (row) => row.code,
       sortable: true,
       center: true,
@@ -71,31 +78,6 @@ const DashboardMaterias = () => {
     },
   ];
 
-  // Estilos personalizados para la tabla
-  const customStyles = {
-    headRow: {
-      style: {
-        fontWeight: "bold",
-        fontSize: "18px",
-        textAlign: "center",
-        "@media (max-width: 640px)": {
-          fontSize: "16px",
-        },
-      },
-    },
-    cells: {
-      style: {
-        fontWeight: "500",
-        fontSize: "16px",
-        textAlign: "center",
-        justifyContent: "center",
-        "@media (max-width: 640px)": {
-          fontSize: "14px",
-        },
-      },
-    },
-  };
-
   // Función para filtrar la búsqueda en la tabla
   const filterFunction = (data, query) => {
     return data.filter((record) => {
@@ -106,19 +88,20 @@ const DashboardMaterias = () => {
     });
   };
 
+  if (loading) return <div>Cargando...</div>;
+  if (error) return <div>{error}</div>;
+
   return (
-    <div className="flex flex-col items-center">
-      <Tabla
-        columns={columns}
-        data={data} // Se pasa el array de datos obtenido desde el padre
-        customStyles={customStyles}
-        buttontext={"Agregar Materia"}
-        placeholder={"Buscar por nombre o código"}
-        filterFunction={filterFunction}
-        rol={"Materias"}
-      />
-    </div>
+    <TablaGenerica
+      columns={columns}
+      data={data}
+      title="Listado de Materias"
+      addButtonText="Agregar Materia"
+      onAdd={() => navigate('/administrador/materias/agregar')} // Usamos navigate
+      filterFunction={filterFunction}
+      filterPlaceholder="Buscar por nombre o código"
+    />
   );
 };
 
-export default DashboardMaterias;
+export default ListadoMaterias;

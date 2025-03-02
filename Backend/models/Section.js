@@ -1,34 +1,34 @@
 import mongoose from 'mongoose';
 
 const sectionSchema = new mongoose.Schema({
-  subjectId: { 
-    type: String, 
-    required: [true, 'El código de la materia es requerido'], 
-    trim: true 
-  },
-  semesterId: { 
-    type: mongoose.Schema.Types.ObjectId, // Cambia a ObjectId
-    ref: 'Semester', // Referencia al modelo Semester
-    required: [true, 'El código del semestre es requerido'], 
-  },
-  sectionNumber: { 
-    type: String,
-    required: [true, 'El código de la sección es requerido'], 
-    trim: true 
-  },
-  arrayStudents: { 
-    type: [mongoose.Schema.Types.ObjectId], // Cambia a ObjectId si es necesario
-    ref: 'User', // Referencia al modelo User
-    default: [] 
-  },
-  profesorId: {
-    type: String,
-    required: [true, 'El código del profesor es requerido'], 
-    trim: true 
-  }
+    subjectId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Subject',
+        required: [true, 'El ID de la materia es requerido'],
+    },
+    semesterId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Semester',
+        required: [true, 'El ID del semestre es requerido'],
+    },
+    sectionNumber: {
+        type: String,
+        required: [true, 'El código de la sección es requerido'],
+        trim: true,
+    },
+    arrayStudents: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'User',
+        default: [],
+    },
+    profesorId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: [true, 'El ID del profesor es requerido'],
+    },
 }, {
-  timestamps: true, // Añade automáticamente `createdAt` y `updatedAt`
-  versionKey: false // Esto es para que no aparezca el atributo `__v`
+    timestamps: true,
+    versionKey: false,
 });
 
 export default mongoose.model('Section', sectionSchema);

@@ -24,9 +24,11 @@ export default function MenuItems({ onItemSelected, userType = 'admin' }) {
       { panelName: 'Profesores', icon: MdPeople, path: '/administrador/profesores' },
       { panelName: 'Materias', icon: MdLibraryBooks, path: '/administrador/materias' },
       { panelName: 'Secciones', icon: MdViewList, path: '/administrador/secciones' },
-      { panelName: 'Semestres', icon: MdDateRange, path: '/administrador/semestres' }
+      { panelName: 'Semestres', icon: MdDateRange, path: '/administrador/semestres' },
+      // Nueva ruta para Carreras
+      { panelName: 'Carreras', icon: MdLibraryBooks, path: '/administrador/carreras' }
     ],
-    
+  
     Profesor: [
       { panelName: 'Dashboard', icon: MdHome, path: '/profesor' },
       { panelName: 'Mis Cursos', icon: MdSchool, path: '/profesor' },

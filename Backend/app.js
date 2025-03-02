@@ -18,6 +18,7 @@ import reportRoutes from './routes/reportRoutes.js'; // Importación de evaluati
 
 import studentRoutes from './routes/studentRoutes.js';// Importación de studentRoutes
 import professorRoutes from './routes/professorRoutes.js'; // Importación de professorRoutes
+import careerRoutes from './routes/careerRoutes.js';
 
 dotenv.config();
 
@@ -48,6 +49,7 @@ app.use('/api/reports', reportRoutes); // Define las rutas de evaluaciónes bajo
 
 app.use('/api/students', studentRoutes);
 app.use('/api/professors', professorRoutes); // Define las rutas de profesores bajo el prefijo /api/professors
+app.use('/api/careers', careerRoutes);
 
 app.listen(PORT, ()=> {
 	

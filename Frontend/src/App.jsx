@@ -28,6 +28,10 @@ import VerSemestre from './pages/Administrador/Semestres/VerSemestre';
 import AgregarSemestre from './pages/Administrador/Semestres/AgregarSemestre';
 import EditarSemestre from './pages/Administrador/Semestres/EditarSemestre';
 import DetalleSeccion from './pages/Estudiante/DetalleSeccion';
+import CarrerasPage from './pages/Administrador/Carreras/ListadoCarreras';
+import FormularioCarrera from './pages/Administrador/Carreras/AgregarCarrera';
+import VerCarrera from './pages/Administrador/Carreras/VerCarrera';
+import EditarCarrera from './pages/Administrador/Carreras/Editarcarrera';
 
 // Páginas de Estudiante
 import EstudiantePage from './pages/Estudiante/Inicioestudiante';
@@ -100,6 +104,10 @@ function App() {
           <Route path="semestres/ver/:id" element={<VerSemestre />} />
           <Route path="semestres/agregar" element={<AgregarSemestre />} />
           <Route path="semestres/editar/:id" element={<EditarSemestre />} />
+          <Route path="carreras" element={<CarrerasPage />} />
+          <Route path="carreras/agregar" element={<FormularioCarrera />} />
+          <Route path="carreras/ver/:id" element={<VerCarrera />} />
+          <Route path="carreras/editar/:id" element={<EditarCarrera />} />
         </Route>
 
         {/* Rutas de Profesor */}
