@@ -125,7 +125,7 @@ const SeccionFormulario = ({ initialData }) => {
             <option value="">Seleccione una materia</option>
             {subjects.map((subject) => (
               <option key={subject._id} value={subject._id}>
-                {subject.name}
+                {subject.name} - CODIGO: {subject.code}
               </option>
             ))}
           </select>
@@ -188,7 +188,7 @@ const SeccionFormulario = ({ initialData }) => {
             <option value="">Seleccione un profesor</option>
             {professors.map((professor) => (
               <option key={professor.id} value={professor.id}>
-                {`${professor.firstName} ${professor.lastName}`}
+                {`${professor.firstName} ${professor.lastName} - CI: ${professor.cedula}`}
               </option>
             ))}
           </select>
@@ -209,7 +209,7 @@ const SeccionFormulario = ({ initialData }) => {
                   {...register("arrayStudents")}
                   className="mr-2"
                 />
-                <span>{`${student.firstName} ${student.lastName}`}</span>
+                <span>{`${student.firstName} ${student.lastName} - CI: ${student.cedula}`}</span>
               </div>
             ))}
           </div>

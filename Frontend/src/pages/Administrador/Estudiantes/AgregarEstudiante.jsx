@@ -36,7 +36,7 @@ const FormularioEstudiante = () => {
       initialData={{
         firstName: "",
         lastName: "",
-        email: "",
+        cedula: "",
         isActive: "true"
       }}
       isEditing={false}

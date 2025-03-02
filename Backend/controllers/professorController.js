@@ -8,13 +8,14 @@ import mongoose from 'mongoose';
 export const getAllProfessors = async (req, res) => {
     try {
         const professors = await User.find({ role: 'Profesor' })
-            .select('firstName lastName email isActive role createdAt updatedAt');
+            .select('firstName lastName email cedula isActive role createdAt updatedAt');
 
         const formattedProfessors = professors.map(professor => ({
             id: professor._id,
             firstName: professor.firstName,
             lastName: professor.lastName,
             email: professor.email,
+            cedula: professor.cedula,
             isActive: professor.isActive,
             role: professor.role,
             createdAt: professor.createdAt,
@@ -35,7 +36,7 @@ export const getAllProfessors = async (req, res) => {
 export const getProfessorById = async (req, res) => {
     try {
         const professor = await User.findOne({ _id: req.params.id, role: 'Profesor' })
-            .select('firstName lastName email isActive role createdAt updatedAt');
+            .select('firstName lastName email cedula isActive role createdAt updatedAt');
 
         if (!professor) {
             return res.status(404).json({
@@ -48,6 +49,7 @@ export const getProfessorById = async (req, res) => {
             firstName: professor.firstName,
             lastName: professor.lastName,
             email: professor.email,
+            cedula: professor.cedula,
             isActive: professor.isActive,
             role: professor.role,
             createdAt: professor.createdAt,
@@ -65,13 +67,13 @@ export const getProfessorById = async (req, res) => {
 // Crear un nuevo profesor
 export const createProfessor = async (req, res) => {
     try {
-        const { firstName, lastName, email, isActive, role } = req.body;
+        const { firstName, lastName, isActive, role, cedula } = req.body;
 
-        // Verificar si el email ya existe
-        const existingUser = await User.findOne({ email });
+        // Verificar si la cédula ya existe
+        const existingUser = await User.findOne({ cedula });
         if (existingUser) {
             return res.status(400).json({
-                message: 'Ya existe un usuario con este correo electrónico'
+                message: 'Ya existe un usuario con esta cédula'
             });
         }
 
@@ -79,11 +81,9 @@ export const createProfessor = async (req, res) => {
         const professor = new User({
             firstName,
             lastName,
-            email,
+            cedula,
             isActive,
             role: role || 'Profesor',
-            // Generar una contraseña temporal
-            //password: Math.random().toString(36).slice(-8)
         });
 
         await professor.save();
@@ -94,7 +94,7 @@ export const createProfessor = async (req, res) => {
                 id: professor._id,
                 firstName: professor.firstName,
                 lastName: professor.lastName,
-                email: professor.email,
+                cedula: professor.cedula,
                 isActive: professor.isActive,
                 role: professor.role,
                 createdAt: professor.createdAt,
@@ -113,25 +113,41 @@ export const createProfessor = async (req, res) => {
 // Actualizar un profesor
 export const updateProfessor = async (req, res) => {
     try {
-        const { firstName, lastName, email, isActive, role } = req.body;
+        const { firstName, lastName, email, isActive, role, cedula } = req.body;
         
-        // Verificar si el email ya existe en otro usuario
-        const existingUser = await User.findOne({ 
-            email, 
-            _id: { $ne: req.params.id } 
-        });
-
-        if (existingUser) {
-            return res.status(400).json({
-                message: 'Ya existe otro usuario con este correo electrónico'
+        // Verificar si el email ya existe en otro usuario (solo si se proporciona email)
+        if (email) {
+            const existingUser = await User.findOne({ 
+                email, 
+                _id: { $ne: req.params.id } 
             });
+
+            if (existingUser) {
+                return res.status(400).json({
+                    message: 'Ya existe otro usuario con este correo electrónico'
+                });
+            }
+        }
+
+        // Construir el objeto de actualización
+        const updateData = {
+            firstName,
+            lastName,
+            cedula,
+            isActive,
+            role
+        };
+        
+        // Solo incluir email si se proporciona
+        if (email) {
+            updateData.email = email;
         }
 
         const updatedProfessor = await User.findOneAndUpdate(
             { _id: req.params.id, role: 'Profesor' },
-            { firstName, lastName, email, isActive, role },
+            updateData,
             { new: true }
-        ).select('firstName lastName email isActive role createdAt updatedAt');
+        ).select('firstName lastName email cedula isActive role createdAt updatedAt');
 
         if (!updatedProfessor) {
             return res.status(404).json({
@@ -146,6 +162,7 @@ export const updateProfessor = async (req, res) => {
                 firstName: updatedProfessor.firstName,
                 lastName: updatedProfessor.lastName,
                 email: updatedProfessor.email,
+                cedula: updatedProfessor.cedula,
                 isActive: updatedProfessor.isActive,
                 role: updatedProfessor.role,
                 createdAt: updatedProfessor.createdAt,
@@ -235,6 +252,7 @@ export const getProfessorDetails = async (req, res) => {
         res.status(200).json({
             nombre: `${professor.firstName} ${professor.lastName}`,
             email: professor.email,
+            cedula: professor.cedula,
             isActive: professor.isActive,
             semestres: formattedSemestres,
         });

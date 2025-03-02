@@ -57,7 +57,7 @@ const filterFunction = (data, query) => {
   return data.filter((record) => {
     return (
       record.firstName.toLowerCase().includes(query.toLowerCase()) ||
-      record.email.toLowerCase().includes(query.toLowerCase())
+      record.cedula.toLowerCase().includes(query.toLowerCase())
     );
   });
 };
@@ -118,8 +118,8 @@ const DashboardEstudiantes = () => {
       center: "true",
     },
     {
-      name: "Email",
-      selector: (row) => row.email,
+      name: "Cédula",
+      selector: (row) => row.cedula,
       sortable: true,
       center: "true",
     },
@@ -174,7 +174,7 @@ const DashboardEstudiantes = () => {
         data={students}
         customStyles={customStyles}
         buttontext="Agregar Estudiante"
-        placeholder="Buscar por nombre o email"
+        placeholder="Buscar por nombre o cédula"
         filterFunction={filterFunction}
         rol="Estudiantes"
         responsive 

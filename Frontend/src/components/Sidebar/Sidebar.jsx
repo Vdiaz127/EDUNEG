@@ -51,7 +51,7 @@ export default function Sidebar({ className }) {
           </div>
 
           {/* Footer del Sidebar (Botón de cerrar sesión) */}
-          <div className="p-4 border-t border-gray-800">
+          <div className="p-4 border-t border-gray-800 flex-shrink-0">
             <button
               onClick={logout}
               className="w-full flex items-center justify-center p-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors duration-200"

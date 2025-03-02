@@ -143,10 +143,12 @@ const DashboardSecciones = () => {
   // Función para filtrar la búsqueda usando el nombre de la materia o el número de sección
   const filterFunction = (data, query) => {
     return data.filter((record) => {
-      const subjectName = record.subject
+      const subjectName = record.subject && record.subject.name
         ? record.subject.name.toLowerCase()
         : "";
-      const sectionNumber = record.sectionNumber.toLowerCase();
+      const sectionNumber = record.sectionNumber
+        ? record.sectionNumber.toLowerCase()
+        : "";
       return (
         subjectName.includes(query.toLowerCase()) ||
         sectionNumber.includes(query.toLowerCase())

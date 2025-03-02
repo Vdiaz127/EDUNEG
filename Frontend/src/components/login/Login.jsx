@@ -105,7 +105,7 @@ const Login = () => {
 
           {/* Botón para "Iniciar sesión por primera vez" */}
           <button
-            onClick={() => navigate("/primer-login")}
+            onClick={() => navigate("/registro")}
             className="mt-4 text-blue-500 underline"
           >
             Iniciar sesión por primera vez

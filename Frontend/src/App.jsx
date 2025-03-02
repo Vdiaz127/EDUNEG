@@ -36,8 +36,8 @@ import EstudiantePage from './pages/Estudiante/Inicioestudiante';
 
 // Componentes de Login
 import Login from './components/login/Login';
-import PrimerLogin from './components/login/PrimerLogin';
-import CrearContrasena from './components/login/CrearContrasena';
+import Registro from './components/login/Registro';
+// import CrearContrasena from './components/login/CrearContrasena';
 
 // Páginas de Profesor
 import InicioProfesor  from './pages/Profesor/dashboard_profesor';
@@ -88,10 +88,8 @@ function App() {
         />
 
         {/* Ruta de Primer Login */}
-        <Route path="/primer-login" element={<PrimerLogin />} />
+        <Route path="/registro" element={<Registro />} />
 
-        {/* Ruta de Crear Contraseña */}
-        <Route path="/crear-contrasena" element={<CrearContrasena />} />
 
         {/* Rutas de Administrador */}
         <Route

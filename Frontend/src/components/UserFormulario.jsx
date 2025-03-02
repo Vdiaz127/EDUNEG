@@ -15,10 +15,14 @@ const schema = yup.object().shape({
     .required("El apellido es requerido")
     .min(2, "El apellido debe tener al menos 2 caracteres")
     .max(50, "El apellido no puede tener más de 50 caracteres"),
-  email: yup
+  cedula: yup
     .string()
-    .required("El email es requerido")
-    .email("Formato de email inválido"),
+    .required("La cédula es requerida")
+    .matches(/^[0-9]+$/, "La cédula debe contener solo números"),
+  // email: yup
+  //   .string()
+  //   .required("El email es requerido")
+  //   .email("Formato de email inválido"),
   isActive: yup
     .string()
     .required("El estatus es requerido")
@@ -43,7 +47,7 @@ const UserFormulario = ({
     defaultValues: initialData || {
       firstName: "",
       lastName: "",
-      email: "",
+      cedula: "",
       isActive: "",
     },
   });
@@ -99,6 +103,20 @@ const UserFormulario = ({
         </div>
 
         <div>
+          <label htmlFor="cedula" className="block text-sm font-medium">
+            Cédula
+          </label>
+          <input
+            {...register("cedula")}
+            type="text"
+            className="bg-gray-100 mt-1 block w-full border-b-2 border-gray-500 p-2 outline-none"
+          />
+          {errors.cedula && (
+            <p className="text-red-500 text-sm">{errors.cedula.message}</p>
+          )}
+        </div>
+
+        {/* <div>
           <label htmlFor="email" className="block text-sm font-medium">
             Correo electrónico
           </label>
@@ -110,7 +128,7 @@ const UserFormulario = ({
           {errors.email && (
             <p className="text-red-500 text-sm">{errors.email.message}</p>
           )}
-        </div>
+        </div> */}
 
         <div>
           <label htmlFor="isActive" className="block text-sm font-medium">

@@ -20,7 +20,7 @@ const subjectSchema = new mongoose.Schema({
         type: String, 
         required: [true, 'La descripción de la materia es requerida'], 
         trim: true, 
-        minlength: [10, 'La descripción debe tener al menos 10 caracteres'], 
+        minlength: [3, 'La descripción debe tener al menos 10 caracteres'], 
         maxlength: [500, 'La descripción no puede exceder los 500 caracteres'] 
     },
     credits: { 

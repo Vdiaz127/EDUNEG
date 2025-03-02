@@ -38,7 +38,6 @@ const AgregarProfesor = () => {
       initialData={{
         firstName: "",
         lastName: "",
-        email: "",
         password: "",
         isActive: "true"
       }}

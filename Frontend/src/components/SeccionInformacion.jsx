@@ -57,6 +57,7 @@ const SeccionInformacion = ({
         setProfessor(res.data);
       } catch (error) {
         console.error("Error al obtener el profesor:", error);
+        setProfessor(null);
       }
     };
     if (profesorId) fetchProfessor();
@@ -73,6 +74,7 @@ const SeccionInformacion = ({
         setStudents(studentsRes.map(res => res.data));
       } catch (error) {
         console.error("Error al obtener los estudiantes:", error);
+        setStudents([]);
       }
     };
     if (arrayStudents && arrayStudents.length > 0) fetchStudents();
@@ -99,7 +101,7 @@ const SeccionInformacion = ({
               Materia
             </p>
             <p className="font-bold text-lg">
-              {subject ? subject.name : subjectId}
+              {subject ? subject.name : `${subjectId} (No encontrado en la BD)`}
             </p>
           </div>
 
@@ -110,7 +112,7 @@ const SeccionInformacion = ({
               Semestre
             </p>
             <p className="font-bold text-lg">
-              {semester ? `Semestre ${semester.periodo} - ${semester.año}` : semesterId}
+              {semester ? `Semestre ${semester.periodo} - ${semester.año}` : `${semesterId} (No encontrado en la BD)`}
             </p>
           </div>
         </div>
@@ -134,30 +136,38 @@ const SeccionInformacion = ({
               Profesor
             </p>
             <p className="font-bold text-lg">
-              {professor ? `${professor.firstName} ${professor.lastName} – ${professor.email}` : profesorId}
+              {professor ? `${professor.firstName} ${professor.lastName} – CI: ${professor.cedula}` : `${profesorId} (No encontrado en la BD)`}
             </p>
           </div>
         </div>
 
-        {/* Fila: Estudiantes (mostrar nombre y correo) */}
+        {/* Fila: Estudiantes (mostrar nombre y cédula) */}
         <div className="w-full bg-gray-100 border-2 border-gray-300 py-2 px-5 rounded-lg shadow-md">
-        {students && students.length > 0 && (
           <div className="flex flex-col mb-4 gap-5">
-            <p className="text-lg font-semibold flex items-center gap-2">
-              <span className="w-7 h-7">👥</span>
-              Estudiantes
-            </p>
-            <ul className="font-bold text-lg">
-              {students.map((student) => (
-                <li key={student._id}>
-                  {student.firstName} {student.lastName} – {student.email}
-                </li>
+              <p className="text-lg font-semibold flex items-center gap-2">
+                <span className="w-7 h-7">👥</span>
+                Estudiantes
+              </p>
+              {students && students.length > 0 ? (
+            
+              <ul className="font-bold text-lg">
+                {students.map((student) => (
+                  <li key={student._id}>
+                    {student.firstName} {student.lastName} – CI: {student.cedula}
+                  </li>
+                ))}
+              </ul>
+            
+          ) : (
+            <p className="font-bold text-lg">
+              {arrayStudents.map((studentId) => (
+                <div key={studentId}>{studentId} (No encontrado en la BD)</div>
               ))}
-            </ul>
+            </p>
+          )}
           </div>
-        )}
+        </div>
       </div>
-    </div>
 
       {/* Botones para regresar y editar */}
       <div className="mt-4 w-1/2 flex justify-center md:justify-between items-center flex-wrap gap-4">
