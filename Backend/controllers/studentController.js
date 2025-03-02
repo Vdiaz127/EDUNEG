@@ -171,63 +171,71 @@ export const deleteStudent = async (req, res) => {
 };
 
 export const getStudentDetails = async (req, res) => {
-  try {
-    const studentId = req.params.id;
-
-    // Buscar al estudiante por su ID
-    const student = await User.findById(studentId);
-
-    if (!student) {
-      return res.status(404).json({ message: 'Estudiante no encontrado' });
-    }
-
-    // Buscar las secciones en las que el estudiante está inscrito
-    const secciones = await Section.find({ arrayStudents: studentId });
-
-    // Obtener la información de las materias y semestres asociados a las secciones
-    const formattedSemestres = await Promise.all(
-      secciones.map(async (seccion) => {
+    try {
+      const studentId = req.params.id;
+  
+      // Buscar al estudiante por su ID
+      const student = await User.findById(studentId);
+  
+      if (!student) {
+        return res.status(404).json({ message: 'Estudiante no encontrado' });
+      }
+  
+      // Buscar las secciones en las que el estudiante está inscrito
+      const secciones = await Section.find({ arrayStudents: studentId });
+  
+      // Objeto para agrupar las secciones por semestre
+      const semestresMap = {};
+  
+      // Obtener la información de las materias y semestres asociados a las secciones
+      for (const seccion of secciones) {
         // Convertir subjectId (String) a ObjectId
-        const subjectId = new mongoose.Types.ObjectId(seccion.subjectId); // Usar new
-
+        const subjectId = new mongoose.Types.ObjectId(seccion.subjectId);
+  
         // Obtener la materia asociada a la sección
         const materia = await Subject.findById(subjectId);
-
+  
         // Convertir profesorId (String) a ObjectId
-        const profesorId = new mongoose.Types.ObjectId(seccion.profesorId); // Usar new
-
+        const profesorId = new mongoose.Types.ObjectId(seccion.profesorId);
+  
         // Obtener el profesor asociado a la sección
         const profesor = await User.findById(profesorId);
-
+  
         // Obtener el semestre asociado a la sección
         const semestre = await Semester.findById(seccion.semesterId);
-
-        return {
-          id: seccion.semesterId,
-          periodo: semestre ? semestre.periodo : "N/A",
-          año: semestre ? semestre.año : "N/A",
-          secciones: [
-            {
-              id: seccion._id,
-              materia: materia ? materia.name : "Materia no encontrada",
-              codigo: seccion.subjectId,
-              seccion: seccion.sectionNumber,
-              profesor: profesor ? `${profesor.firstName} ${profesor.lastName}` : "Profesor no encontrado",
-              horario: "Lunes y Miércoles, 10:00 AM - 12:00 PM", // Esto debería venir de la base de datos
-              enlace: `/seccion/${seccion.subjectId}-${seccion.sectionNumber}`,
-            },
-          ],
-        };
-      })
-    );
-
-    res.status(200).json({
-      promedio: student.promedio || "N/A",
-      proximoExamen: "15 de Abril", // Esto debería venir de la base de datos
-      semestres: formattedSemestres,
-    });
-  } catch (error) {
-    console.error("Error al obtener detalles del estudiante:", error);
-    res.status(500).json({ message: 'Error en el servidor', error: error.message });
-  }
-};
+  
+        // Si el semestre no está en el mapa, lo agregamos
+        if (!semestresMap[seccion.semesterId]) {
+          semestresMap[seccion.semesterId] = {
+            id: seccion.semesterId,
+            periodo: semestre ? semestre.periodo : "N/A",
+            año: semestre ? semestre.año : "N/A",
+            secciones: [], // Array para las secciones de este semestre
+          };
+        }
+  
+        // Agregar la sección al semestre correspondiente
+        semestresMap[seccion.semesterId].secciones.push({
+          id: seccion._id,
+          materia: materia ? materia.name : "Materia no encontrada",
+          codigo: seccion.subjectId,
+          seccion: seccion.sectionNumber,
+          profesor: profesor ? `${profesor.firstName} ${profesor.lastName}` : "Profesor no encontrado",
+          horario: "Lunes y Miércoles, 10:00 AM - 12:00 PM", // Esto debería venir de la base de datos
+          enlace: `/seccion/${seccion.subjectId}-${seccion.sectionNumber}`,
+        });
+      }
+  
+      // Convertir el mapa de semestres a un array
+      const formattedSemestres = Object.values(semestresMap);
+  
+      res.status(200).json({
+        promedio: student.promedio || "N/A",
+        proximoExamen: "15 de Abril", // Esto debería venir de la base de datos
+        semestres: formattedSemestres,
+      });
+    } catch (error) {
+      console.error("Error al obtener detalles del estudiante:", error);
+      res.status(500).json({ message: 'Error en el servidor', error: error.message });
+    }
+  };

@@ -27,6 +27,7 @@ import SemestresPage from './pages/Administrador/Semestres/ListarSemestre';
 import VerSemestre from './pages/Administrador/Semestres/VerSemestre';
 import AgregarSemestre from './pages/Administrador/Semestres/AgregarSemestre';
 import EditarSemestre from './pages/Administrador/Semestres/EditarSemestre';
+import DetalleSeccion from './pages/Estudiante/DetalleSeccion';
 
 // Páginas de Estudiante
 import EstudiantePage from './pages/Estudiante/Inicioestudiante';
@@ -124,6 +125,7 @@ function App() {
         >
           <Route index element={<EstudiantePage />} />
           {/* Aquí puedes agregar más rutas específicas del estudiante */}
+          <Route path="seccion/:sectionId" element={<DetalleSeccion />} />
         </Route>
 
         {/* Ruta por defecto (Not Found) */}

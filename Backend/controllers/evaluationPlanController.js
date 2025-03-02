@@ -26,7 +26,7 @@ export const getEvaluationPlanById = async (req, res) => {
   try {
     const evaluationPlan = await EvaluationPlan.findById(req.params.id);
     if (!evaluationPlan) {
-      return res.status(404).json({ message: 'Evaluation plan not found' });
+      return res.status(404).json({ message: 'Plan de evaluación no encontrado' });
     }
     res.status(200).json(evaluationPlan);
   } catch (error) {
@@ -43,7 +43,7 @@ export const updateEvaluationPlan = async (req, res) => {
       { new: true }
     );
     if (!updatedEvaluationPlan) {
-      return res.status(404).json({ message: 'Evaluation plan not found' });
+      return res.status(404).json({ message: 'Plan de evaluación no encontrado' });
     }
     res.status(200).json(updatedEvaluationPlan);
   } catch (error) {
@@ -56,9 +56,9 @@ export const deleteEvaluationPlan = async (req, res) => {
   try {
     const deletedEvaluationPlan = await EvaluationPlan.findByIdAndDelete(req.params.id);
     if (!deletedEvaluationPlan) {
-      return res.status(404).json({ message: 'Evaluation plan not found' });
+      return res.status(404).json({ message: 'Plan de evaluación no encontrado' });
     }
-    res.status(200).json({ message: 'Evaluation plan deleted successfully' });
+    res.status(200).json({ message: 'Plan de evaluación eliminado exitosamente' });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

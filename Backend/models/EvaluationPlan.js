@@ -18,24 +18,10 @@ const evaluationPlanSchema = new mongoose.Schema(
     startDate: {
       type: Date,
       required: [true, 'La fecha de inicio es requerida'],
-      validate: {
-        validator: function (value) {
-          // Validar que la fecha de inicio no sea en el pasado
-          return value >= new Date();
-        },
-        message: 'La fecha de inicio no puede ser en el pasado',
-      },
     },
     endDate: {
       type: Date,
       required: [true, 'La fecha de finalización es requerida'],
-      validate: {
-        validator: function (value) {
-          // Validar que la fecha de finalización sea posterior a la fecha de inicio
-          return value > this.startDate;
-        },
-        message: 'La fecha de finalización debe ser posterior a la fecha de inicio',
-      },
     },
     status: {
       type: String,
@@ -44,6 +30,11 @@ const evaluationPlanSchema = new mongoose.Schema(
         message: 'El estado debe ser "active", "inactive" o "completed"',
       },
       default: 'active',
+    },
+    sectionId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Section',
+      required: [true, 'El ID de la sección es requerido'],
     },
   },
   {

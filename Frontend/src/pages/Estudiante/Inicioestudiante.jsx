@@ -1,17 +1,17 @@
 import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../components/context/UserContext";
 import Sidebar from "../../components/Sidebar/Sidebar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Importar useNavigate
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
-import axios from 'axios'; // Si usas axios
+import axios from 'axios';
 
 export default function Inicioestudiante() {
   const { user } = useContext(UserContext);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook para navegar entre rutas
 
   const [semestres, setSemestres] = useState([]);
   const [semestresExpandidos, setSemestresExpandidos] = useState({});
-  const [loading, setLoading] = useState(true); // Estado para manejar la carga
+  const [loading, setLoading] = useState(true);
   const [promedio, setPromedio] = useState("N/A");
   const [proximoExamen, setProximoExamen] = useState("N/A");
 
@@ -24,12 +24,10 @@ export default function Inicioestudiante() {
 
   useEffect(() => {
     if (user) {
-      // Obtener los datos del estudiante desde el backend
       const fetchData = async () => {
         try {
-          const response = await axios.get(`/api/students/${user.id}/details`); // Asegúrate de que la URL sea correcta
+          const response = await axios.get(`/api/students/${user.id}/details`);
           const studentData = response.data;
-  
           setSemestres(studentData.semestres);
           setPromedio(studentData.promedio);
           setProximoExamen(studentData.proximoExamen);
@@ -39,7 +37,7 @@ export default function Inicioestudiante() {
           setLoading(false);
         }
       };
-  
+
       fetchData();
     }
   }, [user]);
@@ -50,7 +48,7 @@ export default function Inicioestudiante() {
   }
 
   if (loading) {
-    return <div>Cargando...</div>; // Muestra un mensaje de carga mientras se obtienen los datos
+    return <div>Cargando...</div>;
   }
 
   return (
@@ -102,12 +100,12 @@ export default function Inicioestudiante() {
                       key={seccion.id}
                       className="bg-white p-4 rounded-lg shadow-md mt-2 hover:bg-gray-50 transition-colors"
                     >
-                      <a
-                        href={seccion.enlace}
+                      <button
+                        onClick={() => navigate(`/estudiante/seccion/${seccion.id}`)}
                         className="text-lg font-semibold text-blue-600 hover:text-blue-800"
                       >
                         {seccion.materia} / Sección {seccion.seccion}
-                      </a>
+                      </button>
                       <p className="text-sm text-gray-600 mt-1">
                         Profesor: {seccion.profesor}
                       </p>
