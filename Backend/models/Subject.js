@@ -1,14 +1,7 @@
+// models/Subject.js
 import mongoose from 'mongoose';
 
 const subjectSchema = new mongoose.Schema({
-    code: {
-        type: String,
-        required: [true, 'El código de la materia es requerido'],
-        trim: true,
-        unique: true,
-        minlength: [3, 'El código debe tener al menos 3 caracteres'],
-        maxlength: [10, 'El código no puede exceder los 10 caracteres'],
-    },
     name: {
         type: String,
         required: [true, 'El nombre de la materia es requerido'],
@@ -34,9 +27,17 @@ const subjectSchema = new mongoose.Schema({
         ref: 'Career',
         required: [true, 'El ID de la carrera es requerido'],
     },
+    acronym: {
+        type: String,
+        unique: true, // Asegura que el acrónimo sea único
+        trim: true,
+    },
 }, {
     timestamps: true,
     versionKey: false,
 });
+
+// Validación para evitar materias con el mismo nombre en la misma carrera
+subjectSchema.index({ name: 1, careerId: 1 }, { unique: true });
 
 export default mongoose.model('Subject', subjectSchema);

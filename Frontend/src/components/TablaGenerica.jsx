@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FaEye, FaEdit } from 'react-icons/fa';
+import React, { useState } from 'react';
 
 const TablaGenerica = ({
   columns,
@@ -8,7 +6,6 @@ const TablaGenerica = ({
   title,
   addButtonText,
   onAdd,
-  onEdit,
   filterFunction,
   filterPlaceholder,
 }) => {
@@ -56,7 +53,6 @@ const TablaGenerica = ({
                     {column.name}
                   </th>
                 ))}
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700 uppercase">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -64,25 +60,9 @@ const TablaGenerica = ({
                 <tr key={row._id} className="hover:bg-gray-50">
                   {columns.map((column) => (
                     <td key={column.name} className="px-4 py-2 text-sm text-gray-700">
-                      {column.selector(row)}
+                      {column.selector ? column.selector(row) : column.cell(row)}
                     </td>
                   ))}
-                  <td className="px-4 py-2">
-                    <div className="flex gap-4">
-                      <Link
-                        to={`/administrador/semestres/ver/${row._id}`}
-                        className="text-blue-500 hover:text-blue-700"
-                      >
-                        <FaEye size={20} />
-                      </Link>
-                      <button
-                        onClick={() => onEdit(row)}
-                        className="text-green-500 hover:text-green-700"
-                      >
-                        <FaEdit size={20} />
-                      </button>
-                    </div>
-                  </td>
                 </tr>
               ))}
             </tbody>

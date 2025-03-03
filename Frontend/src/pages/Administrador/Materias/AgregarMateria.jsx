@@ -7,10 +7,23 @@ const AgregarMateria = () => {
   const { id } = useParams(); // Si existe, estamos en modo edición
   const navigate = useNavigate();
   const [initialData, setInitialData] = useState(null);
+  const [careers, setCareers] = useState([]); // Estado para almacenar las carreras
   const isEditMode = Boolean(id); // Modo edición si id existe
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Obtener la lista de carreras
+    const fetchCareers = async () => {
+      try {
+        const response = await axios.get('/api/careers');
+        setCareers(response.data);
+      } catch (error) {
+        console.error('Error al cargar las carreras:', error);
+      }
+    };
+
+    fetchCareers();
+
     if (isEditMode) {
       axios.get(`/api/subjects/${id}`)
         .then(response => {
@@ -27,19 +40,19 @@ const AgregarMateria = () => {
       if (isEditMode) {
         // Para editar, se usa PUT y se envían los datos formateados
         await axios.put(`/api/subjects/${id}`, {
-          code: data.codigo,
           name: data.nombre,
           description: data.descripcion,
           credits: data.unidadesCreditos,
+          careerId: data.carreraId,
         });
         console.log('Materia actualizada');
       } else {
         // Para crear, se usa POST
         await axios.post('/api/subjects', {
-          code: data.codigo,
           name: data.nombre,
           description: data.descripcion,
           credits: data.unidadesCreditos,
+          careerId: data.carreraId,
         });
         console.log('Materia creada');
       }
@@ -51,13 +64,6 @@ const AgregarMateria = () => {
   };
 
   const campos = [
-    {
-      name: 'codigo',
-      label: 'Código',
-      type: 'text',
-      placeholder: 'Ingrese el código de la materia',
-      required: true,
-    },
     {
       name: 'nombre',
       label: 'Nombre',
@@ -77,6 +83,16 @@ const AgregarMateria = () => {
       label: 'Unidades de Crédito',
       type: 'number',
       placeholder: 'Ingrese las unidades de crédito',
+      required: true,
+    },
+    {
+      name: 'carreraId',
+      label: 'Carrera',
+      type: 'select',
+      options: careers.map(career => ({
+        value: career._id,
+        label: career.name,
+      })),
       required: true,
     },
   ];

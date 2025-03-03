@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import SectionCard from "../../../components/SectionCard";
 import Modal from "react-modal";
 import { FaEye, FaTrash } from "react-icons/fa";
+import TablaGenerica from "../../../components/TablaGenerica";
 
 const SeccionesPage = () => {
     const [sections, setSections] = useState([]);
@@ -11,6 +11,7 @@ const SeccionesPage = () => {
     const [professors, setProfessors] = useState([]);
     const [students, setStudents] = useState([]);
     const [semesters, setSemesters] = useState([]);
+    const [careers, setCareers] = useState([]); // Nuevo estado para carreras
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -29,20 +30,21 @@ const SeccionesPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [sectionsResponse, subjectsResponse, professorsResponse, studentsResponse, semestersResponse] = await Promise.all([
+                const [sectionsResponse, subjectsResponse, professorsResponse, studentsResponse, semestersResponse, careersResponse] = await Promise.all([
                     axios.get(`/api/sections`),
                     axios.get(`/api/subjects`),
                     axios.get(`/api/professors`),
                     axios.get(`/api/students`),
-                    axios.get(`/api/semesters`) // Obtener la lista de semestres
+                    axios.get(`/api/semesters`),
+                    axios.get(`/api/careers`) // Obtener la lista de carreras
                 ]);
 
-                // Guardar los datos
                 setSections(sectionsResponse.data);
                 setSubjects(subjectsResponse.data);
                 setProfessors(professorsResponse.data);
                 setStudents(studentsResponse.data);
                 setSemesters(semestersResponse.data);
+                setCareers(careersResponse.data); // Guardar las carreras
 
                 setLoading(false);
             } catch (error) {
@@ -55,10 +57,28 @@ const SeccionesPage = () => {
         fetchData();
     }, []);
 
-    // Función para obtener el nombre del semestre a partir del semesterId
     const getSemesterName = (semesterId) => {
         const semester = semesters.find(sem => sem._id === semesterId);
         return semester ? `Semestre ${semester.periodo} - ${semester.año}` : "Semestre no encontrado";
+    };
+
+    const getSubjectName = (subjectId) => {
+        const subject = subjects.find(sub => sub._id === subjectId);
+        return subject ? subject.name : "Materia no encontrada";
+    };
+
+    const getCareerNameFromSubject = (subjectId) => {
+        const subject = subjects.find(sub => sub._id === subjectId);
+        if (subject) {
+            const career = careers.find(career => career._id === subject.careerId);
+            return career ? career.name : "Carrera no encontrada";
+        }
+        return "Materia no encontrada";
+    };
+
+    const getProfessorName = (professorId) => {
+        const professor = professors.find(prof => prof.id === professorId);
+        return professor ? `${professor.firstName} ${professor.lastName}` : "Profesor no encontrado";
     };
 
     const handleInputChange = (e) => {
@@ -116,50 +136,78 @@ const SeccionesPage = () => {
         }
     };
 
+    const columns = [
+        {
+            name: "Materia",
+            selector: (row) => getSubjectName(row.subjectId)
+        },
+        {
+            name: "Carrera",
+            selector: (row) => getCareerNameFromSubject(row.subjectId) // Mostrar la carrera desde la materia
+        },
+        {
+            name: "Semestre",
+            selector: (row) => getSemesterName(row.semesterId)
+        },
+        {
+            name: "Sección",
+            selector: (row) => row.sectionNumber
+        },
+        {
+            name: "Profesor",
+            selector: (row) => getProfessorName(row.profesorId)
+        },
+        {
+            name: "Estudiantes",
+            selector: (row) => row.arrayStudents.length
+        },
+        {
+            name: "Acciones",
+            cell: (row) => (
+                <div className="flex space-x-2">
+                    <button 
+                        onClick={() => handleViewDetails(row._id)} 
+                        className="text-blue-500 hover:text-blue-600"
+                    >
+                        <FaEye />
+                    </button>
+                    <button 
+                        onClick={() => openDeleteModal(row)} 
+                        className="text-red-500 hover:text-red-600"
+                    >
+                        <FaTrash />
+                    </button>
+                </div>
+            )
+        }
+    ];
+
+    const filterFunction = (data, query) => {
+        return data.filter(section => 
+            getSubjectName(section.subjectId).toLowerCase().includes(query.toLowerCase()) ||
+            getCareerNameFromSubject(section.subjectId).toLowerCase().includes(query.toLowerCase()) || // Filtrar por carrera
+            getSemesterName(section.semesterId).toLowerCase().includes(query.toLowerCase()) ||
+            section.sectionNumber.toLowerCase().includes(query.toLowerCase()) ||
+            getProfessorName(section.profesorId).toLowerCase().includes(query.toLowerCase())
+        );
+    };
+
     if (loading) return <div className="text-center text-gray-500">Cargando...</div>;
     if (error) return <div className="text-center text-red-500">{error}</div>;
 
     return (
         <div className="flex flex-col justify-center items-center min-h-screen p-6 bg-gray-100">
-            <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg">
-                <div className="flex justify-between items-center mb-4">
-                    <h1 className="text-xl font-bold text-gray-700">Gestión de Secciones</h1>
-                    <button 
-                        onClick={() => setModalIsOpen(true)} 
-                        className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600"
-                    >
-                        Agregar Sección
-                    </button>
-                </div>
-                {sections.length === 0 ? (
-                    <div className="text-center text-gray-500">No se encontraron secciones registradas</div>
-                ) : (
-                    <div className="space-y-4">
-                        {sections.map((section) => (
-                            <div key={section._id} className="relative p-4 bg-gray-50 rounded-lg shadow">
-                                <SectionCard 
-                                    {...section}
-                                    semesterName={getSemesterName(section.semesterId)} // Pasar el nombre del semestre
-                                />
-                                <div className="absolute top-2 right-2 flex space-x-2">
-                                    <button 
-                                        onClick={() => handleViewDetails(section._id)} 
-                                        className="text-blue-500 hover:text-blue-600"
-                                    >
-                                        <FaEye />
-                                    </button>
-                                    <button 
-                                        onClick={() => openDeleteModal(section)} 
-                                        className="text-red-500 hover:text-red-600"
-                                    >
-                                        <FaTrash />
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
+            <TablaGenerica
+                columns={columns}
+                data={sections}
+                title="Gestión de Secciones"
+                addButtonText="Agregar Sección"
+                onAdd={() => setModalIsOpen(true)}
+                filterFunction={filterFunction}
+                filterPlaceholder="Buscar sección..."
+            />
+
+            {/* Modal para agregar nueva sección */}
             <Modal 
                 isOpen={modalIsOpen} 
                 onRequestClose={() => setModalIsOpen(false)} 
@@ -267,6 +315,8 @@ const SeccionesPage = () => {
                     </div>
                 </form>
             </Modal>
+
+            {/* Modal para confirmar eliminación */}
             <Modal
                 isOpen={deleteModalIsOpen}
                 onRequestClose={closeDeleteModal}
