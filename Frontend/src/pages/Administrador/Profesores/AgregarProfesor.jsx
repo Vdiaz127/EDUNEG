@@ -46,6 +46,13 @@ const AgregarProfesor = () => {
       required: true,
     },
     {
+      name: "cedula",
+      label: "Cédula",
+      type: "text",
+      placeholder: "Ingrese la cédula",
+      required: true,
+    },
+    {
       name: "email",
       label: "Correo electrónico",
       type: "email",
@@ -62,7 +69,7 @@ const AgregarProfesor = () => {
       ],
       required: true,
     },
-  ];
+];
 
   if (loading) return <div>Cargando...</div>;
 

@@ -99,13 +99,9 @@ const Login = () => {
 
           {errors.backend && <p className="error">{errors.backend}</p>}
 
-          <p className="forgot-password">
-            <a href="#">¿Olvidaste tu contraseña?</a>
-          </p>
-
           {/* Botón para "Iniciar sesión por primera vez" */}
           <button
-            onClick={() => navigate("/primer-login")}
+            onClick={() => navigate("/registro")}
             className="mt-4 text-blue-500 underline"
           >
             Iniciar sesión por primera vez

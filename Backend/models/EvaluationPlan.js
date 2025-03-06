@@ -35,6 +35,10 @@ const evaluationPlanSchema = new mongoose.Schema({
         ref: 'Section',
         required: [true, 'El ID de la sección es requerido'],
     },
+    isLocked: {
+        type: Boolean,
+        default: false,
+    },
 }, {
     timestamps: true,
     versionKey: false,

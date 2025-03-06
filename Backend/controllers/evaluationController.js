@@ -63,3 +63,18 @@ export const deleteEvaluation = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+// Obtener el número de evaluaciones pendientes en una sección
+export const getPendingEvaluationsCount = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const evaluations = await Evaluation.find({ evaluationPlanId: id, status: 'Pendiente' });
+    const pendingEvaluationsCount = evaluations.length;
+
+    res.status(200).json({ pendingEvaluationsCount });
+  } catch (error) {
+    console.error('Error al obtener las evaluaciones pendientes:', error);
+    res.status(500).json({ message: 'Error en el servidor', error: error.message });
+  }
+};

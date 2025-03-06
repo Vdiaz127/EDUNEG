@@ -53,7 +53,6 @@ export default function Inicioestudiante() {
 
   return (
     <div className="flex h-screen">
-      <Sidebar />
 
       <div className="flex-grow p-6 overflow-y-auto bg-gray-100">
         <h1 className="text-3xl font-bold mb-4">

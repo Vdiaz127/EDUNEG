@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import UserFormulario from "../../../components/UserFormulario";
+import FormularioGenerico from "../../../components/FormularioGenerico";
 import axios from "axios";
 
 const EditarEstudiante = () => {
@@ -28,39 +28,85 @@ const EditarEstudiante = () => {
 
   const handleSubmit = async (data) => {
     try {
+      setLoading(true);
+      setError(null);
+
       const userData = {
         ...data,
-        isActive: data.isActive === "true" || data.isActive === true
+        role: "Estudiante",
+        isActive: data.isActive === "true" || data.isActive === true,
       };
 
       await axios.put(`/api/students/${id}`, userData);
-      
-      
       navigate("/administrador/estudiantes");
     } catch (error) {
       console.error("Error al actualizar estudiante:", error);
-      
+      setError(error.response?.data?.message || "Error al actualizar el estudiante");
+    } finally {
+      setLoading(false);
     }
   };
+
+  const campos = [
+    {
+      name: "firstName",
+      label: "Nombre",
+      type: "text",
+      placeholder: "Ingrese el nombre",
+      required: true,
+    },
+    {
+      name: "lastName",
+      label: "Apellido",
+      type: "text",
+      placeholder: "Ingrese el apellido",
+      required: true,
+    },
+    {
+      name: "cedula",
+      label: "Cédula",
+      type: "text",
+      placeholder: "Ingrese la cédula",
+      required: true,
+    },
+    {
+      name: "email",
+      label: "Correo electrónico",
+      type: "email",
+      placeholder: "Ingrese el correo electrónico",
+      required: true,
+    },
+    {
+      name: "isActive",
+      label: "Estatus",
+      type: "select",
+      options: [
+        { value: true, label: "Activo" },
+        { value: false, label: "Inactivo" },
+      ],
+      required: true,
+    },
+  ];
 
   if (loading) return <div>Cargando...</div>;
   if (error) return <div>{error}</div>;
   if (!student) return <div>Estudiante no encontrado</div>;
 
   return (
-    <UserFormulario 
+    <FormularioGenerico
+      titulo="Editar Estudiante"
+      campos={campos}
       onSubmit={handleSubmit}
-      rol="Estudiante"
+      submitButtonText="Actualizar Estudiante"
+      returnUrl="/administrador/estudiantes"
       initialData={{
         firstName: student.firstName,
         lastName: student.lastName,
+        cedula: student.cedula,
         email: student.email,
-        role: student.role,
-        isActive: student.isActive.toString()
+        isActive: student.isActive,
       }}
-      isEditing={true}
-      submitButtonText="Actualizar Estudiante"
-      returnUrl="/administrador/estudiantes"
+      error={error}
     />
   );
 };

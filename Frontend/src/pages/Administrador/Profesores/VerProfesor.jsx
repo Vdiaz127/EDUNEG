@@ -42,6 +42,10 @@ const VerProfesor = () => {
             <p>{professor.lastName}</p>
           </div>
           <div>
+            <label className="font-semibold">Cédula:</label>
+            <p>{professor.cedula}</p>
+          </div>
+          <div>
             <label className="font-semibold">Correo electrónico:</label>
             <p>{professor.email}</p>
           </div>
@@ -60,7 +64,7 @@ const VerProfesor = () => {
         </div>
       </div>
     </div>
-  );
+);
 };
 
 export default VerProfesor;

@@ -4,7 +4,8 @@ import {
     getProfessorById,
     createProfessor,
     updateProfessor,
-    deleteProfessor
+    deleteProfessor,
+    getProfessorDetails,
 } from '../controllers/professorController.js';
 
 const router = express.Router();
@@ -15,5 +16,7 @@ router.get('/:id', getProfessorById);
 router.post('/', createProfessor);
 router.put('/:id', updateProfessor);
 router.delete('/:id', deleteProfessor);
+
+router.get('/:id/details', getProfessorDetails);
 
 export default router;

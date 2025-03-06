@@ -44,6 +44,12 @@ const ListadoProfesores = () => {
       center: true,
     },
     {
+      name: "Cédula",
+      selector: (row) => row.cedula,
+      sortable: true,
+      center: true,
+    },
+    {
       name: "Correo electrónico",
       selector: (row) => row.email,
       sortable: true,
@@ -80,7 +86,7 @@ const ListadoProfesores = () => {
       ),
       center: true,
     },
-  ];
+];
 
   const filterFunction = (data, query) => {
     return data.filter((record) => {

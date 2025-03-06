@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useContext } from 'react';
-import { UserContext } from './components/context/UserContext'; // Importa el contexto de usuario
+import { UserContext } from './components/context/UserContext';
 
 // Layouts
 import AdminLayout from './layouts/AdminLayout';
@@ -21,8 +21,11 @@ import ProfesoresPage from './pages/Administrador/Profesores/ListadoProfesores';
 import FormularioProfesor from './pages/Administrador/Profesores/AgregarProfesor';
 import VerProfesor from './pages/Administrador/Profesores/VerProfesor';
 import EditarProfesor from './pages/Administrador/Profesores/EditarProfesor';
+
 import SeccionesPage from './pages/Administrador/Secciones/ListadoSecciones';
 import VerSeccion from './pages/Administrador/Secciones/VerSeccion';
+import EditarSeccion from './pages/Administrador/Secciones/EditarSeccion';
+
 import SemestresPage from './pages/Administrador/Semestres/ListarSemestre';
 import VerSemestre from './pages/Administrador/Semestres/VerSemestre';
 import AgregarSemestre from './pages/Administrador/Semestres/AgregarSemestre';
@@ -32,49 +35,68 @@ import CarrerasPage from './pages/Administrador/Carreras/ListadoCarreras';
 import FormularioCarrera from './pages/Administrador/Carreras/AgregarCarrera';
 import VerCarrera from './pages/Administrador/Carreras/VerCarrera';
 import EditarCarrera from './pages/Administrador/Carreras/Editarcarrera';
-
+import PlanEvaluacionPage from "./pages/Profesor/PlanEvaluacionPage"; // Importa el nuevo componente
+import VerPlanEvaluacion from './pages/Profesor/VerPlanEvaluacion.jsx';
 // Páginas de Estudiante
 import EstudiantePage from './pages/Estudiante/Inicioestudiante';
 
 // Componentes de Login
 import Login from './components/login/Login';
-import PrimerLogin from './components/login/PrimerLogin';
-import CrearContrasena from './components/login/CrearContrasena';
+import Registro from './components/login/Registro';
+// import CrearContrasena from './components/login/CrearContrasena';
+
+// Páginas de Profesor
+import InicioProfesor  from './pages/Profesor/dashboard_profesor';
+import { Materia } from './pages/Profesor/materia';
+import { Asignacion } from './pages/Profesor/asignacion';
+import PlanEvaluacion from './pages/Profesor/PlanEvaluacion';
+import SeccionesFormulario from './components/SeccionFormulario';
+
 
 function App() {
-  const { user } = useContext(UserContext); // Obtén el estado del usuario desde el contexto
+  const { user, loading } = useContext(UserContext);
 
-  // Función para proteger las rutas según el rol del usuario
+  // Mientras se valida el token, mostramos un loader global.
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Cargando...
+      </div>
+    );
+  }
+
+  // Componente para proteger las rutas según el rol del usuario.
   const ProtectedRoute = ({ children, requiredRole }) => {
+    // Al llegar aquí, ya se terminó la validación.
     if (!user) {
-      return <Navigate to="/" />; // Redirige al login si no hay usuario autenticado
+      // Si no hay usuario autenticado, redirige al login.
+      return <Navigate to="/" />;
     }
-
     if (requiredRole && user.role !== requiredRole) {
-
-      if (user.role === "Admin") {
-        return <Navigate to={`/Administrador`} />
-      } else if (user.role === "Profesor") {
-        return <Navigate to={`/profesor`} />
-      } else if (user.role === "Estudiante") {
-        return <Navigate to={`/estudiante`} />
-      }
+      // Si el usuario no tiene el rol requerido, redirige a su dashboard.
+      return <Navigate to={`/${user.role.toLowerCase()}`} />;
     }
-
-    return children; // Permite el acceso si el usuario está autenticado y tiene el rol correcto
+    return children;
   };
 
   return (
     <BrowserRouter>
       <Routes>
         {/* Ruta de Login */}
-        <Route path="/" element={!user ? <Login /> : <Navigate to={`/${user.role.toLowerCase()}`} />} />
+        <Route
+          path="/"
+          element={
+            !user ? (
+              <Login />
+            ) : (
+              <Navigate to={`/${user.role.toLowerCase()}`} />
+            )
+          }
+        />
 
         {/* Ruta de Primer Login */}
-        <Route path="/primer-login" element={<PrimerLogin />} />
+        <Route path="/registro" element={<Registro />} />
 
-        {/* Ruta de Crear Contraseña */}
-        <Route path="/crear-contrasena" element={<CrearContrasena />} />
 
         {/* Rutas de Administrador */}
         <Route
@@ -90,16 +112,22 @@ function App() {
           <Route path="estudiantes/agregar" element={<FormularioEstudiante />} />
           <Route path="estudiantes/ver/:id" element={<VerEstudiante />} />
           <Route path="estudiantes/editar/:id" element={<EditarEstudiante />} />
+
           <Route path="materias" element={<MateriasPage />} />
           <Route path="materias/agregar" element={<FormularioMateria />} />
           <Route path="materias/ver/:id" element={<VerMateria />} />
           <Route path="materias/editar/:id" element={<EditarMateria />} />
+
           <Route path="profesores" element={<ProfesoresPage />} />
           <Route path="profesores/agregar" element={<FormularioProfesor />} />
           <Route path="profesores/ver/:id" element={<VerProfesor />} />
           <Route path="profesores/editar/:id" element={<EditarProfesor />} />
-          <Route path="secciones" element={<SeccionesPage />} />
+
+          <Route path="secciones" element={<SeccionesPage/>} />
           <Route path="secciones/ver/:id" element={<VerSeccion />} />
+          <Route path="secciones/agregar" element={<SeccionesFormulario />} />
+          <Route path="secciones/editar/:id" element={<EditarSeccion />} />
+
           <Route path="semestres" element={<SemestresPage />} />
           <Route path="semestres/ver/:id" element={<VerSemestre />} />
           <Route path="semestres/agregar" element={<AgregarSemestre />} />
@@ -119,7 +147,12 @@ function App() {
             </ProtectedRoute>
           }
         >
-          {/* Aquí puedes agregar las rutas específicas del profesor */}
+          <Route index element={<InicioProfesor />} />
+          <Route path="materia" element={<Materia />} />
+          <Route path="asignacion" element={<Asignacion />} />
+          <Route path="PlanEvaluacion" element={<PlanEvaluacion />} />
+          <Route path="plan-evaluacion/:sectionId" element={<PlanEvaluacionPage />} />
+          <Route path="plan-evaluacion/:sectionId/ver" element={<VerPlanEvaluacion />} />
         </Route>
 
         {/* Rutas de Estudiante */}
@@ -132,8 +165,6 @@ function App() {
           }
         >
           <Route index element={<EstudiantePage />} />
-          {/* Aquí puedes agregar más rutas específicas del estudiante */}
-          <Route path="seccion/:sectionId" element={<DetalleSeccion />} />
         </Route>
 
         {/* Ruta por defecto (Not Found) */}

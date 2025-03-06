@@ -13,10 +13,21 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: [true, 'El correo electrónico es obligatorio.'],
+    },
+    cedula: {
+        type: String,
+        required: [true, 'La cédula es obligatoria.'],
+        unique: [true, 'La cédula ya está registrada.']
+    },
+    email: { 
+        type: String, 
+        // Por ahora no se requiere, ya que se agregará posteriormente
         unique: [true, 'El correo electrónico ya está en uso.'],
+        sparse: true,
         validate: {
             validator: function(v) {
-                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+                if (!v) return true; // Permitir que el campo esté vacío
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); // Validación básica de correo electrónico
             },
             message: props => `${props.value} no es un correo electrónico válido.`,
         },
@@ -33,10 +44,11 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
     },
-}, {
+    },{
     timestamps: true,
-    versionKey: false,
-});
+    versionKey: false,        
+    }
+);
 
 // Encriptar la contraseña antes de guardar
 userSchema.pre('save', async function(next) {

@@ -1,55 +1,60 @@
 import React, { createContext, useState, useEffect } from "react";
+const API_URL = import.meta.env.VITE_API_URL;
 
-// Crear el contexto
 export const UserContext = createContext();
 
-// Proveedor del contexto
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // Estado de carga
 
-  // Verificar si hay un token al cargar la aplicación
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      // Validar el token y obtener los datos del usuario
       validateToken(token);
+    } else {
+      setLoading(false); 
     }
   }, []);
 
-  // Función para validar el token y obtener los datos del usuario
   const validateToken = async (token) => {
+    // console.log(token);
+    // console.log(`Bearer ${token}`);
+    // console.log(`${API_URL}/api/auth/validate-token`);
     try {
-      const response = await fetch("http://localhost:5000/api/auth/validate-token", {
+      const response = await fetch(`${API_URL}/api/auth/validate-token`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      
       if (response.ok) {
-        const userData = await response.json();
-        setUser(userData.user); // Actualizar el estado del usuario
+        const data = await response.json();
+        setUser(data.user);
       } else {
-        localStorage.removeItem("token"); // Eliminar el token si no es válido
+        const errorText = await response.text(); // Extrae el texto de la respuesta
+        console.warn("Token inválido. Código:", response.status, "Respuesta:", errorText);
       }
     } catch (error) {
-      console.error("Error al validar el token:", error);
+      console.error("Error al APP validar el token:", error);
+      console.log(error);
+    } finally {
+      setLoading(false); // Finaliza la carga
     }
   };
+  
 
-  // Función para actualizar los datos del usuario
   const updateUser = (userData) => {
     setUser(userData);
   };
 
-  // Función para cerrar sesión
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
   };
 
   return (
-    <UserContext.Provider value={{ user, updateUser, logout }}>
+    <UserContext.Provider value={{ user, loading, updateUser, logout }}>
       {children}
     </UserContext.Provider>
   );

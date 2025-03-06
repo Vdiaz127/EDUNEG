@@ -4,10 +4,10 @@ import bcrypt from 'bcryptjs';
 
 // Función para registrar un nuevo usuario
 export const registerUser = async (req, res) => {
-  const { firstName, lastName, email, password, role } = req.body;
+  const { firstName, lastName, email, password, role, cedula } = req.body;
 
   try {
-    const user = new User({ firstName, lastName, email, password, role });
+    const user = new User({ firstName, lastName, email, password, role, cedula });
     await user.save();
     res.status(201).json({ message: 'Usuario creado exitosamente.' });
   } catch (error) {
@@ -63,8 +63,8 @@ export const loginUser = async (req, res) => {
 
 // Middleware para validar el token
 export const authenticateToken = async (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Obtener el token del encabezado
-  console.log(token);
+  const token = req.headers['Authorization']?.split(' ')[1]; // Obtener el token del encabezado
+  
   if (!token) {
     return res.sendStatus(401); // No autorizado
   }
@@ -78,12 +78,13 @@ export const authenticateToken = async (req, res, next) => {
 };
 
 export const validateToken = async (req, res) => {
+  
   const token = req.headers['authorization']?.split(' ')[1];
 
   if (!token) {
     return res.status(401).json({ msg: "Token no proporcionado." });
   }
-
+  
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
@@ -104,43 +105,53 @@ export const validateToken = async (req, res) => {
     });
   } catch (error) {
     console.error("Error al validar el token:", error);
+    
     res.status(401).json({ msg: "Token no válido." });
   }
 };
 
 // Función para validar el correo (Primer Login)
 export const validateEmail = async (req, res) => {
-  const { email } = req.body;
+  const { cedula } = req.body;
 
   try {
-    // Buscar al usuario por su correo
-    const user = await User.findOne({ email });
+    // Buscar al usuario por su cédula
+    const user = await User.findOne({ cedula });
 
     if (!user) {
-      return res.status(400).json({ msg: "Correo no válido." });
+      return res.status(400).json({ msg: "Cédula no válida." });
     }
 
-    // Verificar si el usuario ya tiene una contraseña
-    if (user.password) {
-      return res.status(400).json({ msg: "Ya has establecido una contraseña anteriormente." });
+    // Verificar si el usuario ya tiene un email y contraseña
+    if (user.email && user.password) {
+      return res.status(400).json({ msg: "Ya has completado tu registro anteriormente." });
     }
 
-    // Generar un token único (puedes usar JWT)
+    // Generar un token único
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h", // El token expira en 1 hora
+      expiresIn: "1h"
     });
 
-    // Enviar el token como respuesta
-    res.json({ token });
+    // Enviar el token y datos básicos del usuario
+    res.json({ 
+      token,
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        cedula: user.cedula,
+        role: user.role
+      }
+    });
   } catch (error) {
-    console.error("Error en la validación del correo:", error);
+    console.error("Error en la validación de la cédula:", error);
     res.status(500).json({ msg: "Error en el servidor." });
   }
 };
 
-// Función para crear la contraseña (Primer Login)
+// Función para crear la contraseña y email (Primer Login)
 export const createPassword = async (req, res) => {
-  const { token, password } = req.body;
+  const { token, password, email } = req.body;
 
   try {
     // Verificar y decodificar el token
@@ -153,20 +164,26 @@ export const createPassword = async (req, res) => {
       return res.status(400).json({ msg: "Token no válido." });
     }
 
-    // Verificar si el usuario ya tiene una contraseña
-    if (user.password) {
-      return res.status(400).json({ msg: "Ya has establecido una contraseña anteriormente." });
+    // Verificar si el usuario ya tiene email y contraseña
+    if (user.email && user.password) {
+      return res.status(400).json({ msg: "Ya has completado tu registro anteriormente." });
     }
 
-    // Actualizar la contraseña del usuario
-    // const salt = await bcrypt.genSalt(10);
+    // Verificar si el email ya existe en otro usuario
+    const existingUser = await User.findOne({ email });
+    if (existingUser && existingUser._id.toString() !== user._id.toString()) {
+      return res.status(400).json({ msg: "Este correo electrónico ya está en uso." });
+    }
+
+    // Actualizar el email y la contraseña del usuario
+    user.email = email;
     user.password = password;
     await user.save();
 
     // Enviar respuesta exitosa
-    res.json({ msg: "Contraseña creada exitosamente." });
+    res.json({ msg: "Registro completado exitosamente." });
   } catch (error) {
-    console.error("Error al crear la contraseña:", error);
+    console.error("Error al completar el registro:", error);
 
     if (error.name === "JsonWebTokenError") {
       return res.status(400).json({ msg: "Token no válido o expirado." });

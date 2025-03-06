@@ -36,7 +36,6 @@ app.use(express.json());
 
 app.use(cors());
 
-
 // Rutas
 app.use('/api/auth', authRoutes);
 app.use('/api/grades', gradeRoutes); // Define las rutas de calificaciones bajo el prefijo /api/grades

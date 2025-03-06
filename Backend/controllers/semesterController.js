@@ -114,3 +114,16 @@ export const changeSemesterStatus = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+export const getProfessorSemesters = async (req, res) => {
+    try {
+        const semesters = await Semester.find({
+            status: { $in: ['en curso', 'cerrado'] }
+        });
+
+        res.status(200).json(semesters);
+    } catch (error) {
+        console.error('Error al obtener semestres:', error);
+        res.status(500).json({ message: 'Error al obtener los semestres', error: error.message });
+    }
+};

@@ -6,13 +6,13 @@ import Semester from '../models/Semester.js';
 
 export const createStudent = async (req, res) => {
     try {
-        const { firstName, lastName, email, isActive } = req.body;
+        const { firstName, lastName, isActive, cedula } = req.body;
 
-        // Verificar si el email ya existe
-        const existingUser = await User.findOne({ email });
+        // Verificar si la cédula ya existe
+        const existingUser = await User.findOne({ cedula });
         if (existingUser) {
             return res.status(400).json({
-                message: 'Ya existe un usuario con este correo electrónico'
+                message: 'Ya existe un usuario con esta cédula'
             });
         }
 
@@ -20,11 +20,9 @@ export const createStudent = async (req, res) => {
         const student = new User({
             firstName,
             lastName,
-            email,
+            cedula,
             isActive,
             role: 'Estudiante',
-            // Generar una contraseña temporal
-           // password: Math.random().toString(36).slice(-8)
         });
 
         await student.save();
@@ -35,7 +33,7 @@ export const createStudent = async (req, res) => {
                 id: student._id,
                 firstName: student.firstName,
                 lastName: student.lastName,
-                email: student.email,
+                cedula: student.cedula,
                 isActive: student.isActive
             }
         });
@@ -48,17 +46,20 @@ export const createStudent = async (req, res) => {
     }
 };
 
+
 export const getAllStudents = async (req, res) => {
     try {
         const students = await User.find({ role: 'Estudiante' })
-            .select('firstName lastName email isActive');
+            .select('firstName lastName email cedula isActive role');
 
         const formattedStudents = students.map(student => ({
             id: student._id,
             firstName: student.firstName,
             lastName: student.lastName,
             email: student.email,
-            isActive: student.isActive
+            cedula: student.cedula,
+            isActive: student.isActive,
+            role: student.role
         }));
 
         res.status(200).json(formattedStudents);
@@ -74,7 +75,7 @@ export const getAllStudents = async (req, res) => {
 export const getStudentById = async (req, res) => {
     try {
         const student = await User.findOne({ _id: req.params.id, role: 'Estudiante' })
-            .select('firstName lastName email isActive');
+            .select('firstName lastName email cedula isActive role createdAt updatedAt');
 
         if (!student) {
             return res.status(404).json({
@@ -87,7 +88,11 @@ export const getStudentById = async (req, res) => {
             firstName: student.firstName,
             lastName: student.lastName,
             email: student.email,
-            isActive: student.isActive
+            role: student.role,
+            cedula: student.cedula,
+            isActive: student.isActive,
+            createdAt: student.createdAt,
+            updatedAt: student.updatedAt
         });
     } catch (error) {
         console.error('Error al obtener estudiante:', error);
@@ -100,25 +105,40 @@ export const getStudentById = async (req, res) => {
 
 export const updateStudent = async (req, res) => {
     try {
-        const { firstName, lastName, email, isActive } = req.body;
+        const { firstName, lastName, email, isActive, cedula } = req.body;
         
-        // Verificar si el email ya existe en otro usuario
-        const existingUser = await User.findOne({ 
-            email, 
-            _id: { $ne: req.params.id } 
-        });
-        
-        if (existingUser) {
-            return res.status(400).json({
-                message: 'Ya existe un usuario con este correo electrónico'
+        // Verificar si el email ya existe en otro usuario (solo si se proporciona email)
+        if (email) {
+            const existingUser = await User.findOne({ 
+                email, 
+                _id: { $ne: req.params.id } 
             });
+            
+            if (existingUser) {
+                return res.status(400).json({
+                    message: 'Ya existe un usuario con este correo electrónico'
+                });
+            }
+        }
+
+        // Construir el objeto de actualización
+        const updateData = {
+            firstName,
+            lastName,
+            cedula,
+            isActive
+        };
+        
+        // Solo incluir email si se proporciona
+        if (email) {
+            updateData.email = email;
         }
 
         const updatedStudent = await User.findOneAndUpdate(
             { _id: req.params.id, role: 'Estudiante' },
-            { firstName, lastName, email, isActive },
+            updateData,
             { new: true }
-        ).select('firstName lastName email isActive');
+        ).select('firstName lastName email cedula isActive');
 
         if (!updatedStudent) {
             return res.status(404).json({
@@ -133,6 +153,7 @@ export const updateStudent = async (req, res) => {
                 firstName: updatedStudent.firstName,
                 lastName: updatedStudent.lastName,
                 email: updatedStudent.email,
+                cedula: updatedStudent.cedula,
                 isActive: updatedStudent.isActive
             }
         });
