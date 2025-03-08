@@ -49,6 +49,7 @@ app.use('/api/reports', reportRoutes); // Define las rutas de evaluaciónes bajo
 app.use('/api/students', studentRoutes);
 app.use('/api/professors', professorRoutes); // Define las rutas de profesores bajo el prefijo /api/professors
 app.use('/api/careers', careerRoutes);
+app.use("/api/upload", express.static("uploads"));
 
 app.listen(PORT, ()=> {
 	
@@ -56,6 +57,8 @@ app.listen(PORT, ()=> {
   connectDB();
   console.log('Server is running on http://localhost:' + PORT);
 });
+
+
 
 // Servir archivos estáticos para el frontend
 app.use(express.static(path.join(__dirname, "/Frontend/dist")));

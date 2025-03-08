@@ -30,7 +30,6 @@ import SemestresPage from './pages/Administrador/Semestres/ListarSemestre';
 import VerSemestre from './pages/Administrador/Semestres/VerSemestre';
 import AgregarSemestre from './pages/Administrador/Semestres/AgregarSemestre';
 import EditarSemestre from './pages/Administrador/Semestres/EditarSemestre';
-import DetalleSeccion from './pages/Estudiante/DetalleSeccion';
 import CarrerasPage from './pages/Administrador/Carreras/ListadoCarreras';
 import FormularioCarrera from './pages/Administrador/Carreras/AgregarCarrera';
 import VerCarrera from './pages/Administrador/Carreras/VerCarrera';
@@ -39,6 +38,8 @@ import PlanEvaluacionPage from "./pages/Profesor/PlanEvaluacionPage"; // Importa
 import VerPlanEvaluacion from './pages/Profesor/VerPlanEvaluacion.jsx';
 // Páginas de Estudiante
 import EstudiantePage from './pages/Estudiante/Inicioestudiante';
+import SeccionDetalle from "./pages/Estudiante/SeccionDetalle";
+import EntregarTarea from "./pages/Estudiante/EntregarTarea";
 
 // Componentes de Login
 import Login from './components/login/Login';
@@ -46,7 +47,7 @@ import Registro from './components/login/Registro';
 // import CrearContrasena from './components/login/CrearContrasena';
 
 // Páginas de Profesor
-import InicioProfesor  from './pages/Profesor/dashboard_profesor';
+import InicioProfesor from './pages/Profesor/dashboard_profesor';
 import { Materia } from './pages/Profesor/materia';
 import { Asignacion } from './pages/Profesor/asignacion';
 import PlanEvaluacion from './pages/Profesor/PlanEvaluacion';
@@ -123,7 +124,7 @@ function App() {
           <Route path="profesores/ver/:id" element={<VerProfesor />} />
           <Route path="profesores/editar/:id" element={<EditarProfesor />} />
 
-          <Route path="secciones" element={<SeccionesPage/>} />
+          <Route path="secciones" element={<SeccionesPage />} />
           <Route path="secciones/ver/:id" element={<VerSeccion />} />
           <Route path="secciones/agregar" element={<SeccionesFormulario />} />
           <Route path="secciones/editar/:id" element={<EditarSeccion />} />
@@ -165,6 +166,14 @@ function App() {
           }
         >
           <Route index element={<EstudiantePage />} />
+          {/* Ruta para el detalle de la sección */}
+          <Route path="/estudiante/seccion/:id" element={<SeccionDetalle />} />
+
+          {/* Ruta para entregar una tarea */}
+          <Route
+            path="/estudiante/seccion/:sectionId/entregar-tarea/:evaluationId"
+            element={<EntregarTarea />}
+          />
         </Route>
 
         {/* Ruta por defecto (Not Found) */}
