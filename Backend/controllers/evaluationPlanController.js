@@ -1,9 +1,138 @@
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import EvaluationPlan from '../models/EvaluationPlan.js';
 import Evaluation from '../models/Evaluation.js';
 import Section from '../models/Section.js';
-import Subject from '../models/Subject.js';
 import Grade from '../models/Grade.js';
 import User from '../models/User.js';
+
+export const generateActaCierre = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Obtener el plan de evaluación
+    const evaluationPlan = await EvaluationPlan.findById(id)
+      .populate('sectionId')
+      .populate({
+        path: 'sectionId',
+        populate: [
+          { path: 'subjectId', select: 'name' },
+          { path: 'semesterId', select: 'periodo año' },
+          { path: 'profesorId', select: 'firstName lastName' },
+        ],
+      });
+
+    if (!evaluationPlan) {
+      return res.status(404).json({ message: 'Plan de evaluación no encontrado.' });
+    }
+
+    // Obtener las evaluaciones del plan
+    const evaluations = await Evaluation.find({ id });
+
+    // Obtener los estudiantes de la sección
+    const students = await User.find({ _id: { $in: evaluationPlan.sectionId.arrayStudents } });
+
+    // Obtener las calificaciones de los estudiantes
+    const grades = await Grade.find({ evaluationId: { $in: evaluations.map((e) => e._id) } });
+
+    // Crear el PDF
+    const doc = new jsPDF();
+
+    // Título del PDF
+    doc.setFontSize(18);
+    doc.text(`Acta de Cierre - ${evaluationPlan.name}`, 10, 10);
+
+    // Datos de la sección
+    doc.setFontSize(12);
+    doc.text(`Materia: ${evaluationPlan.sectionId.subjectId.name}`, 10, 20);
+    doc.text(`Código de la sección: ${evaluationPlan.sectionId.sectionNumber}`, 10, 30);
+    doc.text(`Semestre: ${evaluationPlan.sectionId.semesterId.periodo} ${evaluationPlan.sectionId.semesterId.año}`, 10, 40);
+    doc.text(`Profesor: ${evaluationPlan.sectionId.profesorId.firstName} ${evaluationPlan.sectionId.profesorId.lastName}`, 10, 50);
+
+    // Datos del plan de evaluación
+    doc.text(`Plan de Evaluación: ${evaluationPlan.name}`, 10, 60);
+    doc.text(`Fecha de inicio: ${new Date(evaluationPlan.startDate).toLocaleDateString()}`, 10, 70);
+    doc.text(`Fecha de fin: ${new Date(evaluationPlan.endDate).toLocaleDateString()}`, 10, 80);
+
+    // Detalles de las evaluaciones
+    doc.setFontSize(14);
+    doc.text('Evaluaciones:', 10, 90);
+    evaluations.forEach((evaluation, index) => {
+      doc.setFontSize(12);
+      doc.text(
+        `${index + 1}. ${evaluation.name} (${evaluation.weight}%) - Fecha de entrega: ${new Date(evaluation.dueDate).toLocaleDateString()}`,
+        15,
+        100 + index * 10
+      );
+    });
+
+    // Tabla de calificaciones de los estudiantes
+    doc.setFontSize(14);
+    doc.text('Calificaciones de los Estudiantes:', 10, 100 + evaluations.length * 10);
+
+    // Crear la tabla con el nombre de la evaluación y la nota
+    const headers = ['Estudiante', ...evaluations.map((e) => e.name), 'Total'];
+
+    const data = students.map((student) => {
+      const studentGrades = evaluations.map((evaluation) => {
+        const grade = grades.find((g) => {
+          if (!g.evaluationId || !g.studentId) {
+            console.warn("Grade sin evaluationId o studentId:", g);
+            return false;
+          }
+    res.status(500).json(g);
+          
+          const gradeEvaluationId =
+            typeof g.evaluationId === 'object' ? g.evaluationId._id.toString() : g.evaluationId.toString();
+          const gradeStudentId =
+            typeof g.studentId === 'object' ? g.studentId._id.toString() : g.studentId.toString();
+          const currentEvaluationId = evaluation._id.toString();
+          const currentStudentId = student._id.toString();
+      
+          console.log("Comparando:", {
+            gradeEvaluationId,
+            currentEvaluationId,
+            gradeStudentId,
+            currentStudentId,
+          });
+      
+          return (
+            gradeEvaluationId === currentEvaluationId &&
+            gradeStudentId === currentStudentId
+          );
+        });
+      
+        res.status(200).json({ grade });
+        
+        return grade ? grade.score : 0; // Solo asignar 0 si no se encuentra la calificación
+      });
+
+      const total = studentGrades.reduce((sum, score) => sum + score, 0);
+      return [`${student.firstName} ${student.lastName}`, ...studentGrades, total];
+    });
+
+    // Agregar la tabla usando autoTable
+    autoTable(doc, {
+      head: [headers],
+      body: data,
+      startY: 110 + evaluations.length * 10,
+    });
+
+    // Espacio para firma y sello
+    doc.setFontSize(12);
+    //doc.text('Firma del Profesor: ___________________________', 10, doc.autoTable.previous.finalY + 20);
+    //doc.text('Sello de la Institución: ________________________', 10, doc.autoTable.previous.finalY + 30);
+
+    // Convertir el PDF a base64
+    const pdfBase64 = doc.output('datauristring');
+
+    // Enviar el PDF como respuesta
+    res.status(200).json({ pdf: pdfBase64 });
+  } catch (error) {
+    console.error('Error al generar el acta de cierre:', error);
+    res.status(500).json({ message: 'Error al generar el acta de cierre', error: error.message });
+  }
+};
 
 export const createEvaluationPlan = async (req, res) => {
   try {

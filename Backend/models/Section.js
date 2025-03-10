@@ -23,7 +23,7 @@ const sectionSchema = new mongoose.Schema({
     },
     profesorId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'User ',
         required: [true, 'El ID del profesor es requerido'],
     },
 }, {

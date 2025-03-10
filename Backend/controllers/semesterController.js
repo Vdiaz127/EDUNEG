@@ -94,26 +94,37 @@ export const changeSemesterStatus = async (req, res) => {
         const { id } = req.params;
         const { status } = req.body;
 
+        // Validar que el estado sea uno de los permitidos
         const validStatuses = ['abierto', 'en curso', 'cerrado'];
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ message: 'Estado no válido' });
         }
 
-        const semester = await Semester.findByIdAndUpdate(
-            id,
-            { status },
-            { new: true }
-        );
-
+        // Obtener el semestre actual
+        const semester = await Semester.findById(id);
         if (!semester) {
             return res.status(404).json({ message: 'Semestre no encontrado' });
         }
+
+        // Validar las transiciones de estado permitidas
+        if (semester.status === 'cerrado') {
+            return res.status(400).json({ message: 'No se puede cambiar el estado de un semestre cerrado.' });
+        }
+
+        if (semester.status === 'abierto' && status === 'cerrado') {
+            return res.status(400).json({ message: 'No se puede cerrar un semestre que está abierto.' });
+        }
+
+        // Actualizar el estado del semestre
+        semester.status = status;
+        await semester.save();
 
         res.status(200).json(semester);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 export const getProfessorSemesters = async (req, res) => {
     try {

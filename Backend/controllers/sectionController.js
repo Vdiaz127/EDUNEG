@@ -2,6 +2,14 @@ import Section from '../models/Section.js';
 
 export const createSection = async (req, res) => {
     try {
+        const { subjectId, semesterId, sectionNumber } = req.body;
+
+        // Verificar si ya existe una sección con el mismo número en el mismo semestre
+        const existingSection = await Section.findOne({ semesterId, sectionNumber });
+        if (existingSection) {
+            return res.status(400).json({ message: 'Ya existe una sección con este número en el mismo semestre.' });
+        }
+
         const section = new Section(req.body);
         await section.save();
         res.status(201).send(section);
@@ -56,11 +64,16 @@ export const deleteSection = async (req, res) => {
 };
 
 export const addStudentToSection = async (req, res) => {
-    const { sectionId, studentId } = req.body; // Asegúrate de que los datos se envían en el cuerpo de la solicitud
+    const { sectionId, studentId } = req.body;
     try {
-        const section = await Section.findById(sectionId);
+        const section = await Section.findById(sectionId).populate('semesterId');
         if (!section) {
             return res.status(404).send({ error: 'Sección no encontrada' });
+        }
+
+        // Verificar si el semestre está en curso
+        if (section.semesterId.status !== 'en curso') {
+            return res.status(400).send({ error: 'Solo se pueden inscribir estudiantes en semestres en curso.' });
         }
 
         // Verificar si el estudiante ya está en el arreglo
@@ -76,7 +89,6 @@ export const addStudentToSection = async (req, res) => {
         res.status(500).send(error);
     }
 };
-
 export const removeStudentFromSection = async (req, res) => {
     const { sectionId, studentId } = req.body; // Asegúrate de que los datos se envían en el cuerpo de la solicitud
     try {

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaCheckCircle, FaTimesCircle, FaSpinner, FaEdit, FaTrash, FaDownload } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle, FaSpinner, FaEdit, FaTrash, FaDownload, FaFilePdf } from 'react-icons/fa';
 import Notification from '../../components/Notification'; // Importa el componente de notificación
+import { jsPDF } from 'jspdf'; // Importar jsPDF
+import autoTable from 'jspdf-autotable'; // Importar el plugin para tablas
 
 const VerPlanEvaluacion = () => {
   const { sectionId } = useParams();
@@ -12,7 +14,7 @@ const VerPlanEvaluacion = () => {
   const [students, setStudents] = useState([]);
   const [grades, setGrades] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [notification, setNotification] = useState(null); // Estado para la notificación
+  const [notification, setNotification] = useState(null);
 
   // Función para mostrar notificaciones
   const showNotification = (message, type) => {
@@ -96,6 +98,24 @@ const VerPlanEvaluacion = () => {
     }
   };
 
+  const generatePDF = async () => {
+    try {
+      // Solicitar el PDF al backend
+      const response = await axios.get(`/api/evaluation-plans/${evaluationPlan._id}/generate-acta-cierre`, {
+        responseType: 'json',
+      });
+  
+      // Crear un enlace temporal para descargar el PDF
+      const link = document.createElement('a');
+      link.href = response.data.pdf;
+      link.download = `Acta_de_Cierre_${evaluationPlan.name}.pdf`;
+      link.click();
+    } catch (error) {
+      console.error('Error al generar el PDF:', error);
+      showNotification('Error al generar el PDF. Inténtalo de nuevo.', 'error');
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -135,6 +155,17 @@ const VerPlanEvaluacion = () => {
             className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors mb-4"
           >
             Cerrar Sección
+          </button>
+        )}
+
+        {/* Botón para generar el PDF */}
+        {evaluationPlan.status === 'completed' && (
+          <button
+            onClick={generatePDF}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors mb-4"
+          >
+            <FaFilePdf className="inline-block mr-2" />
+            Generar Acta de Cierre (PDF)
           </button>
         )}
       </div>

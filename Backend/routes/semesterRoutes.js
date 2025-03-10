@@ -18,6 +18,7 @@ router.put('/:id', updateSemester);
 router.delete('/:id', deleteSemester);
 
 // Nueva ruta para cambiar el estado del semestre
-router.patch('/:id/status', changeSemesterStatus);
+router.put('/:id/status', changeSemesterStatus);
+
 
 export default router;

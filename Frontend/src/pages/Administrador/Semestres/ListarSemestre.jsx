@@ -1,7 +1,9 @@
+// ListarSemestre.jsx
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import TablaGenerica from '../../../components/TablaGenerica';
+import { FaEdit, FaTrash, FaCheckCircle } from 'react-icons/fa';
 
 const ListarSemestre = () => {
   const [semesters, setSemesters] = useState([]);
@@ -25,6 +27,41 @@ const ListarSemestre = () => {
     fetchSemesters();
   }, []);
 
+  const handleDelete = async (id, status) => {
+    if (status === 'en curso' || status === 'cerrado') {
+      alert('No se puede eliminar un semestre en curso o cerrado.');
+      return;
+    }
+
+    try {
+      await axios.delete(`/api/semesters/${id}`);
+      fetchSemesters(); // Recargar la lista de semestres
+    } catch (error) {
+      console.error('Error al eliminar el semestre:', error);
+      setError('Error al eliminar el semestre');
+    }
+  };
+
+  const handleChangeStatus = async (id, currentStatus) => {
+    let newStatus;
+    if (currentStatus === 'abierto') {
+      newStatus = 'en curso';
+    } else if (currentStatus === 'en curso') {
+      newStatus = 'cerrado';
+    } else {
+      alert('No se puede cambiar el estado de un semestre cerrado.');
+      return;
+    }
+
+    try {
+      await axios.put(`/api/semesters/${id}/status`, { status: newStatus });
+      fetchSemesters(); // Recargar la lista de semestres
+    } catch (error) {
+      console.error('Error al cambiar el estado del semestre:', error);
+      setError('Error al cambiar el estado del semestre');
+    }
+  };
+
   const columns = [
     {
       name: 'Periodo',
@@ -45,6 +82,33 @@ const ListarSemestre = () => {
     {
       name: 'Estado',
       selector: (row) => row.status,
+    },
+    {
+      name: 'Acciones',
+      cell: (row) => (
+        <div className="flex space-x-2">
+          <button
+            onClick={() => navigate(`/administrador/semestres/editar/${row._id}`)}
+            className="text-blue-500 hover:text-blue-600"
+          >
+            <FaEdit />
+          </button>
+          <button
+            onClick={() => handleDelete(row._id, row.status)}
+            className="text-red-500 hover:text-red-600"
+            disabled={row.status === 'en curso' || row.status === 'cerrado'}
+          >
+            <FaTrash />
+          </button>
+          <button
+            onClick={() => handleChangeStatus(row._id, row.status)}
+            className="text-green-500 hover:text-green-600"
+            disabled={row.status === 'cerrado'}
+          >
+            <FaCheckCircle />
+          </button>
+        </div>
+      ),
     },
   ];
 

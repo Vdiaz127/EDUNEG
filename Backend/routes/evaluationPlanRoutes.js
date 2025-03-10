@@ -7,6 +7,7 @@ import {
   deleteEvaluationPlan,
   getEvaluationPlansBySection,
   closeEvaluationPlan, // Importa la función
+  generateActaCierre,
 } from '../controllers/evaluationPlanController.js';
 
 const router = express.Router();
@@ -23,5 +24,7 @@ router.get('/:id', getEvaluationPlanById);
 router.put('/:id', updateEvaluationPlan);
 router.delete('/:id', deleteEvaluationPlan);
 router.post('/:id/close-section', closeEvaluationPlan);
+// Nueva ruta para generar el acta de cierre
+router.get('/:id/generate-acta-cierre', generateActaCierre);
 
 export default router;
