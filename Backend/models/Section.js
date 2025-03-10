@@ -18,7 +18,7 @@ const sectionSchema = new mongoose.Schema({
     },
     arrayStudents: {
         type: [mongoose.Schema.Types.ObjectId],
-        ref: 'User',
+        ref: 'User ',
         default: [],
     },
     profesorId: {

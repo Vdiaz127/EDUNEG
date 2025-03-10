@@ -168,3 +168,23 @@ export const getStudentCount = async (req, res) => {
       res.status(500).json({ message: 'Error en el servidor', error: error.message });
     }
   };
+  // Obtener estudiantes de una sección
+export const getStudentsBySectionId = async (req, res) => {
+    try {
+      const { id } = req.params;
+  
+      // Buscar la sección por ID
+      const section = await Section.findById(id).populate('arrayStudents', 'firstName lastName email'); // Popula los estudiantes
+      if (!section) {
+        return res.status(404).json({ message: 'Sección no encontrada' });
+      }
+  
+      // Obtener los estudiantes de la sección
+      const students = section.arrayStudents;
+  
+      res.status(200).json(students);
+    } catch (error) {
+      console.error('Error al obtener los estudiantes de la sección:', error);
+      res.status(500).json({ message: 'Error en el servidor', error: error.message });
+    }
+  };

@@ -1,6 +1,8 @@
 import Grade from '../models/Grade.js';
 import Evaluation from '../models/Evaluation.js';
 import Section from '../models/Section.js';
+import fs from 'fs';
+import path from 'path';
 
 // Crear un Grade cuando un estudiante entrega una tarea
 export const createGrade = async (req, res) => {
@@ -113,3 +115,72 @@ export const deleteGrade = async (req, res) => {
       res.status(500).json({ message: 'Error al eliminar el Grade', error: error.message });
   }
 };
+
+// Descargar el archivo de la tarea
+export const downloadGradeFile = async (req, res) => {
+    try {
+      const grade = await Grade.findById(req.params.id);
+      if (!grade) {
+        return res.status(404).json({ message: 'Calificación no encontrada' });
+      }
+      const filePath = path.resolve(grade.fileUrl);
+      return res.status(200).json({ url: grade.fileUrl });
+
+      if (!fs.existsSync(filePath)) {
+        
+        return res.status(404).json({ message: 'Archivo no encontrado' });
+      }
+  
+      res.download(filePath);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+  
+  // Eliminar el archivo de la tarea
+  export const deleteGradeFile = async (req, res) => {
+    try {
+      const grade = await Grade.findById(req.params.id);
+      if (!grade) {
+        return res.status(404).json({ message: 'Calificación no encontrada' });
+      }
+  
+      const filePath = path.resolve(grade.fileUrl);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+  
+      // Actualizar el estado de la calificación para permitir que el estudiante vuelva a cargar la tarea
+      grade.fileUrl = null;
+      grade.status = 'Pendiente';
+      await grade.save();
+  
+      res.status(200).json({ message: 'Archivo eliminado exitosamente' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+
+  // Eliminar el archivo de la tarea
+  export const GradeTask  = async (req, res) => {
+    try {
+        const { score, comments } = req.body;
+    
+        // Validar que la calificación esté entre 0 y 100
+        if (score < 0 || score > 100) {
+          return res.status(400).json({ message: 'La calificación debe estar entre 0 y 100.' });
+        }
+    
+        // Actualizar la calificación en la base de datos
+        const updatedGrade = await Grade.findByIdAndUpdate(
+          req.params.id,
+          { score, comments, status: 'Calificado' },
+          { new: true }
+        );
+    
+        res.status(200).json({ message: 'Calificación actualizada exitosamente', updatedGrade });
+      } catch (error) {
+        console.error('Error al actualizar la calificación:', error);
+        res.status(500).json({ message: 'Error en el servidor', error: error.message });
+      }
+  };

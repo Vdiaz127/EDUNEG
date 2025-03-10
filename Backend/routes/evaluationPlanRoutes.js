@@ -5,7 +5,8 @@ import {
   getEvaluationPlanById,
   updateEvaluationPlan,
   deleteEvaluationPlan,
-  getEvaluationPlansBySection, // Importa la función
+  getEvaluationPlansBySection,
+  closeEvaluationPlan, // Importa la función
 } from '../controllers/evaluationPlanController.js';
 
 const router = express.Router();
@@ -21,5 +22,6 @@ router.get('/by-section', getEvaluationPlansBySection); // Mueve esta línea ANT
 router.get('/:id', getEvaluationPlanById);
 router.put('/:id', updateEvaluationPlan);
 router.delete('/:id', deleteEvaluationPlan);
+router.post('/:id/close-section', closeEvaluationPlan);
 
 export default router;

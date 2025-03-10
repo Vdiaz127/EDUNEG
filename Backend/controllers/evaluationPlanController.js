@@ -2,6 +2,8 @@ import EvaluationPlan from '../models/EvaluationPlan.js';
 import Evaluation from '../models/Evaluation.js';
 import Section from '../models/Section.js';
 import Subject from '../models/Subject.js';
+import Grade from '../models/Grade.js';
+import User from '../models/User.js';
 
 export const createEvaluationPlan = async (req, res) => {
   try {
@@ -61,7 +63,6 @@ export const createEvaluationPlan = async (req, res) => {
               dueDate: assignment.date,
               weight: assignment.weight,
               evaluationPlanId: evaluationPlan._id,
-              status: 'Pendiente'
           });
 
           await evaluation.save();
@@ -142,5 +143,66 @@ export const deleteEvaluationPlan = async (req, res) => {
   } catch (error) {
       console.error('Error al eliminar plan de evaluación:', error);
       res.status(500).json({ message: 'Error al eliminar el plan de evaluación', error: error.message });
+  }
+};
+
+export const closeEvaluationPlan = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Obtener el plan de evaluación
+    const evaluationPlan = await EvaluationPlan.findById(id);
+    if (!evaluationPlan) {
+      return res.status(404).json({ message: 'Plan de evaluación no encontrado.' });
+    }
+
+    // Verificar que el plan no esté ya cerrado
+    if (evaluationPlan.status === 'completed') {
+      return res.status(400).json({ message: 'El plan de evaluación ya está cerrado.' });
+    }
+
+    // Obtener todas las evaluaciones del plan
+    const evaluations = await Evaluation.find({ evaluationPlanId: id });
+
+    // Obtener todos los estudiantes de la sección
+    const section = await Section.findById(evaluationPlan.sectionId);
+    const students = section.arrayStudents;
+
+    // Verificar tareas no entregadas y asignar calificación 0
+    let ungradedTasks = [];
+    for (const evaluation of evaluations) {
+      for (const studentId of students) {
+        const grade = await Grade.findOne({ evaluationId: evaluation._id, studentId });
+
+        if (!grade || grade.status !== 'Calificado') {
+          // Si no hay entrega o no está calificada, asignar 0 y estado "Calificado"
+          await Grade.findOneAndUpdate(
+            { evaluationId: evaluation._id, studentId },
+            { score: 0, status: 'Calificado' },
+            { upsert: true, new: true }
+          );
+
+          // Agregar a la lista de tareas no entregadas
+          const student = await User.findById(studentId);
+          ungradedTasks.push({
+            student: `${student.firstName} ${student.lastName}`,
+            evaluation: evaluation.name,
+          });
+        }
+      }
+    }
+
+    // Cambiar el estado del plan de evaluación a "completed"
+    evaluationPlan.status = 'completed';
+    await evaluationPlan.save();
+
+    // Devolver la lista de tareas no entregadas
+    res.status(200).json({
+      message: 'Sección cerrada exitosamente. Se asignó calificación 0 a las tareas no entregadas.',
+      ungradedTasks,
+    });
+  } catch (error) {
+    console.error('Error al cerrar la sección:', error);
+    res.status(500).json({ message: 'Error en el servidor', error: error.message });
   }
 };

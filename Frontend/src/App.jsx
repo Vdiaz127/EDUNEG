@@ -48,10 +48,9 @@ import Registro from './components/login/Registro';
 
 // Páginas de Profesor
 import InicioProfesor from './pages/Profesor/dashboard_profesor';
-import { Materia } from './pages/Profesor/materia';
-import { Asignacion } from './pages/Profesor/asignacion';
 import PlanEvaluacion from './pages/Profesor/PlanEvaluacion';
 import SeccionesFormulario from './components/SeccionFormulario';
+import CalificarEvaluacion from './pages/Profesor/CalificarEvaluacion';
 
 
 function App() {
@@ -149,11 +148,11 @@ function App() {
           }
         >
           <Route index element={<InicioProfesor />} />
-          <Route path="materia" element={<Materia />} />
-          <Route path="asignacion" element={<Asignacion />} />
           <Route path="PlanEvaluacion" element={<PlanEvaluacion />} />
           <Route path="plan-evaluacion/:sectionId" element={<PlanEvaluacionPage />} />
           <Route path="plan-evaluacion/:sectionId/ver" element={<VerPlanEvaluacion />} />
+          <Route path="grade/:gradeId" element={<CalificarEvaluacion />} /> {/* Nueva ruta */}
+
         </Route>
 
         {/* Rutas de Estudiante */}

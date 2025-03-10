@@ -21,10 +21,10 @@ const evaluationSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: {
-            values: ['Pendiente', 'Entregado', 'Calificado'],
-            message: 'El estado debe ser "Pendiente", "Entregado" o "Calificado"',
+            values: ['Creada', 'Disponible', 'Cerrada'],
+            message: 'El estado debe ser "Creada", "Disponible" o "Cerrada"',
         },
-        default: 'Pendiente',
+        default: 'Creada',
     },
     evaluationPlanId: {
         type: mongoose.Schema.Types.ObjectId,

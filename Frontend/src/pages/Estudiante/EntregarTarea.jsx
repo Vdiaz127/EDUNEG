@@ -77,7 +77,6 @@ const EntregarTarea = () => {
     validateAndSetFile(droppedFile);
   };
 
-  // Manejar la entrega de la tarea
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) {
@@ -91,15 +90,21 @@ const EntregarTarea = () => {
     setUploadProgress(0); // Reiniciar el progreso de la subida
   
     try {
-      // Subir el archivo
-      const fileUrl = await uploadFile(file);
+      // Crear un FormData para enviar el archivo y los datos
+      const formData = new FormData();
+      formData.append("file", file); // Agregar el archivo
+      formData.append("evaluationId", evaluationId); // Agregar el ID de la evaluación
+      formData.append("studentId", user.id); // Agregar el ID del estudiante
   
-      // Crear el Grade en la base de datos
-      await axios.post("/api/grades", {
-        evaluationId,
-        studentId: user.id, // ID del estudiante
-        fileUrl,
-        status: "Entregado",
+      // Subir el archivo y crear el Grade en una sola solicitud
+      const response = await axios.post("/api/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+          setUploadProgress(progress);
+        },
       });
   
       setSuccess("Tarea entregada exitosamente.");
@@ -114,9 +119,28 @@ const EntregarTarea = () => {
       setUploadProgress(0); // Reiniciar el progreso de la subida
     }
   };
-
+  
+  // Función para subir el archivo al servidor
   const uploadFile = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
 
+    try {
+      const response = await axios.post("/api/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+          setUploadProgress(progress);
+        },
+      });
+
+      return response.data.fileUrl; // Devuelve la URL del archivo subido
+    } catch (error) {
+      console.error("Error al subir el archivo:", error);
+      throw new Error("Error al subir el archivo.");
+    }
   };
 
   if (!evaluation || !section || !materia) {
