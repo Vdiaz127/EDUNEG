@@ -1,0 +1,158 @@
+/* src/components/Login.css */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .login-container {
+    display: flex;
+    height: 100vh; /* Full height */
+  }
+  
+  .login-left {
+    background-color: #007bff; /* Blue background */
+    background-image: url(../../assets/left-bg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    padding: 20px;
+  }
+  
+  .login-left .leftLogo {
+    width: 150px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .login-left h1 {
+    font-size: xx-large;
+    font-weight: bold;
+  }
+
+  .login-left h2 {
+    margin-bottom: 33px;
+  }
+
+  .login-left p {
+    text-align: center;
+  }
+
+  .login-right {
+    background-color: white; /* White background */
+    color: black;
+  }
+
+  .login-right h1 {
+    font-size: xx-large;
+    color: rgb(32, 32, 32);
+  }
+
+    .login-right p {
+        text-align: center;
+        line-height: 21px;
+        color: rgb(71, 71, 71);
+    }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px; /* Add some space from the title */
+    margin-bottom: 15px; /* Add some space from the title */
+    width: 100%;
+  }
+  
+  .login-form input {
+    padding: 6px 12px;
+    margin: 10px 0; /* Space between inputs */
+    border: 1px solid #dddddd9d;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+  }
+  
+  .login-form input:focus {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .login-form button {
+    background-color: #002a57; /* Blue button */
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: all 0.3s ease;
+  }
+  
+  .login-form button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  .forgot-password {
+    margin-top: 10px;
+    text-align: center; /* Center the text */
+  }
+  
+  .error {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+
+  @keyframes blob {
+    0% {
+      transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+      transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+      transform: translate(0px, 0px) scale(1);
+    }
+  }
+
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  /* Animación para el mensaje de éxito */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .success-message {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
