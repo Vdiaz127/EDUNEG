@@ -60,5 +60,5 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 
   };
 
-const User = mongoose.model('User ', userSchema); // Nota: se eliminó el espacio extra en 'User  '
+const User = mongoose.model('User', userSchema); // Nota: se eliminó el espacio extra en 'User  '
 export default User;
