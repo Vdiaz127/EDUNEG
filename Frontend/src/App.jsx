@@ -33,18 +33,22 @@ import EditarSemestre from './pages/Administrador/Semestres/EditarSemestre';
 
 // Páginas de Estudiante
 import EstudiantePage from './pages/Estudiante/Inicioestudiante';
+import SeccionDetalle from './pages/Estudiante/SeccionDetalle';
+
 
 // Componentes de Login
 import Login from './components/login/Login';
 import Registro from './components/login/Registro';
-// import CrearContrasena from './components/login/CrearContrasena';
 
 // Páginas de Profesor
 import InicioProfesor  from './pages/Profesor/dashboard_profesor';
-import { Materia } from './pages/Profesor/materia';
-import { Asignacion } from './pages/Profesor/asignacion';
 import PlanEvaluacion from './pages/Profesor/PlanEvaluacion';
+import PlanEvaluacionPage from './pages/Profesor/PlanEvaluacionPage';
+
+import VerPlanEvaluacion from './pages/Profesor/VerPlanEvaluacion';
 import SeccionesFormulario from './components/SeccionFormulario';
+import CalificarEvaluacion from './pages/Profesor/CalificarEvaluacion';
+
 
 function App() {
   const { user, loading } = useContext(UserContext);
@@ -137,9 +141,10 @@ function App() {
           }
         >
           <Route index element={<InicioProfesor />} />
-          <Route path="materia" element={<Materia />} />
-          <Route path="asignacion" element={<Asignacion />} />
           <Route path="PlanEvaluacion" element={<PlanEvaluacion />} />
+          <Route path="plan-evaluacion/:sectionId" element={<PlanEvaluacionPage/>} />
+          <Route path="plan-evaluacion/:sectionId/ver" element={<VerPlanEvaluacion />} />
+          <Route path="grade/:gradeId" element={<CalificarEvaluacion />} /> 
         </Route>
 
         {/* Rutas de Estudiante */}
@@ -152,6 +157,14 @@ function App() {
           }
         >
           <Route index element={<EstudiantePage />} />
+          <Route path="/estudiante/seccion/:id" element={<SeccionDetalle />} />
+
+          {/* Ruta para entregar una tarea */}
+          {/* <Route
+            path="/estudiante/seccion/:sectionId/entregar-tarea/:evaluationId"
+            element={<EntregarTarea />}
+          /> */}
+        
         </Route>
 
         {/* Ruta por defecto (Not Found) */}

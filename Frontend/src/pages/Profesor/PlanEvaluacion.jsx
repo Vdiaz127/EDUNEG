@@ -1,28 +1,37 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
+import { PlusIcon, TrashIcon } from "@heroicons/react/24/solid";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const PlanEvaluacion = ({ isOpen, onClose }) => {
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+const PlanEvaluacion = ({ section }) => {
   const [description, setDescription] = useState("");
-  const [assignments, setAssignments] = useState([]);
+  const [assignments, setAssignments] = useState([{}]); // Inicializa con un elemento vacío
   const [totalWeight, setTotalWeight] = useState(0);
-
+  const navigate = useNavigate();
+  
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
   };
 
   const addAssignment = () => {
-    const newAssignmentNumber = assignments.length + 1;
-    setAssignments([
-      ...assignments,
-      {
-        assignmentNumber: newAssignmentNumber,
-        title: "",
-        description: "",
-        date: "",
-        weight: "",
-        assignmentId: Date.now(),
-      },
-    ]);
+    const newAssignmentNumber = assignments.length;
+    const newAssignment = {
+      assignmentNumber: newAssignmentNumber,
+      title: `Evaluación ${newAssignmentNumber}`,
+      description: "",
+      date: "",
+      weight: 0,
+      assignmentId: Date.now(),
+    };
+
+    if (assignments.length === 1 && Object.keys(assignments[0]).length === 0) {
+      setAssignments([newAssignment]);
+    } else {
+      setAssignments([...assignments, newAssignment]);
+    }
   };
 
   const handleAssignmentChange = (index, field, value) => {
@@ -54,246 +63,188 @@ const PlanEvaluacion = ({ isOpen, onClose }) => {
     const selectedDate = new Date(date);
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
-
     return selectedDate >= currentDate;
   };
 
-  const resetModal = () => {
+  const resetForm = () => {
     setDescription("");
-    setAssignments([]);
+    setAssignments([{}]); // Resetea con un elemento vacío
     setTotalWeight(0);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (totalWeight === 100) {
       const planEvaluacionData = {
-        description: description,
+        description,
         assignments: assignments.map((assignment) => ({
           title: assignment.title,
           description: assignment.description,
           date: assignment.date,
           weight: assignment.weight,
+          documentLink: assignment.documentLink || ""
         })),
+        sectionId: section._id,
       };
 
-      console.log("Plan de Evaluación:", planEvaluacionData);
-
-      simularEnvioAPI(planEvaluacionData)
-        .then(() => {
+      try {
+        const response = await axios.post(`${apiUrl}/api/evaluation-plans`, planEvaluacionData);
+        if (response.status === 201) {
           Swal.fire({
             title: "¡Éxito!",
-            text: "El plan de evaluación se ha creado correctamente.",
+            text: `Plan de evaluación "${response.data.evaluationPlan.name}" creado correctamente.`,
             icon: "success",
             confirmButtonText: "Ok",
           }).then(() => {
-            resetModal();
-            onClose();
+            resetForm();
+            navigate('/profesor');
           });
-        })
-        .catch((error) => {
-          Swal.fire({
-            title: "¡Error!",
-            text: "Ocurrió un error al crear el plan de evaluación.",
-            icon: "error",
-            confirmButtonText: "Ok",
-          });
-          console.error("Error al enviar a la API:", error);
+        }
+      } catch (error) {
+        Swal.fire({
+          title: "¡Error!",
+          text: "Ocurrió un error al crear el plan de evaluación.",
+          icon: "error",
+          confirmButtonText: "Ok",
         });
+        console.error("Error al enviar a la API:", error);
+      }
     } else {
       Swal.fire({
         title: "¡Error!",
-        text: "La ponderación total debe ser igual a 100%.",
+        text: "La ponderación total debe ser exactamente 100%.",
         icon: "error",
         confirmButtonText: "Ok",
       });
     }
   };
 
-  const simularEnvioAPI = (data) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const exito = Math.random() > 0.2;
-
-        if (exito) {
-          resolve();
-        } else {
-          reject(new Error("Simulación de error en la API"));
-        }
-      }, 1500);
-    });
-  };
-
-  //if (!isOpen) return null;
-
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 overflow-auto flex justify-center items-start z-50 py-10">
-      {" "}
-      {/* Cambio aquí */}
-      <div className="bg-white p-6 rounded shadow-md w-4/5 max-w-4xl relative">
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none cursor-pointer"
-        >
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
+    <div className="p-6 bg-white rounded-lg shadow-md">
+      <div className="mb-8">
+        <h2 className="text-2xl font-semibold mb-2 text-gray-800">
+          Crear Plan de Evaluación
+        </h2>
+        <p className="text-gray-600">
+          Materia: <span className="font-semibold">{section.subjectId.name}</span> |
+          Sección: <span className="font-semibold">{section.sectionNumber}</span> |
+          Semestre: <span className="font-semibold">{section.semesterId.periodo} - {section.semesterId.año}</span>
+        </p>
+      </div>
 
-        {/* Contenedor para el título y el botón */}
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Plan de Evaluación</h2>
-          {description && (
-            <button
-              onClick={totalWeight === 100 ? handleSubmit : addAssignment}
-              className={`px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 mt-2 cursor-pointer  ${
-                totalWeight === 100
-                  ? "bg-green-600 hover:bg-green-700 text-white"
-                  : totalWeight < 100
-                  ? "bg-indigo-600 hover:bg-indigo-700 text-white"
-                  : "bg-gray-400 text-gray-600 cursor-not-allowed"
-              }`}
-              disabled={totalWeight > 100}
-            >
-              {totalWeight === 100
-                ? "Crear Plan de Evaluación"
-                : "Agregar Asignación"}
-            </button>
-          )}
-        </div>
+      <div className="mb-6">
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Descripción del Plan (Opcional)
+        </label>
+        <textarea
+          id="description"
+          placeholder="Ingrese una descripción general del plan de evaluación"
+          value={description}
+          onChange={handleDescriptionChange}
+          className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          rows="3"
+        />
+      </div>
 
-        {/* Contenedor principal para la descripción y las asignaciones */}
-        <div className="flex flex-col md:flex-row">
-          {/* Descripción */}
-          <div className="w-full md:w-1/3 border flex items-center justify-center">
-            <textarea
-              id="description"
-              placeholder="Ingrese una descripción"
-              value={description}
-              onChange={handleDescriptionChange}
-              className="bg-gray-100 outline-none px-1 block w-full sm:text-sm  resize-none h-full"
-            />
-          </div>
-
-          {/* Contenedor para las asignaciones */}
-          <div className="w-full md:w-2/3">
-            <div className="grid grid-cols-1 md:grid-cols-3">
-              {/* Encabezados de la tabla */}
-              <div className="p-2 border font-semibold text-center">
-                Asignación
-              </div>
-              <div className="p-2 border font-semibold text-center">Fecha</div>
-              <div className="p-2 border font-semibold text-center">
-                Ponderación
-              </div>
-
-              {/* Filas de asignaciones */}
+      <div className="mb-6">
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Evaluaciones
+        </label>
+        <div className="overflow-x-auto">
+          <table className="w-full table-auto border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="px-4 py-2 text-left border border-gray-200">Nombre</th>
+                <th className="px-4 py-2 text-left border border-gray-200">Fecha</th>
+                <th className="px-4 py-2 text-left border border-gray-200">Ponderación</th>
+                <th className="px-4 py-2 text-left border border-gray-200">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
               {assignments.map((assignment, index) => (
-                <React.Fragment key={assignment.assignmentId}>
-                  {/* Asignación */}
-                  <div className="p-2 border flex flex-col">
-                    <div className="font-semibold">
-                      Asignación #{assignment.assignmentNumber}
-                    </div>
-                    <div>
-                      <label className="block text-gray-700 text-sm font-bold mb-1">
-                        Título:
-                      </label>
-                      <input
-                        type="text"
-                        value={assignment.title}
-                        onChange={(e) =>
-                          handleAssignmentChange(index, "title", e.target.value)
-                        }
-                        disabled={!description}
-                        className="bg-gray-100 shadow appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gray-700 text-sm font-bold mb-1">
-                        Descripción:
-                      </label>
-                      <textarea
-                        value={assignment.description}
-                        onChange={(e) =>
-                          handleAssignmentChange(
-                            index,
-                            "description",
-                            e.target.value
-                          )
-                        }
-                        disabled={!description}
-                        className="bg-gray-100 shadow appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight outline-none resize-none flex-grow"
-                      />
-                    </div>
-                    <button
-                      onClick={() => deleteAssignment(index)}
-                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-2 cursor-pointer"
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-
-                  {/* Fecha */}
-                  <div className="p-2 border flex items-center justify-center">
+                <tr key={assignment.assignmentId || index} className="border-b">
+                  <td className="px-4 py-2 border border-gray-200">
+                    <input
+                      type="text"
+                      value={assignment.title || ""}
+                      onChange={(e) =>
+                        handleAssignmentChange(index, "title", e.target.value)
+                      }
+                      className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Nombre de la evaluación"
+                    />
+                  </td>
+                  <td className="px-4 py-2 border border-gray-200">
                     <input
                       type="date"
-                      value={assignment.date}
+                      value={assignment.date || ""}
                       onChange={(e) => {
                         const date = e.target.value;
                         if (validateDate(date)) {
                           handleAssignmentChange(index, "date", date);
                         } else {
-                          alert(
-                            "La fecha debe ser mayor o igual a la fecha actual."
-                          );
+                          alert("La fecha debe ser mayor o igual a la fecha actual.");
                         }
                       }}
-                      disabled={!description}
-                      className="bg-gray-100 shadow-sm block w-full sm:text-sm border border-gray-400 rounded py-4 px-2"
+                      className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                  </div>
-
-                  {/* Ponderación */}
-                  <div className="p-2 border flex items-center justify-center">
+                  </td>
+                  <td className="px-4 py-2 border border-gray-200">
                     <input
                       type="number"
-                      value={assignment.weight}
+                      value={assignment.weight || ""}
                       onChange={(e) => {
                         const value = e.target.value;
                         if (
                           value === "" ||
                           (Number(value) >= 0 &&
-                            Number(value) <= 25 &&
-                            totalWeight -
-                              Number(assignment.weight || 0) +
-                              Number(value) <=
-                              100)
+                            totalWeight - Number(assignment.weight || 0) + Number(value) <= 100)
                         ) {
                           handleAssignmentChange(index, "weight", value);
                         }
                       }}
-                      disabled={!description}
-                      className="bg-gray-100 px-2 py-4 shadow-sm block w-full sm:text-sm border border-gray-400 rounded-md outline-none"
+                      className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Ponderación"
                     />
-                  </div>
-                </React.Fragment>
+                  </td>
+                  <td className="px-4 py-2 border border-gray-200">
+                    <button
+                      onClick={() => deleteAssignment(index)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <TrashIcon className="h-5 w-5" />
+                    </button>
+                  </td>
+                </tr>
               ))}
-            </div>
-          </div>
+            </tbody>
+          </table>
         </div>
+      </div>
 
-        {/* Total Weight */}
-        <div className="mt-4 text-right">Total: {totalWeight}%</div>
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={addAssignment}
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-blue-600 transition-colors"
+        >
+          <PlusIcon className="h-5 w-5 mr-2" />
+          Agregar Evaluación
+        </button>
+      </div>
+
+      <div className="text-right mb-4">
+        <span className="font-semibold">Total: {totalWeight}%</span>
+      </div>
+
+      <div className="flex justify-end">
+        <button
+          onClick={handleSubmit}
+          disabled={totalWeight !== 100}
+          className={`bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors ${
+            totalWeight !== 100 ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+        >
+          Crear Plan de Evaluación
+        </button>
       </div>
     </div>
   );

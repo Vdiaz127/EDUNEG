@@ -16,7 +16,7 @@ const evaluationSchema = new mongoose.Schema({
     dueDate: { 
         type: Date,
         min: '1950-01-01',
-        max: Date.now(),
+        //max: Date.now(),
         required: [true, 'La fecha de entrega de la evaluación es requerida'], 
     },
     weight: { 

@@ -15,28 +15,6 @@ const evaluationPlanSchema = new mongoose.Schema(
       trim: true,
       maxlength: [500, 'La descripción no puede exceder los 500 caracteres'],
     },
-    startDate: {
-      type: Date,
-      required: [true, 'La fecha de inicio es requerida'],
-      validate: {
-        validator: function (value) {
-          // Validar que la fecha de inicio no sea en el pasado
-          return value >= new Date();
-        },
-        message: 'La fecha de inicio no puede ser en el pasado',
-      },
-    },
-    endDate: {
-      type: Date,
-      required: [true, 'La fecha de finalización es requerida'],
-      validate: {
-        validator: function (value) {
-          // Validar que la fecha de finalización sea posterior a la fecha de inicio
-          return value > this.startDate;
-        },
-        message: 'La fecha de finalización debe ser posterior a la fecha de inicio',
-      },
-    },
     status: {
       type: String,
       enum: {
@@ -47,10 +25,11 @@ const evaluationPlanSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Habilita createdAt y updatedAt automáticamente
-    versionKey: false, // Esto es para que no aparezca el atributo `__v`
+    timestamps: true,
+    versionKey: false,
   }
 );
+
 
 const EvaluationPlan = mongoose.model('EvaluationPlan', evaluationPlanSchema);
 

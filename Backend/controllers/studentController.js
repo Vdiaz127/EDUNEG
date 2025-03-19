@@ -3,6 +3,8 @@ import User from '../models/User.js';
 import Section from '../models/Section.js';
 import Subject from '../models/Subject.js';
 import Semester from '../models/Semester.js';
+import EvaluationPlan from '../models/EvaluationPlan.js';
+import Evaluation from '../models/Evaluation.js';
 
 export const createStudent = async (req, res) => {
     try {
@@ -192,63 +194,76 @@ export const deleteStudent = async (req, res) => {
 };
 
 export const getStudentDetails = async (req, res) => {
-  try {
-    const studentId = req.params.id;
-
-    // Buscar al estudiante por su ID
-    const student = await User.findById(studentId);
-
-    if (!student) {
-      return res.status(404).json({ message: 'Estudiante no encontrado' });
+    try {
+      const studentId = req.params.id;
+  
+      // Buscar al estudiante por su ID
+      const student = await User.findById(studentId);
+      if (!student) {
+        return res.status(404).json({ message: 'Estudiante no encontrado' });
+      }
+  
+      // Buscar las secciones en las que el estudiante está inscrito
+      const sections = await Section.find({ arrayStudents: studentId });
+  
+      // Obtener información de materias, semestres y evaluaciones pendientes
+      const formattedSemesters = await Promise.all(
+        sections.map(async (section) => {
+          const subject = await Subject.findById(section.subjectId);
+          const professor = await User.findById(section.profesorId);
+          const semester = await Semester.findById(section.semesterId);
+  
+          // Buscar el plan de evaluación basado en el nombre de la sección
+          const planName = `Plan de evaluación - Sección ${section.sectionNumber}`;
+          const evaluationPlan = await EvaluationPlan.findOne({ name: planName });
+  
+          let pendingAssignments = [];
+          if (evaluationPlan) {
+            pendingAssignments = await Evaluation.find({
+              evaluationPlan: evaluationPlan._id.toString(),
+            });
+          }
+  
+          // Formatear evaluaciones pendientes
+          const formattedAssignments = pendingAssignments.map(evaluation => ({
+            id: evaluation._id,
+            name: evaluation.name,
+            dueDate: evaluation.dueDate,
+            weight: evaluation.weight * 10, // Convertir a porcentaje
+            documentLink: evaluation.documentLink
+          }));
+  
+          return {
+            id: section.semesterId,
+            periodo: semester ? semester.periodo : "N/A",
+            año: semester ? semester.año : "N/A",
+            secciones: [
+              {
+                id: section._id,
+                materia: subject ? subject.name : "Materia no encontrada",
+                codigo: section.subjectId,
+                seccion: section.sectionNumber,
+                profesor: professor ? `${professor.firstName} ${professor.lastName}` : "Profesor no encontrado",
+                enlace: `/seccion/${section.subjectId}-${section.sectionNumber}`,
+                pendingAssignments: formattedAssignments
+              },
+            ],
+          };
+        })
+      );
+  
+      res.status(200).json({
+        promedio: student.promedio || "N/A",
+        proximoExamen: "N/A", // Se debe calcular en base a las evaluaciones
+        semestres: formattedSemesters,
+      });
+    } catch (error) {
+      console.error("Error al obtener detalles del estudiante:", error);
+      res.status(500).json({ 
+        message: 'Error en el servidor', 
+        error: error.message 
+      });
     }
+  };
+  
 
-    // Buscar las secciones en las que el estudiante está inscrito
-    const secciones = await Section.find({ arrayStudents: studentId });
-
-    // Obtener la información de las materias y semestres asociados a las secciones
-    const formattedSemestres = await Promise.all(
-      secciones.map(async (seccion) => {
-        // Convertir subjectId (String) a ObjectId
-        const subjectId = new mongoose.Types.ObjectId(seccion.subjectId); // Usar new
-
-        // Obtener la materia asociada a la sección
-        const materia = await Subject.findById(subjectId);
-
-        // Convertir profesorId (String) a ObjectId
-        const profesorId = new mongoose.Types.ObjectId(seccion.profesorId); // Usar new
-
-        // Obtener el profesor asociado a la sección
-        const profesor = await User.findById(profesorId);
-
-        // Obtener el semestre asociado a la sección
-        const semestre = await Semester.findById(seccion.semesterId);
-
-        return {
-          id: seccion.semesterId,
-          periodo: semestre ? semestre.periodo : "N/A",
-          año: semestre ? semestre.año : "N/A",
-          secciones: [
-            {
-              id: seccion._id,
-              materia: materia ? materia.name : "Materia no encontrada",
-              codigo: seccion.subjectId,
-              seccion: seccion.sectionNumber,
-              profesor: profesor ? `${profesor.firstName} ${profesor.lastName}` : "Profesor no encontrado",
-              horario: "Lunes y Miércoles, 10:00 AM - 12:00 PM", // Esto debería venir de la base de datos
-              enlace: `/seccion/${seccion.subjectId}-${seccion.sectionNumber}`,
-            },
-          ],
-        };
-      })
-    );
-
-    res.status(200).json({
-      promedio: student.promedio || "N/A",
-      proximoExamen: "15 de Abril", // Esto debería venir de la base de datos
-      semestres: formattedSemestres,
-    });
-  } catch (error) {
-    console.error("Error al obtener detalles del estudiante:", error);
-    res.status(500).json({ message: 'Error en el servidor', error: error.message });
-  }
-};
